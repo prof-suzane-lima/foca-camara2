@@ -1,0 +1,1948 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relatório de Banca · Cebraspe · biblioteconomia descomplicada</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --verde: #00A74A;
+    --rosa: #F4A6D7;
+    --bege: #F1F1DE;
+    --verde-escuro: #07272D;
+    --azul: #9BCBEB;
+    --verde-limao: #B5BD00;
+    --amarelo: #FED141;
+    --laranja: #FF6A39;
+    --linha: rgba(7, 39, 45, 0.15);
+    --linha-suave: rgba(7, 39, 45, 0.08);
+    --shadow-soft: 0 1px 3px rgba(7, 39, 45, 0.06), 0 4px 16px rgba(7, 39, 45, 0.04);
+    --dif-facil: #C9F7C5;
+    --dif-medio: #FCE5CD;
+    --dif-dificil: #FADBD8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+
+  body {
+    background: var(--bege);
+    color: var(--verde-escuro);
+    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+    font-weight: 400;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ====== HEADER + NAV ====== */
+  .header {
+    background: var(--verde-escuro);
+    color: var(--bege);
+    padding: 14px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(7, 39, 45, 0.18);
+  }
+
+  .logo-text {
+    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    color: var(--bege);
+    line-height: 1;
+    user-select: none;
+  }
+
+  .logo-text .prof {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    opacity: 0.85;
+  }
+
+  .logo-text .nome {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+  }
+
+  .logo-text .nome em {
+    font-style: italic;
+    font-weight: 800;
+  }
+
+  .header-meta {
+    font-size: 13px;
+    color: rgba(241, 241, 222, 0.7);
+    letter-spacing: 0.06em;
+  }
+
+  .nav {
+    background: white;
+    border-bottom: 1px solid var(--linha-suave);
+    position: sticky;
+    top: 60px;
+    z-index: 99;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .nav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 48px;
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .nav-inner::-webkit-scrollbar { display: none; }
+
+  .nav a {
+    color: rgba(7, 39, 45, 0.65);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 14px 14px;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: all 0.18s ease;
+    flex-shrink: 0;
+  }
+
+  .nav a:hover {
+    color: var(--verde-escuro);
+    border-bottom-color: var(--linha);
+  }
+
+  .nav a.active {
+    color: var(--verde);
+    border-bottom-color: var(--verde);
+    font-weight: 700;
+  }
+
+  /* ====== CONTAINER ====== */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 56px 48px 80px;
+  }
+
+  /* ====== HERO ====== */
+  .eyebrow {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--laranja);
+    margin-bottom: 14px;
+  }
+
+  .hero h1 {
+    font-size: 84px;
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    line-height: 0.95;
+    margin-bottom: 20px;
+  }
+  .hero h1 em { font-style: normal; color: var(--verde); }
+
+  .hero-sub {
+    font-size: 19px;
+    color: rgba(7, 39, 45, 0.75);
+    max-width: 620px;
+    line-height: 1.5;
+    margin-bottom: 28px;
+  }
+
+  .hero-meta {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .pill {
+    background: var(--verde-escuro);
+    color: var(--bege);
+    padding: 7px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .pill.alt { background: var(--rosa); color: var(--verde-escuro); }
+
+  /* ====== STATS ====== */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-top: 56px;
+  }
+
+  .stat {
+    background: white;
+    border: 1px solid var(--linha-suave);
+    border-radius: 14px;
+    padding: 26px 24px;
+    box-shadow: var(--shadow-soft);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stat::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 4px;
+    background: var(--accent, var(--verde));
+  }
+  .stat.s2 { --accent: var(--rosa); }
+  .stat.s3 { --accent: var(--amarelo); }
+  .stat.s4 { --accent: var(--laranja); }
+
+  .stat-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(7, 39, 45, 0.55);
+    margin-bottom: 12px;
+  }
+
+  .stat-value {
+    font-size: 46px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .stat-detail {
+    font-size: 12px;
+    color: rgba(7, 39, 45, 0.6);
+    margin-top: 8px;
+  }
+
+  /* ====== SEÇÕES ====== */
+  .section {
+    margin-top: 80px;
+    scroll-margin-top: 120px;
+  }
+
+  .section-num {
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--verde);
+    margin-bottom: 8px;
+  }
+
+  .section-title {
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    margin-bottom: 8px;
+  }
+
+  .section-sub {
+    color: rgba(7, 39, 45, 0.65);
+    font-size: 14.5px;
+    margin-bottom: 32px;
+    max-width: 760px;
+    line-height: 1.55;
+  }
+
+  /* ====== TABELA DE PROVAS ====== */
+  .provas-table {
+    background: white;
+    border: 1px solid var(--linha-suave);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .provas-search {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--linha-suave);
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .provas-search input {
+    flex: 1;
+    min-width: 200px;
+    border: 1.5px solid var(--linha);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 14px;
+    font-family: inherit;
+    color: var(--verde-escuro);
+    background: var(--bege);
+    transition: border-color 0.18s ease;
+  }
+  .provas-search input:focus {
+    outline: none;
+    border-color: var(--verde);
+  }
+
+  .provas-count {
+    font-size: 13px;
+    color: rgba(7, 39, 45, 0.6);
+    font-variant-numeric: tabular-nums;
+  }
+
+  table.provas {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+  }
+
+  table.provas thead {
+    background: rgba(7, 39, 45, 0.03);
+  }
+
+  table.provas th {
+    text-align: left;
+    padding: 14px 20px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(7, 39, 45, 0.55);
+    border-bottom: 1px solid var(--linha-suave);
+  }
+
+  table.provas td {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--linha-suave);
+    vertical-align: top;
+  }
+
+  table.provas tr:last-child td { border-bottom: none; }
+  table.provas tr.hidden { display: none; }
+
+  table.provas td.year {
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    color: var(--verde);
+    width: 70px;
+  }
+
+  table.provas td.org {
+    font-weight: 600;
+    width: 220px;
+  }
+
+  table.provas td.cargo {
+    color: rgba(7, 39, 45, 0.75);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  table.provas td.qtd {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    width: 90px;
+  }
+
+  /* ====== LINHA DE PROVA NOVA ====== */
+  table.provas tr.prova-nova td {
+    background: rgba(255, 138, 76, 0.06);
+  }
+
+  .badge-novo {
+    display: inline-block;
+    background: var(--laranja);
+    color: var(--bege);
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 4px;
+    vertical-align: middle;
+    line-height: 1.4;
+  }
+
+  /* ====== ÁREAS BAR CHART ====== */
+  .bars { display: flex; flex-direction: column; gap: 14px; }
+
+  .bar-row {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .bar-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 14px;
+    gap: 16px;
+  }
+
+  .bar-label-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .rank-dot {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--verde-escuro);
+    flex-shrink: 0;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .bar-label {
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .bar-stats {
+    color: rgba(7, 39, 45, 0.6);
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+    flex-shrink: 0;
+    font-weight: 600;
+  }
+
+  .bar-track {
+    background: rgba(7, 39, 45, 0.06);
+    border-radius: 6px;
+    height: 14px;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 6px;
+    transition: width 0.6s ease;
+  }
+
+  .more-toggle {
+    margin-top: 24px;
+    background: transparent;
+    border: 1.5px solid var(--verde-escuro);
+    color: var(--verde-escuro);
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.18s ease;
+  }
+  .more-toggle:hover {
+    background: var(--verde-escuro);
+    color: var(--bege);
+  }
+
+  /* ====== ACORDEÃO DE ÁREAS (DETALHE COM SUBÁREAS) ====== */
+  .area-detail {
+    background: white;
+    border: 1px solid var(--linha-suave);
+    border-radius: 12px;
+    margin-bottom: 12px;
+    box-shadow: var(--shadow-soft);
+    overflow: hidden;
+    transition: all 0.2s ease;
+  }
+
+  .area-detail-header {
+    padding: 18px 22px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    user-select: none;
+    transition: background 0.15s ease;
+  }
+  .area-detail-header:hover {
+    background: rgba(7, 39, 45, 0.02);
+  }
+
+  .area-detail-rank {
+    background: var(--accent, var(--verde));
+    color: var(--verde-escuro);
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 14px;
+    flex-shrink: 0;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .area-detail-name {
+    flex: 1;
+    font-weight: 600;
+    font-size: 15px;
+  }
+
+  .area-detail-count {
+    color: rgba(7, 39, 45, 0.6);
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+  }
+
+  .area-detail-arrow {
+    color: rgba(7, 39, 45, 0.4);
+    font-size: 14px;
+    transition: transform 0.2s ease;
+  }
+  .area-detail.open .area-detail-arrow {
+    transform: rotate(180deg);
+  }
+
+  .area-detail-body {
+    display: none;
+    padding: 0 22px 20px;
+    border-top: 1px solid var(--linha-suave);
+  }
+  .area-detail.open .area-detail-body { display: block; }
+
+  .sub-mini-title {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(7, 39, 45, 0.5);
+    margin: 18px 0 10px;
+  }
+
+  .sub-mini-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .sub-mini-list li {
+    display: grid;
+    grid-template-columns: 24px 1fr auto;
+    gap: 12px;
+    align-items: center;
+    font-size: 13.5px;
+    padding: 6px 0;
+  }
+
+  .sub-mini-rank {
+    color: rgba(7, 39, 45, 0.4);
+    font-weight: 700;
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .sub-mini-name {
+    line-height: 1.4;
+  }
+
+  .sub-mini-count {
+    background: rgba(7, 39, 45, 0.06);
+    color: var(--verde-escuro);
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ====== SUBÁREAS RANKING ====== */
+  .subareas-list {
+    background: white;
+    border: 1px solid var(--linha-suave);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .sub-row {
+    display: grid;
+    grid-template-columns: 50px 1fr auto;
+    gap: 16px;
+    align-items: center;
+    padding: 14px 22px;
+    border-bottom: 1px solid var(--linha-suave);
+    font-size: 14px;
+  }
+  .sub-row:last-child { border-bottom: none; }
+  .sub-row.hidden { display: none; }
+
+  .sub-rank {
+    font-weight: 800;
+    font-size: 17px;
+    color: rgba(7, 39, 45, 0.4);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .sub-area-tag {
+    font-size: 10.5px;
+    color: var(--verde);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 3px;
+  }
+
+  .sub-name { font-weight: 500; line-height: 1.4; }
+
+  .sub-count {
+    background: var(--verde-escuro);
+    color: var(--bege);
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ====== PEGADINHAS (CARDS EXPANSÍVEIS) ====== */
+  .pegadinhas-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .pegadinha-card {
+    background: white;
+    border: 1px solid var(--linha-suave);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: var(--shadow-soft);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-left: 4px solid var(--laranja);
+  }
+  .pegadinha-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 20px rgba(7, 39, 45, 0.08);
+  }
+  .pegadinha-card.open {
+    grid-column: 1 / -1;
+    cursor: default;
+  }
+
+  .pega-header {
+    padding: 22px 24px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .pega-num {
+    background: rgba(255, 106, 57, 0.12);
+    color: var(--laranja);
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 14px;
+    flex-shrink: 0;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .pega-text {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .pega-title {
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: -0.015em;
+    margin-bottom: 6px;
+    line-height: 1.3;
+  }
+
+  .pega-stats {
+    display: flex;
+    gap: 14px;
+    font-size: 12px;
+    color: rgba(7, 39, 45, 0.65);
+    margin-bottom: 4px;
+  }
+  .pega-stats strong { color: var(--laranja); font-weight: 800; }
+
+  .pega-arrow {
+    color: rgba(7, 39, 45, 0.35);
+    font-size: 14px;
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+    margin-top: 10px;
+  }
+  .pegadinha-card.open .pega-arrow { transform: rotate(180deg); }
+
+  .pega-body {
+    display: none;
+    padding: 0 24px 24px;
+    border-top: 1px solid var(--linha-suave);
+    margin-top: 0;
+  }
+  .pegadinha-card.open .pega-body { display: block; }
+
+  .pega-explain {
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 18px 0 22px;
+    color: rgba(7, 39, 45, 0.85);
+  }
+
+  .pega-examples-title {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(7, 39, 45, 0.5);
+    margin-bottom: 14px;
+  }
+
+  .pega-example {
+    background: rgba(7, 39, 45, 0.025);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+  }
+
+  .pega-ex-meta {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .tag-mini {
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .tag-prova { background: var(--verde-escuro); color: var(--bege); }
+  .tag-erro { background: rgba(255, 106, 57, 0.15); color: var(--laranja); }
+  .tag-acerto { background: rgba(0, 167, 74, 0.15); color: var(--verde); }
+  .tag-subarea { background: var(--bege); color: rgba(7, 39, 45, 0.7); border: 1px solid var(--linha-suave); }
+
+  .pega-ex-text {
+    font-size: 13.5px;
+    line-height: 1.55;
+  }
+
+  /* ====== QUESTÕES REPETIDAS (PARES) ====== */
+  .pares-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .par {
+    background: white;
+    border: 1px solid var(--linha-suave);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: var(--shadow-soft);
+  }
+  .par.hidden { display: none; }
+
+  .par-header {
+    padding: 16px 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(7, 39, 45, 0.03);
+    border-bottom: 1px solid var(--linha-suave);
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .par-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+  }
+
+  .par-num {
+    background: var(--verde);
+    color: var(--bege);
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 800;
+  }
+
+  .par-sim {
+    font-size: 12px;
+    color: rgba(7, 39, 45, 0.6);
+    font-variant-numeric: tabular-nums;
+  }
+  .par-sim strong {
+    color: var(--verde-escuro);
+    font-weight: 800;
+  }
+
+  .par-subarea {
+    font-size: 12px;
+    color: rgba(7, 39, 45, 0.65);
+    font-style: italic;
+  }
+
+  .par-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .par-q {
+    padding: 18px 22px;
+  }
+  .par-q + .par-q { border-left: 1px solid var(--linha-suave); }
+
+  .par-q-meta {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+
+  .par-q-text {
+    font-size: 13.5px;
+    line-height: 1.55;
+  }
+
+  /* ====== HEATMAP ====== */
+  .heatmap {
+    background: white;
+    border: 1px solid var(--linha-suave);
+    border-radius: 14px;
+    padding: 24px;
+    box-shadow: var(--shadow-soft);
+    overflow-x: auto;
+  }
+
+  .heatmap-table {
+    width: 100%;
+    min-width: 600px;
+    border-collapse: separate;
+    border-spacing: 4px;
+  }
+
+  .heatmap-table th {
+    text-align: center;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(7, 39, 45, 0.55);
+    padding: 8px 4px;
+  }
+
+  .heatmap-table th.area-th {
+    text-align: left;
+    padding: 8px 12px;
+    width: 320px;
+  }
+
+  .heatmap-table td.area-name {
+    font-size: 13.5px;
+    font-weight: 500;
+    padding: 8px 12px;
+    color: var(--verde-escuro);
+    line-height: 1.35;
+  }
+
+  .heatmap-table td.cell {
+    text-align: center;
+    padding: 10px 6px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    transition: transform 0.15s ease;
+    cursor: default;
+  }
+  .heatmap-table td.cell:hover {
+    transform: scale(1.06);
+  }
+
+  .heatmap-table td.total {
+    text-align: center;
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--verde-escuro);
+    font-variant-numeric: tabular-nums;
+    padding: 10px 12px;
+    background: rgba(0, 167, 74, 0.08);
+    border-radius: 6px;
+  }
+
+  .heatmap-legend {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 18px;
+    font-size: 12px;
+    color: rgba(7, 39, 45, 0.6);
+    flex-wrap: wrap;
+  }
+  .heatmap-gradient {
+    width: 180px;
+    height: 12px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #E8F4ED 0%, #00A74A 100%);
+  }
+
+  /* ====== DIFICULDADE ====== */
+  .dif-table {
+    background: white;
+    border: 1px solid var(--linha-suave);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .dif-row {
+    display: grid;
+    grid-template-columns: 1fr 80px 1fr;
+    gap: 24px;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--linha-suave);
+    align-items: center;
+  }
+  .dif-row:last-child { border-bottom: none; }
+
+  .dif-tipo {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  .dif-total {
+    text-align: right;
+    font-size: 13px;
+    color: rgba(7, 39, 45, 0.6);
+    font-variant-numeric: tabular-nums;
+  }
+  .dif-total strong {
+    color: var(--verde-escuro);
+    font-weight: 800;
+    font-size: 18px;
+    display: block;
+  }
+
+  .dif-bar {
+    display: flex;
+    height: 32px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: inset 0 0 0 1px var(--linha-suave);
+  }
+
+  .dif-segment {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--verde-escuro);
+    transition: flex-basis 0.4s ease;
+    min-width: 0;
+  }
+  .dif-segment.zero { display: none; }
+
+  .dif-legend {
+    display: flex;
+    gap: 32px;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
+  }
+
+  .dif-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+  }
+
+  .legend-dot {
+    width: 14px; height: 14px;
+    border-radius: 4px;
+  }
+
+  .leitura-rapida {
+    margin-top: 24px;
+    background: rgba(244, 166, 215, 0.15);
+    border-left: 4px solid var(--rosa);
+    border-radius: 8px;
+    padding: 18px 22px;
+  }
+
+  .leitura-tag {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--rosa);
+    margin-bottom: 10px;
+  }
+
+  .leitura-rapida ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 13.5px;
+    line-height: 1.55;
+  }
+
+  .leitura-rapida li {
+    padding-left: 18px;
+    position: relative;
+  }
+  .leitura-rapida li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--rosa);
+    font-weight: 800;
+  }
+
+  /* ====== FOOTER ====== */
+  .footer {
+    margin-top: 96px;
+    padding: 32px 0;
+    border-top: 1px solid var(--linha);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    color: rgba(7, 39, 45, 0.6);
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .footer-handle {
+    color: var(--verde);
+    font-weight: 700;
+  }
+
+  /* ====== MOBILE ====== */
+  @media (max-width: 820px) {
+    .header { padding: 12px 20px; }
+    .nav-inner { padding: 0 20px; }
+    .container { padding: 36px 20px 60px; }
+    .hero h1 { font-size: 52px; }
+    .hero-sub { font-size: 16px; }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .stat-value { font-size: 36px; }
+    .pegadinhas-grid { grid-template-columns: 1fr; }
+    .par-body { grid-template-columns: 1fr; }
+    .par-q + .par-q {
+      border-left: none;
+      border-top: 1px solid var(--linha-suave);
+    }
+    .dif-row {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    .dif-total { text-align: left; }
+    .section-title { font-size: 26px; }
+    table.provas td.org { width: auto; }
+    table.provas td.cargo { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo-text">
+    <span class="prof">prof.</span>
+    <span class="nome">suzane <em>lima</em></span>
+  </div>
+  <div class="header-meta">relatório de banca</div>
+</header>
+
+<nav class="nav">
+  <div class="nav-inner" id="nav-inner">
+    <a href="#provas">provas</a>
+    <a href="#areas">áreas</a>
+    <a href="#subareas">subáreas</a>
+    <a href="#pegadinhas">pegadinhas</a>
+    <a href="#repetidas">repetidas</a>
+    <a href="#tendencia-areas">tendência áreas</a>
+    <a href="#tendencia-subareas">tendência subáreas</a>
+    <a href="#dificuldade">dificuldade</a>
+  </div>
+</nav>
+
+<main class="container">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="eyebrow">Análise de banca</div>
+    <h1><em>cebraspe</em><br>2015–2026</h1>
+    <p class="hero-sub">o que cai, com que frequência, em que ano. mapa de tendências, pegadinhas e questões repetidas dentro do corpus completo de provas de biblioteconomia da banca.</p>
+    <div class="hero-meta">
+      <span class="pill">27 provas</span>
+      <span class="pill alt">1.567 questões</span>
+      <span class="pill">21 áreas · 183 subáreas</span>
+      <span class="pill" style="background:var(--laranja); color:var(--bege);">+ TJ/ES 2023 nesta atualização</span>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="stats">
+    <div class="stat">
+      <div class="stat-label">Provas analisadas</div>
+      <div class="stat-value">27</div>
+      <div class="stat-detail">de 2015 a 2026</div>
+    </div>
+    <div class="stat s2">
+      <div class="stat-label">Total de questões</div>
+      <div class="stat-value">1.567</div>
+      <div class="stat-detail">corpus completo</div>
+    </div>
+    <div class="stat s3">
+      <div class="stat-label">Áreas mapeadas</div>
+      <div class="stat-value">21</div>
+      <div class="stat-detail">classificadas pela taxonomia BDC</div>
+    </div>
+    <div class="stat s4">
+      <div class="stat-label">Subáreas mapeadas</div>
+      <div class="stat-value">183</div>
+      <div class="stat-detail">granularidade fina</div>
+    </div>
+  </section>
+
+  <!-- 1. PROVAS ANALISADAS -->
+  <section class="section" id="provas">
+    <div class="section-num">01 · corpus</div>
+    <h2 class="section-title">provas analisadas</h2>
+    <p class="section-sub">27 provas Cebraspe de biblioteconomia aplicadas entre 2015 e 2026, totalizando 1.567 questões. esta atualização incluiu a prova TJ/ES 2023 (40 questões). busque por ano, órgão ou cargo pra filtrar a lista.</p>
+
+    <div class="provas-table">
+      <div class="provas-search">
+        <input type="text" id="provas-search-input" placeholder="🔍 buscar por ano, órgão, cargo...">
+        <span class="provas-count"><strong id="provas-count">27</strong> provas</span>
+      </div>
+      <table class="provas">
+        <thead>
+          <tr>
+            <th>Ano</th>
+            <th>Órgão</th>
+            <th>Cargo</th>
+            <th style="text-align:right">Questões</th>
+          </tr>
+        </thead>
+        <tbody id="provas-tbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 2. ÁREAS MAIS COBRADAS -->
+  <section class="section" id="areas">
+    <div class="section-num">02 · ranking</div>
+    <h2 class="section-title">áreas mais cobradas</h2>
+    <p class="section-sub">distribuição das 1.567 questões nas 21 áreas mapeadas.</p>
+
+    <div class="bars" id="areas-bars"></div>
+
+    <button class="more-toggle" id="areas-toggle">ver as 11 áreas restantes ↓</button>
+
+    <div style="margin-top: 56px;">
+      <h3 style="font-size: 22px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 8px;">detalhamento das 10 áreas mais cobradas</h3>
+      <p class="section-sub" style="margin-bottom: 24px;">clique pra ver as 5 subáreas mais incidentes em cada uma.</p>
+
+      <div id="areas-detail"></div>
+    </div>
+  </section>
+
+  <!-- 3. SUBÁREAS MAIS COBRADAS -->
+  <section class="section" id="subareas">
+    <div class="section-num">03 · ranking fino</div>
+    <h2 class="section-title">subáreas mais cobradas</h2>
+    <p class="section-sub">ranking sem subordinação — as subáreas mais frequentes em todo o corpus, independentemente da área-mãe. a partir do 30º lugar, a lista fica esparsa: a maioria das subáreas tem 5 ocorrências ou menos.</p>
+
+    <div class="subareas-list" id="subareas-list"></div>
+
+    <button class="more-toggle" id="subareas-toggle">ver até o 30º lugar ↓</button>
+  </section>
+
+  <!-- 4. PEGADINHAS -->
+  <section class="section" id="pegadinhas">
+    <div class="section-num">04 · padrões</div>
+    <h2 class="section-title">pegadinhas frequentes</h2>
+    <p class="section-sub">padrões linguísticos e conceituais que a Cebraspe repete em questões de Certo ou Errado. identificados por análise estatística sobre 667 questões com gabarito ERRADO no período. os exemplos foram selecionados para evidenciar o padrão. clique nos cards pra ver os exemplos.</p>
+
+    <div class="pegadinhas-grid" id="pegadinhas-grid"></div>
+  </section>
+
+  <!-- 5. QUESTÕES REPETIDAS -->
+  <section class="section" id="repetidas">
+    <div class="section-num">05 · repetições</div>
+    <h2 class="section-title">questões repetidas ou muito parecidas</h2>
+    <p class="section-sub">pares de questões com alta similaridade textual aplicadas em provas diferentes. em alguns casos é a mesma afirmação com variação leve de redação; em outros, é a <strong>mesma informação com gabarito invertido</strong> — a banca pega a questão antiga CERTA e transforma em ERRADA trocando uma palavra-chave. detecção via TF-IDF (bigramas, stopwords em português) com cosseno ≥ 0,65. <strong>21 pares cross-prova encontrados.</strong></p>
+
+    <div class="pares-grid" id="pares-grid"></div>
+
+    <button class="more-toggle" id="pares-toggle">ver os 16 pares restantes ↓</button>
+  </section>
+
+  <!-- 6. TENDÊNCIA ÁREAS -->
+  <section class="section" id="tendencia-areas">
+    <div class="section-num">06 · evolução</div>
+    <h2 class="section-title">tendência das 10 áreas mais cobradas</h2>
+    <p class="section-sub">distribuição absoluta de questões por ano para cada uma das 10 áreas mais cobradas. com a inclusão da prova <strong>TJ/ES 2023</strong>. a intensidade da cor reflete o número de questões.</p>
+
+    <div class="heatmap" id="heatmap-areas"></div>
+    <div class="heatmap-legend">
+      <span>menos questões</span>
+      <span class="heatmap-gradient"></span>
+      <span>mais questões</span>
+    </div>
+  </section>
+
+  <!-- 7. TENDÊNCIA SUBÁREAS -->
+  <section class="section" id="tendencia-subareas">
+    <div class="section-num">07 · evolução fina</div>
+    <h2 class="section-title">tendência das 10 subáreas mais cobradas</h2>
+    <p class="section-sub">mesma lógica em granularidade fina. picos isolados em determinados anos costumam refletir o foco do edital do órgão daquela aplicação.</p>
+
+    <div class="heatmap" id="heatmap-subareas"></div>
+    <div class="heatmap-legend">
+      <span>menos questões</span>
+      <span class="heatmap-gradient"></span>
+      <span>mais questões</span>
+    </div>
+  </section>
+
+  <!-- 8. DIFICULDADE POR TIPO -->
+  <section class="section" id="dificuldade">
+    <div class="section-num">08 · calibração</div>
+    <h2 class="section-title">nível de dificuldade por tipo de concurso</h2>
+    <p class="section-sub">percentagem das questões classificadas como Fácil, Médio e Difícil em cada tipo de concurso.</p>
+
+    <div class="dif-legend">
+      <div class="dif-legend-item"><span class="legend-dot" style="background:var(--dif-facil)"></span> Fácil</div>
+      <div class="dif-legend-item"><span class="legend-dot" style="background:var(--dif-medio)"></span> Médio</div>
+      <div class="dif-legend-item"><span class="legend-dot" style="background:var(--dif-dificil)"></span> Difícil</div>
+    </div>
+
+    <div class="dif-table" id="dif-table"></div>
+  </section>
+
+  <footer class="footer">
+    <div>relatório gerado em 29 de abril de 2026 · revisado pela Prof. Suzane Lima</div>
+    <div class="footer-handle">@suzanelimaprof</div>
+  </footer>
+
+</main>
+
+<script>
+// ============================================
+// DADOS
+// ============================================
+
+const PROVAS = [
+  { ano: 2026, org: "TCE/MG", cargo: "Bibliotecário", q: 50 },
+  { ano: 2025, org: "EMBRAPA", cargo: "Analista – Área: Gestão da Informação – Subárea: Gestão da Informação Bibliográfica", q: 27 },
+  { ano: 2025, org: "MPCE", cargo: "Analista Ministerial – Especialidade: Biblioteconomia", q: 70 },
+  { ano: 2025, org: "TJPA", cargo: "Analista Judiciário – Especialidade: Biblioteconomia", q: 70 },
+  { ano: 2024, org: "CAPES", cargo: "Analista em Ciência e Tecnologia – Especialidade: Biblioteconomia", q: 46 },
+  { ano: 2024, org: "Ministério Público do Estado do Tocantins", cargo: "Analista Ministerial Especializado – Biblioteconomia", q: 70 },
+  { ano: 2024, org: "PCDF", cargo: "Bibliotecário", q: 70 },
+  { ano: 2024, org: "Prefeitura Municipal de Cachoeiro de Itapemirim/ES", cargo: "Bibliotecário", q: 40 },
+  { ano: 2024, org: "STJ", cargo: "Analista Judiciário - Área: Apoio Especializado - Especialidade: Biblioteconomia", q: 69 },
+  { ano: 2024, org: "TSE", cargo: "Analista Judiciário – Área: Apoio Especializado – Especialidade: Biblioteconomia", q: 60 },
+  { ano: 2023, org: "TJ/ES", cargo: "Analista Judiciário – Apoio Especializado – Especialidade: Biblioteconomia", q: 40, novo: true },
+  { ano: 2022, org: "Fundação Universidade de Brasília (FUB)", cargo: "Bibliotecário-Documentalista", q: 70 },
+  { ano: 2022, org: "SEE/PE", cargo: "Analista de Gestão Educacional - Biblioteconomia", q: 70 },
+  { ano: 2022, org: "TRT 8ª Região", cargo: "Analista Judiciário - Área: Apoio Especializado - Especialidade: Biblioteconomia", q: 20 },
+  { ano: 2021, org: "Assembleia Legislativa do Estado do Ceará (AL-CE)", cargo: "Analista Legislativo - Biblioteconomia", q: 50 },
+  { ano: 2020, org: "MPCE", cargo: "Analista Ministerial - Biblioteconomia", q: 70 },
+  { ano: 2020, org: "Prefeitura Municipal de Barra dos Coqueiros - SE", cargo: "Bibliotecário", q: 10 },
+  { ano: 2019, org: "PGDF", cargo: "Analista Jurídico – Biblioteconomia", q: 70 },
+  { ano: 2019, org: "TJ-AM", cargo: "Analista Judiciário - Biblioteconomia", q: 79 },
+  { ano: 2018, org: "ABIN", cargo: "Oficial Técnico de Inteligência - Área 10", q: 46 },
+  { ano: 2018, org: "EBSERH", cargo: "Analista Administrativo – Especialidade: Biblioteconomia", q: 60 },
+  { ano: 2018, org: "IPHAN", cargo: "Técnico I - Área 5", q: 70 },
+  { ano: 2018, org: "STJ - Superior Tribunal de Justiça", cargo: "Analista Judiciário - Área de Atividade: Apoio Especializado - Especialidade: Biblioteconomia", q: 80 },
+  { ano: 2017, org: "Secretaria de Estado de Educação do Distrito Federal", cargo: "Analista de Gestão Educacional - Especialidade: Biblioteconomia", q: 50 },
+  { ano: 2016, org: "Defensoria Pública da União (DPU)", cargo: "Bibliotecário", q: 80 },
+  { ano: 2015, org: "Fundação Universidade de Brasília (FUB)", cargo: "Bibliotecário Documentalista", q: 70 },
+  { ano: 2015, org: "TJDFT", cargo: "Analista Judiciário - Biblioteconomia", q: 60 }
+];
+
+const AREAS = [
+  { area: "Tecnologias da Informação, Automação e Bibliotecas Digitais", q: 320, pct: 20.4 },
+  { area: "Bibliotecas Jurídicas e Legislativas", q: 165, pct: 10.5 },
+  { area: "Introdução à Biblioteconomia, Documentação e Ciência da Informação", q: 162, pct: 10.3 },
+  { area: "Catalogação", q: 122, pct: 7.8 },
+  { area: "Serviços de Referência", q: 98, pct: 6.3 },
+  { area: "Normalização", q: 95, pct: 6.1 },
+  { area: "Desenvolvimento de Coleções", q: 90, pct: 5.7 },
+  { area: "Gestão de Bibliotecas", q: 87, pct: 5.6 },
+  { area: "Indexação", q: 81, pct: 5.2 },
+  { area: "Linguagens Documentárias", q: 79, pct: 5.0 },
+  { area: "Estudos de Usuários", q: 67, pct: 4.3 },
+  { area: "Classificação", q: 61, pct: 3.9 },
+  { area: "Bibliografia", q: 33, pct: 2.1 },
+  { area: "Marketing para Unidades de Informação", q: 32, pct: 2.0 },
+  { area: "Fontes de Informação", q: 18, pct: 1.1 },
+  { area: "Legislação da área ou correlata", q: 17, pct: 1.1 },
+  { area: "Controle Bibliográfico", q: 12, pct: 0.8 },
+  { area: "Ciência aberta", q: 10, pct: 0.6 },
+  { area: "Bibliotecas Universitárias", q: 10, pct: 0.6 },
+  { area: "Comunicação científica", q: 6, pct: 0.4 },
+  { area: "Bibliotecas escolares", q: 2, pct: 0.1 }
+];
+
+// Top 5 subáreas dentro de cada uma das 10 áreas mais cobradas
+const SUB_DETAIL = [
+  { area: "Tecnologias da Informação, Automação e Bibliotecas Digitais", subs: [
+    { name: "Automação de bibliotecas", q: 37 },
+    { name: "Equipamento", q: 28 },
+    { name: "Definições de biblioteca digital, virtual, eletrônica, híbrida e 2.0", q: 28 },
+    { name: "Interoperabilidade", q: 23 },
+    { name: "Bibliotecas digitais — requisitos desejáveis", q: 23 }
+  ]},
+  { area: "Bibliotecas Jurídicas e Legislativas", subs: [
+    { name: "Fontes de informação jurídica - Sistemas e rede de informação", q: 44 },
+    { name: "Fontes de informação jurídica - Redes de bibliotecas", q: 30 },
+    { name: "Documentação jurídica", q: 20 },
+    { name: "Fontes de informação jurídica - Diário Oficial da União - Estrutura do DOU", q: 16 },
+    { name: "Fontes de informação jurídica - Diário Oficial da União - Diário da Justiça Eletrônico (DJe)", q: 15 }
+  ]},
+  { area: "Introdução à Biblioteconomia, Documentação e Ciência da Informação", subs: [
+    { name: "Ciência da Informação", q: 40 },
+    { name: "Biblioteconomia - As cinco leis da Biblioteconomia", q: 38 },
+    { name: "Documentação", q: 31 },
+    { name: "Ciência da Informação - Infometria", q: 27 },
+    { name: "Diferenças entre as 3 áreas", q: 9 }
+  ]},
+  { area: "Catalogação", subs: [
+    { name: "AACR2 — Parte 1: Descrição - Regras gerais para descrição (Capítulo 1)", q: 24 },
+    { name: "Catálogos", q: 21 },
+    { name: "RDA", q: 17 },
+    { name: "Modelos conceituais - FRBR - Requisitos Funcionais para Registros Bibliográficos", q: 12 },
+    { name: "Representação descritiva versus representação temática", q: 10 }
+  ]},
+  { area: "Serviços de Referência", subs: [
+    { name: "Disseminação Seletiva da Informação (DSI)", q: 34 },
+    { name: "O que é serviço de referência", q: 18 },
+    { name: "Processo de referência", q: 14 },
+    { name: "Serviço de referência virtual", q: 12 },
+    { name: "Entrevista de referência", q: 7 }
+  ]},
+  { area: "Normalização", subs: [
+    { name: "NBR 6023:2018 — Referências", q: 47 },
+    { name: "NBR 6028:2021 — Resumo, resenha e recensão", q: 9 },
+    { name: "NBR 6034:2004 — Preparação de índice de publicações", q: 7 },
+    { name: "NBR 6027:2012 — Sumário", q: 6 },
+    { name: "NBR 14724:2011 — Trabalhos acadêmicos", q: 6 }
+  ]},
+  { area: "Desenvolvimento de Coleções", subs: [
+    { name: "Processo de desenvolvimento de coleções", q: 49 },
+    { name: "Seleção - Política de seleção", q: 21 },
+    { name: "Seleção - Critérios de seleção", q: 7 },
+    { name: "Seleção - Modelos para estruturação de políticas de desenvolvimento de coleções", q: 6 },
+    { name: "Seleção - Seleção de documentos eletrônicos", q: 3 }
+  ]},
+  { area: "Gestão de Bibliotecas", subs: [
+    { name: "Planejamento", q: 21 },
+    { name: "Funções da biblioteca", q: 19 },
+    { name: "Gestão do conhecimento", q: 17 },
+    { name: "Modelagem da organização", q: 10 },
+    { name: "Avaliação de serviços de informação, programas e projetos", q: 5 }
+  ]},
+  { area: "Indexação", subs: [
+    { name: "Indexação e resumos - Tipos de resumo", q: 12 },
+    { name: "A prática da indexação - Como analisar um documento", q: 10 },
+    { name: "Revocação e Precisão", q: 10 },
+    { name: "Princípios da indexação - Etapas da indexação", q: 9 },
+    { name: "Indexação automática", q: 7 }
+  ]},
+  { area: "Linguagens Documentárias", subs: [
+    { name: "Tesauros - Definição e características", q: 23 },
+    { name: "Tesauros - Construção de tesauros", q: 14 },
+    { name: "Tesauros - Relações conceituais", q: 11 },
+    { name: "Vocabulários controlados", q: 5 },
+    { name: "Ontologias", q: 5 }
+  ]}
+];
+
+// Top 30 subáreas sem subordinação
+const SUBAREAS_RANK = [
+  { sub: "Processo de desenvolvimento de coleções", area: "Desenvolvimento de Coleções", q: 49 },
+  { sub: "NBR 6023:2018 — Referências", area: "Normalização", q: 47 },
+  { sub: "Fontes de informação jurídica - Sistemas e rede de informação", area: "Bibliotecas Jurídicas e Legislativas", q: 44 },
+  { sub: "Ciência da Informação", area: "Introdução à Biblioteconomia, Documentação e Ciência da Informação", q: 40 },
+  { sub: "Biblioteconomia - As cinco leis da Biblioteconomia", area: "Introdução à Biblioteconomia, Documentação e Ciência da Informação", q: 38 },
+  { sub: "Automação de bibliotecas", area: "Tecnologias da Informação, Automação e Bibliotecas Digitais", q: 37 },
+  { sub: "Disseminação Seletiva da Informação (DSI)", area: "Serviços de Referência", q: 34 },
+  { sub: "CDU — Classificação Decimal Universal - Sinais e tabelas auxiliares da CDU", area: "Classificação", q: 31 },
+  { sub: "Documentação", area: "Introdução à Biblioteconomia, Documentação e Ciência da Informação", q: 31 },
+  { sub: "Fontes de informação jurídica - Redes de bibliotecas", area: "Bibliotecas Jurídicas e Legislativas", q: 30 },
+  { sub: "Métodos e metodologias de estudos de usuários", area: "Estudos de Usuários", q: 29 },
+  { sub: "Equipamento", area: "Tecnologias da Informação, Automação e Bibliotecas Digitais", q: 28 },
+  { sub: "Definições de biblioteca digital, virtual, eletrônica, híbrida e 2.0", area: "Tecnologias da Informação, Automação e Bibliotecas Digitais", q: 28 },
+  { sub: "Ciência da Informação - Infometria", area: "Introdução à Biblioteconomia, Documentação e Ciência da Informação", q: 27 },
+  { sub: "AACR2 — Parte 1: Descrição - Regras gerais para descrição (Capítulo 1)", area: "Catalogação", q: 24 },
+  { sub: "Interoperabilidade", area: "Tecnologias da Informação, Automação e Bibliotecas Digitais", q: 23 },
+  { sub: "Bibliotecas digitais — requisitos desejáveis", area: "Tecnologias da Informação, Automação e Bibliotecas Digitais", q: 23 },
+  { sub: "Tesauros - Definição e características", area: "Linguagens Documentárias", q: 23 },
+  { sub: "Sistemas de Recuperação da Informação (SRIs)", area: "Tecnologias da Informação, Automação e Bibliotecas Digitais", q: 22 },
+  { sub: "Catálogos", area: "Catalogação", q: 21 },
+  { sub: "Seleção - Política de seleção", area: "Desenvolvimento de Coleções", q: 21 },
+  { sub: "Planejamento", area: "Gestão de Bibliotecas", q: 21 },
+  { sub: "CDU — Classificação Decimal Universal - Noções básicas", area: "Classificação", q: 20 },
+  { sub: "Documentação jurídica", area: "Bibliotecas Jurídicas e Legislativas", q: 20 },
+  { sub: "Funções da biblioteca", area: "Gestão de Bibliotecas", q: 19 },
+  { sub: "Esquemas de metadados - MARC 21 - Introdução", area: "Tecnologias da Informação, Automação e Bibliotecas Digitais", q: 18 },
+  { sub: "O que é serviço de referência", area: "Serviços de Referência", q: 18 },
+  { sub: "Preservação digital", area: "Tecnologias da Informação, Automação e Bibliotecas Digitais", q: 17 },
+  { sub: "Gestão do conhecimento", area: "Gestão de Bibliotecas", q: 17 },
+  { sub: "Bibliografias - Classificação e tipos de bibliografia", area: "Bibliografia", q: 17 }
+];
+
+const PEGADINHAS = [
+  {
+    titulo: "Exclusividade falsa",
+    ocorrencias: 39,
+    erro: 78,
+    explicacao: "Cebraspe coloca palavras como \"apenas\", \"somente\", \"exclusivamente\", \"unicamente\" ou \"tão somente\" em afirmativas que descrevem conceitos abrangentes. Em 39 de 50 ocorrências dessas palavras em questões C/E (78%), o gabarito é ERRADO. <strong>Regra prática:</strong> desconfie de qualquer afirmativa que restrinja indevidamente o escopo de um conceito.",
+    exemplos: [
+      { prova: "PCDF", ano: 2024, gab: "E", sub: "Fontes de informação jurídica - Diário Oficial da União - Acesso ao DOU", text: "Os conteúdos do DOU são organizados de acordo com as disposições legais da administração pública, sendo disponibilizados apenas para públicos autorizados, mediante canais específicos de acesso." },
+      { prova: "TJPA", ano: 2025, gab: "E", sub: "Documentação jurídica", text: "Cabe aos profissionais do direito avaliar a qualidade e a confiabilidade das informações jurídicas, ao passo que ao bibliotecário jurídico cabe tão somente armazenar os conteúdos produzidos, seja no ambiente físico, seja no digital." },
+      { prova: "TJPA", ano: 2025, gab: "E", sub: "Definições de biblioteca digital, virtual, eletrônica, híbrida e 2.0", text: "Biblioteca digital é aquela que tem como base conteúdos em texto completo, exclusivamente textuais, em formatos digitais, abrangendo livros e periódicos, armazenados e disponibilizados para acesso segundo processos padronizados em servidores próprios ou distribuídos em redes de computadores." },
+      { prova: "MPCE", ano: 2025, gab: "E", sub: "Princípios da indexação - Vocabulários controlados", text: "Entre os três tipos de vocabulários controlados, apenas as listas de cabeçalhos de assuntos controlam sinônimos." }
+    ]
+  },
+  {
+    titulo: "Negação absoluta (\"não é\", \"nunca\", \"jamais\")",
+    ocorrencias: 23,
+    erro: 79,
+    explicacao: "Quando a afirmativa usa negação absoluta sobre um conceito, o gabarito tende a ser ERRADO em 79% das ocorrências (23 de 29). A banca constrói enunciados que negam aspectos reais ou atribuem negações a conceitos que, na verdade, incluem o elemento citado.",
+    exemplos: [
+      { prova: "MPCE", ano: 2025, gab: "E", sub: "Inteligência artificial", text: "Embora a inteligência artificial tenha ampla aplicabilidade nas diversas disciplinas da biblioteconomia, sua aplicação não é possível na área de desenvolvimento de coleções, por ser necessária a intervenção humana durante todo esse processo." },
+      { prova: "CAPES", ano: 2024, gab: "E", sub: "Tesauros - Definição e características", text: "Embora o método de categorias tenha trazido para o campo da documentação o princípio norteador para a organização de conceitos em um dado domínio, o tesauro não é considerado um sistema de conceitos." },
+      { prova: "CAPES", ano: 2024, gab: "E", sub: "Definições de biblioteca digital, virtual, eletrônica, híbrida e 2.0", text: "Os documentos digitais podem ser facilmente combinados, mas não é possível integrar em um único documento qualquer tipo de material originalmente analógico." },
+      { prova: "TSE", ano: 2024, gab: "E", sub: "Indexação e resumos - Tipos de resumo", text: "A sumarização é usada para designar qualquer processo que produza representações condensadas de textos, mas somente em relação a resumos, nunca para extratos." }
+    ]
+  },
+  {
+    titulo: "Inversão entre Revocação e Precisão",
+    ocorrencias: 5,
+    erro: null,
+    explicacao: "A banca alterna as fórmulas e definições dos dois coeficientes. <strong>Regra mnemônica:</strong> PRECISÃO = relevantes recuperados / total recuperado (mede QUALIDADE do resultado); REVOCAÇÃO/RECALL = relevantes recuperados / total relevantes existentes (mede COBERTURA).",
+    exemplos: [
+      { prova: "PGDF", ano: 2019, gab: "E", sub: "Revocação e Precisão", text: "A precisão, na indexação, é a relação entre os documentos relevantes recuperados e o número total de documentos considerados relevantes e existentes na coleção." },
+      { prova: "EBSERH", ano: 2018, gab: "E", sub: "Revocação e Precisão", text: "Situação hipotética: 50 documentos foram recuperados em um processo de busca e, desses documentos, o usuário selecionou 10 como documentos úteis, isto é, uma proporção de 10/50; ou seja, 20% eram documentos úteis. Assertiva: A situação apresentada caracteriza um exemplo do que se denomina revocação." },
+      { prova: "ABIN", ano: 2018, gab: "E", sub: "Revocação e Precisão", text: "No processo de recuperação de informação, os resultados de uso das linguagens documentárias podem ser medidos por dois coeficientes: coeficiente de precisão, que é a relação entre o número de documentos relevantes recuperados e o número total de documentos relevantes existentes na coleção; e coeficiente de revocação, o…" },
+      { prova: "Defensoria Pública da União (DPU)", ano: 2016, gab: "E", sub: "Revocação e Precisão", text: "Revocação, uma medida para a avaliação da qualidade da recuperação da informação, representa a medida de interesse do que foi encontrado em um processo de busca e recuperação da informação pelo usuário." }
+    ]
+  },
+  {
+    titulo: "Confusão entre redes e sistemas jurídicos (RVBI, REJE, RBMPF, LexML, BBD)",
+    ocorrencias: 35,
+    erro: null,
+    explicacao: "A banca troca competências, coordenação e abrangência das redes jurídicas com frequência. Pontos que caem como pegadinha: QUEM coordena a RVBI (Senado Federal, não Câmara); SE a REJE inclui/exclui o TSE; SE o catálogo é aberto ao público externo; SE o empréstimo entre bibliotecas é permitido a usuários externos. Também há inversões entre LexML, SICON e LEGIN.",
+    exemplos: [
+      { prova: "PCDF", ano: 2024, gab: "E", sub: "Fontes de informação jurídica - Redes de bibliotecas", text: "Com vistas à promoção da transparência, o catálogo da Rede de Bibliotecas do Ministério Público Federal (RBMPF) é disponibilizado na página da biblioteca da Procuradoria da República no Distrito Federal na Internet, acessível a todos." },
+      { prova: "PCDF", ano: 2024, gab: "E", sub: "Fontes de informação jurídica - Redes de bibliotecas", text: "A Rede de Bibliotecas da Justiça Eleitoral (REJE) integra, em uma única base de dados, informações referentes aos acervos das bibliotecas de todos os tribunais regionais eleitorais, somando ao todo 28 bibliotecas, exceto a do Tribunal Superior Eleitoral (TSE)." },
+      { prova: "TJPA", ano: 2025, gab: "E", sub: "Fontes de informação jurídica - Redes de bibliotecas", text: "Coordenada pela Biblioteca da Câmara dos Deputados, a RVBI é uma rede cooperativa de onze bibliotecas da administração pública federal e do governo do Distrito Federal, pertencentes aos Poderes Legislativo, Executivo e Judiciário, e possui um acervo que prioriza a área do direito, especialmente a doutrina, mas também c…" },
+      { prova: "MPCE", ano: 2025, gab: "E", sub: "Fontes de informação jurídica - Redes de bibliotecas", text: "O acesso ao catálogo da RVBI é aberto, de maneira que qualquer usuário, independentemente de vínculo institucional, pode realizar empréstimos de publicações e solicitar a reprodução integral de documentos disponíveis em seu acervo." },
+      { prova: "MPCE", ano: 2025, gab: "E", sub: "Fontes de informação jurídica - Sistemas e rede de informação", text: "O vocabulário de autoridade do LexML Brasil é inicialmente preenchido com cinco valores: federal, estadual, municipal, jurídico e legislativo." }
+    ]
+  },
+  {
+    titulo: "Números e contagens erradas (leis, etapas, mandamentos)",
+    ocorrencias: 5,
+    erro: null,
+    explicacao: "Cebraspe troca quantidades fixas — cinco leis de Ranganathan, oito passos do processo de referência, dez mandamentos da preservação digital, três partes da catalogação. Além disso, altera a ORDEM de passos/etapas (típico em Processo de Referência), invertendo o que vem antes ou depois.",
+    exemplos: [
+      { prova: "MPCE", ano: 2025, gab: "E", sub: "Fontes de informação jurídica - Sistemas e rede de informação", text: "O vocabulário de autoridade do LexML Brasil é inicialmente preenchido com cinco valores: federal, estadual, municipal, jurídico e legislativo." },
+      { prova: "TSE", ano: 2024, gab: "E", sub: "Indexação e resumos - Tipos de resumo", text: "Os resumos modulares têm o objetivo de ser descrições completas de conteúdo e são compostos por três partes: o resumo indicativo, o resumo informativo e o resumo crítico." },
+      { prova: "Prefeitura Municipal de Cachoeiro de Itapemirim/ES", ano: 2024, gab: "E", sub: "CDU — Classificação Decimal Universal - Noções básicas", text: "Na CDU, as tabelas do tipo principal são numeradas de zero a nove; a classe quatro representa a matemática e as ciências naturais." },
+      { prova: "Secretaria de Estado de Educação do Distrito Federal", ano: 2017, gab: "E", sub: "Seleção - Modelos para estruturação de políticas de desenvolvimento de coleções", text: "Um dos principais modelos para a estruturação de coleções, o Conspectus orienta que os temas e assuntos das coleções sejam agrupados em cinco níveis: completeza, pesquisa, estudo, básico e mínimo." }
+    ]
+  },
+  {
+    titulo: "Quantificadores universais (\"todos\", \"qualquer\", \"sempre\")",
+    ocorrencias: 34,
+    erro: 44,
+    explicacao: "Afirmações que generalizam universos (\"qualquer usuário\", \"toda biblioteca\", \"sempre deve\", \"todos os tribunais\") são armadilhas clássicas. Em 34 de 77 ocorrências em C/E, o gabarito é ERRADO (44%). Quase sempre existe uma exceção ou especificação que invalida a generalização.",
+    exemplos: [
+      { prova: "PCDF", ano: 2024, gab: "E", sub: "Fontes de informação jurídica - Redes de bibliotecas", text: "Com vistas à promoção da transparência, o catálogo da Rede de Bibliotecas do Ministério Público Federal (RBMPF) é disponibilizado na página da biblioteca da Procuradoria da República no Distrito Federal na Internet, acessível a todos." },
+      { prova: "PCDF", ano: 2024, gab: "E", sub: "Fontes de informação jurídica - Redes de bibliotecas", text: "A Rede de Bibliotecas da Justiça Eleitoral (REJE) integra, em uma única base de dados, informações referentes aos acervos das bibliotecas de todos os tribunais regionais eleitorais, somando ao todo 28 bibliotecas, exceto a do Tribunal Superior Eleitoral (TSE)." },
+      { prova: "PCDF", ano: 2024, gab: "E", sub: "Segurança da informação", text: "Conforme o princípio da disponibilidade, as informações devem estar disponíveis 24 horas por dia, todos os dias da semana." }
+    ]
+  }
+];
+
+const PARES = [
+  { sim: 0.969, sub: "Processo de referência",
+    q1: { p: "PGDF", a: 2019, t: "Certo ou Errado", g: "E", text: "A sequência lógica das etapas decisórias do processo de referência é: questão inicial, problema, questão negociada, necessidade de informação, estratégia de busca, processo de busca, resposta e solução." },
+    q2: { p: "Secretaria de Estado de Educação do Distrito Federal", a: 2017, t: "Certo ou Errado", g: "C", text: "O processo de referência compreende uma sequência lógica de oito passos: problema, necessidade de informação, questão inicial, questão negociada, estratégia de busca, processo de busca, resposta e solução." } },
+  { sim: 0.842, sub: "Fontes de informação jurídica - Redes de bibliotecas",
+    q1: { p: "PCDF", a: 2024, t: "Certo ou Errado", g: "C", text: "A Rede Virtual de Bibliotecas do Congresso Nacional (RVBI) é uma rede cooperativa de bibliotecas que agrega recursos bibliográficos, materiais e humanos de variadas bibliotecas da administração pública federal, do governo do Distrito Federal e dos Poderes Legislativo, Executivo e Judiciário." },
+    q2: { p: "TSE", a: 2024, t: "Certo ou Errado", g: "C", text: "A Rede Virtual de Bibliotecas (RVBI) agrega recursos bibliográficos, materiais e humanos da administração pública federal e do governo do Distrito Federal, dos Poderes Legislativo, Executivo e Judiciário." } },
+  { sim: 0.799, sub: "Esquemas de metadados - MARC 21 - Introdução",
+    q1: { p: "CAPES", a: 2024, t: "Certo ou Errado", g: "C", text: "O formato MARC é ferramenta de domínio exclusivo do bibliotecário, que o utiliza na atividade de descrição bibliográfica." },
+    q2: { p: "Fundação Universidade de Brasília (FUB)", a: 2022, t: "Certo ou Errado", g: "E", text: "Diferentemente da ISO 2709 e do Protocolo Z39.50, o formato Marc é ferramenta de domínio exclusivo do bibliotecário que o utiliza na atividade de descrição bibliográfica." } },
+  { sim: 0.783, sub: "Fontes de informação jurídica - Sistemas e rede de informação",
+    q1: { p: "TCE/MG", a: 2026, t: "Múltipla escolha", g: "E", text: "link da questão: https://www.qconcursos.com/questoes-de-concursos/questoes/90700446-01" },
+    q2: { p: "Ministério Público do Estado do Tocantins", a: 2024, t: "Certo ou Errado", g: "C", text: "LexML é um portal especializado em informação jurídica e legislativa que reúne leis, decretos, acórdãos, súmulas, projetos de leis, entre outros documentos das esferas federal, estadual e municipal dos Poderes Executivo, Legislativo e Judiciário de todo o Brasil, sendo um exemplo de metabuscador disponível atualmente." } },
+  { sim: 0.773, sub: "Revocação e Precisão",
+    q1: { p: "PGDF", a: 2019, t: "Certo ou Errado", g: "E", text: "A precisão, na indexação, é a relação entre os documentos relevantes recuperados e o número total de documentos considerados relevantes e existentes na coleção." },
+    q2: { p: "ABIN", a: 2018, t: "Certo ou Errado", g: "E", text: "No processo de recuperação de informação, os resultados de uso das linguagens documentárias podem ser medidos por dois coeficientes: coeficiente de precisão, que é a relação entre o número de documentos relevantes recuperados e o número total de documentos relevantes existentes na coleção; e coeficiente de revocação, ou seja, a relação entre o número de documentos relevantes re…" } },
+  { sim: 0.762, sub: "Contribuição da Biblioteconomia para o controle bibliográfico",
+    q1: { p: "STJ", a: 2024, t: "Certo ou Errado", g: "C", text: "O sistema OCLC (online computer library center) é um exemplo de catalogação cooperativa em que várias bibliotecas adotam a mesma norma." },
+    q2: { p: "IPHAN", a: 2018, t: "Certo ou Errado", g: "E", text: "O OCLC (Online Computer Library Center) é um tipo de sistema que não utiliza a catalogação cooperativa." } },
+  { sim: 0.748, sub: "Fontes de informação jurídica - Redes de bibliotecas",
+    q1: { p: "PCDF", a: 2024, t: "Certo ou Errado", g: "E", text: "A Rede de Bibliotecas da Justiça Eleitoral (REJE) integra, em uma única base de dados, informações referentes aos acervos das bibliotecas de todos os tribunais regionais eleitorais, somando ao todo 28 bibliotecas, exceto a do Tribunal Superior Eleitoral (TSE)." },
+    q2: { p: "TSE", a: 2024, t: "Certo ou Errado", g: "E", text: "A biblioteca do Tribunal Superior Eleitoral (TSE) coopera com a Rede Virtual de Bibliotecas (RVBI) para integrar, em uma única base de dados, informações referentes aos acervos bibliográficos de todos os tribunais regionais eleitorais." } },
+  { sim: 0.733, sub: "Fontes de informação jurídica - Sistemas e rede de informação",
+    q1: { p: "Ministério Público do Estado do Tocantins", a: 2024, t: "Certo ou Errado", g: "C", text: "LexML é um portal especializado em informação jurídica e legislativa que reúne leis, decretos, acórdãos, súmulas, projetos de leis, entre outros documentos das esferas federal, estadual e municipal dos Poderes Executivo, Legislativo e Judiciário de todo o Brasil, sendo um exemplo de metabuscador disponível atualmente." },
+    q2: { p: "MPCE", a: 2020, t: "Certo ou Errado", g: "C", text: "Julgue o item a seguir, relativo à ciência da informação e à documentação geral e jurídica. LexML é uma rede de informação jurídica e legislativa liderada pelo Senado Federal. Nela, é possível encontrar leis, decretos, acórdãos, súmulas, projetos de leis, entre outros documentos das esferas federal, estadual e municipal dos Poderes Executivo, Legislativo e Judiciário de todo o…" } },
+  { sim: 0.727, sub: "NBR 6034:2004 — Preparação de índice de publicações",
+    q1: { p: "TSE", a: 2024, t: "Certo ou Errado", g: "C", text: "O índice, como descrito na NBR 6034, pode complementar informações não expressas no documento, tais como nomes completos, datas de identificação e nomes de compostos químicos." },
+    q2: { p: "TJ-AM", a: 2019, t: "Certo ou Errado", g: "E", text: "O índice não deve conter informações complementares às do documento, isto é, informações que não estejam nele expressas, tais como nomes completos, datas de identificação, nomes de compostos químicos etc." } },
+  { sim: 0.711, sub: "NBR 6023:2018 — Referências",
+    q1: { p: "MPCE", a: 2025, t: "Certo ou Errado", g: "C", text: "Nas referências bibliográficas de documentos online, além dos elementos essenciais e complementares, devem-se registrar o endereço eletrônico, precedido da expressão Disponível em:, e a data de acesso a ele, precedida da expressão Acesso em:." },
+    q2: { p: "Fundação Universidade de Brasília (FUB)", a: 2022, t: "Certo ou Errado", g: "C", text: "As referências de legislação retiradas da Internet devem obedecer aos padrões indicados para legislação, acrescidas do endereço eletrônico, precedido da expressão “Disponível em:”, e da data de acesso, precedida da expressão “Acesso em:”." } },
+  { sim: 0.708, sub: "Ciência da Informação",
+    q1: { p: "TSE", a: 2024, t: "Certo ou Errado", g: "C", text: "O conteúdo da ciência da informação é marcado pelo selo da interdisciplinaridade entre ciências exatas e físicas, bem como ciências sociais e humanas." },
+    q2: { p: "Defensoria Pública da União (DPU)", a: 2016, t: "Certo ou Errado", g: "C", text: "A ciência da informação tem seu conteúdo apoiado na interdisciplinaridade: é uma área de conhecimento influenciada pelas ciências matemáticas, físicas, ciências sociais e humanas." } },
+  { sim: 0.707, sub: "Questão de referência",
+    q1: { p: "SEE/PE", a: 2022, t: "Certo ou Errado", g: "E", text: "Conforme a quarta lei da biblioteconomia, o serviço de referência pode ser enquadrado em duas categorias distintas: serviço de referência rápida ou serviço de referência autolimitante." },
+    q2: { p: "STJ - Superior Tribunal de Justiça", a: 2018, t: "Certo ou Errado", g: "C", text: "A quarta lei — “Poupe o tempo do leitor” — impacta a organização e os métodos utilizados no serviço de referência, que passa a ser estruturado em duas categorias: o serviço de referência rápida e o serviço de referência de longo alcance." } },
+  { sim: 0.707, sub: "Métodos e metodologias de estudos de usuários",
+    q1: { p: "PCDF", a: 2024, t: "Certo ou Errado", g: "C", text: "Uma desvantagem da entrevista enquanto ferramenta para o estudo de usuário é a suscetibilidade à dupla distorção, oriunda tanto do entrevistador quanto do entrevistado." },
+    q2: { p: "Prefeitura Municipal de Cachoeiro de Itapemirim/ES", a: 2024, t: "Certo ou Errado", g: "C", text: "Uma desvantagem da entrevista é a possibilidade de ocorrer distorção dos fatos tanto por parte do entrevistador quanto do entrevistado." } },
+  { sim: 0.696, sub: "Princípios da indexação - Etapas da indexação",
+    q1: { p: "SEE/PE", a: 2022, t: "Certo ou Errado", g: "C", text: "O processo de indexação é dividido em duas etapas: análise conceitual e tradução." },
+    q2: { p: "TJ-AM", a: 2019, t: "Certo ou Errado", g: "C", text: "A indexação de assuntos envolve duas etapas principais: análise conceitual e tradução." } },
+  { sim: 0.693, sub: "Modelagem da organização",
+    q1: { p: "Prefeitura Municipal de Cachoeiro de Itapemirim/ES", a: 2024, t: "Certo ou Errado", g: "E", text: "Na estrutura organizacional de uma biblioteca, costumeiramente, o serviço de referência está alocado no processamento técnico." },
+    q2: { p: "TJ/ES", a: 2023, t: "Certo ou Errado", g: "C", text: "O serviço de referência é uma unidade presente na estrutura organizacional de uma biblioteca." } },
+  { sim: 0.688, sub: "Ciência da Informação - Infometria",
+    q1: { p: "TJPA", a: 2025, t: "Certo ou Errado", g: "C", text: "A bibliografia é relevante para o desenvolvimento de estudos bibliométricos e de comunicação científica, uma vez que contribui para o conhecimento de obras sobre determinado assunto." },
+    q2: { p: "MPCE", a: 2025, t: "Certo ou Errado", g: "C", text: "A bibliografia é relevante para o desenvolvimento de estudos bibliométricos e de comunicação científica na medida em que contribui para o conhecimento da recepção de obras, a partir do estudo dos processos de transmissão, produção e recepção dos textos enquanto formas registradas." } },
+  { sim: 0.679, sub: "Tesauros - Construção de tesauros",
+    q1: { p: "CAPES", a: 2024, t: "Certo ou Errado", g: "C", text: "A categorização é essencial para a sistematização do conhecimento da realidade, fornecendo princípios para o estabelecimento de relacionamentos associativos. Na elaboração de tesauros, essa prática é crucial para agrupar conceitos de mesma natureza em classes gerais ou facetas, facilitando a construção de cadeias e renques de conceitos." },
+    q2: { p: "STJ - Superior Tribunal de Justiça", a: 2018, t: "Certo ou Errado", g: "C", text: "A categorização é utilizada para agrupar conceitos de mesma natureza em classes gerais ou facetas, com a finalidade de construir cadeias e renques, séries verticais e horizontais de conceitos." } },
+  { sim: 0.669, sub: "Fontes de informação jurídica - Sistemas e rede de informação",
+    q1: { p: "TCE/MG", a: 2026, t: "Múltipla escolha", g: "E", text: "Assinale a opção que apresenta um portal especializado em informação jurídica e legislativa, no qual se pretende reunir leis, decretos, acórdãos, súmulas, projetos de leis, entre outros documentos das esferas federal, estadual e municipal dos Poderes Executivo, Legislativo e Judiciário de todo o Brasil. A) Rede Virtual de Bibliotecas (RVBI) B) Sistema Integral de Normas (SIN)…" },
+    q2: { p: "MPCE", a: 2020, t: "Certo ou Errado", g: "C", text: "Julgue o item a seguir, relativo à ciência da informação e à documentação geral e jurídica. LexML é uma rede de informação jurídica e legislativa liderada pelo Senado Federal. Nela, é possível encontrar leis, decretos, acórdãos, súmulas, projetos de leis, entre outros documentos das esferas federal, estadual e municipal dos Poderes Executivo, Legislativo e Judiciário de todo o…" } },
+  { sim: 0.664, sub: "Fontes de informação jurídica - Redes de bibliotecas",
+    q1: { p: "STJ", a: 2024, t: "Certo ou Errado", g: "E", text: "A RVBI é coordenada pela biblioteca da Câmara dos Deputados e agrega recursos bibliográficos, materiais e humanos de bibliotecas da administração federal e do governo do Distrito Federal, dos Poderes Legislativo, Judiciário e Executivo." },
+    q2: { p: "TSE", a: 2024, t: "Certo ou Errado", g: "C", text: "A Rede Virtual de Bibliotecas (RVBI) agrega recursos bibliográficos, materiais e humanos da administração pública federal e do governo do Distrito Federal, dos Poderes Legislativo, Executivo e Judiciário." } },
+  { sim: 0.656, sub: "Esquemas de metadados - Dublin Core - Elementos descritivos",
+    q1: { p: "Ministério Público do Estado do Tocantins", a: 2024, t: "Certo ou Errado", g: "C", text: "Dublin Core é um padrão de metadados para descrição de documentos digitais." },
+    q2: { p: "STJ", a: 2024, t: "Certo ou Errado", g: "C", text: "O Dublin Core é um padrão de metadados que pode ser implementado na biblioteca digital." } },
+  { sim: 0.651, sub: "Fontes de informação jurídica - Diário Oficial da União - Estrutura do DOU",
+    q1: { p: "PCDF", a: 2024, t: "Certo ou Errado", g: "C", text: "O conteúdo do DOU é organizado em três seções, estando na seção 1 os atos normativos de interesse geral, como leis, decretos, resoluções, instruções normativas, portarias e demais normas que regulem aspectos relevantes para a sociedade." },
+    q2: { p: "Prefeitura Municipal de Cachoeiro de Itapemirim/ES", a: 2024, t: "Certo ou Errado", g: "E", text: "Na seção 1 do DOU, publicam-se leis, decretos, resoluções, instruções normativas, portarias e outros atos normativos de interesse geral nos âmbitos federal, estadual e municipal." } }
+];
+
+// Tendência de áreas (2020-2026, agora com 2023 graças à TJ/ES)
+const ANOS = [2020, 2021, 2022, 2023, 2024, 2025, 2026];
+
+const TENDENCIA_AREAS = [
+  { area: "Tecnologias da Informação, Automação e Bib. Digitais", values: [22, 12, 35, 8, 73, 31, 15], total: 320 },
+  { area: "Bibliotecas Jurídicas e Legislativas", values: [6, 6, 15, 6, 62, 18, 4], total: 165 },
+  { area: "Introdução à Biblioteconomia, Doc. e CI", values: [11, 5, 13, 3, 42, 20, 5], total: 162 },
+  { area: "Catalogação", values: [3, 3, 10, 0, 29, 5, 3], total: 122 },
+  { area: "Serviços de Referência", values: [2, 1, 17, 1, 22, 11, 3], total: 98 },
+  { area: "Normalização", values: [3, 3, 24, 0, 19, 10, 1], total: 95 },
+  { area: "Desenvolvimento de Coleções", values: [4, 5, 5, 4, 18, 10, 2], total: 90 },
+  { area: "Gestão de Bibliotecas", values: [3, 7, 4, 3, 12, 6, 2], total: 87 },
+  { area: "Indexação", values: [6, 2, 5, 3, 10, 13, 6], total: 81 },
+  { area: "Linguagens Documentárias", values: [3, 0, 9, 7, 14, 9, 2], total: 79 }
+];
+
+const TENDENCIA_SUBAREAS = [
+  { area: "Processo de desenvolvimento de coleções", values: [2, 1, 2, 3, 10, 5, 1], total: 49 },
+  { area: "NBR 6023:2018 — Referências", values: [1, 1, 13, 0, 8, 8, 0], total: 47 },
+  { area: "Fontes jurídicas - Sistemas e rede de informação", values: [1, 2, 11, 0, 14, 4, 1], total: 44 },
+  { area: "Ciência da Informação", values: [7, 2, 2, 0, 13, 7, 1], total: 40 },
+  { area: "Biblioteconomia - As cinco leis", values: [2, 0, 4, 0, 12, 2, 2], total: 38 },
+  { area: "Automação de bibliotecas", values: [2, 3, 4, 0, 4, 7, 2], total: 37 },
+  { area: "Disseminação Seletiva da Informação (DSI)", values: [2, 1, 3, 0, 6, 5, 3], total: 34 },
+  { area: "CDU - Sinais e tabelas auxiliares da CDU", values: [3, 0, 1, 0, 8, 1, 1], total: 31 },
+  { area: "Documentação", values: [1, 3, 2, 3, 8, 0, 0], total: 31 },
+  { area: "Fontes jurídicas - Redes de bibliotecas", values: [3, 1, 1, 0, 10, 4, 1], total: 30 }
+];
+
+const DIFICULDADE = [
+  { tipo: "Legislativo/Judiciário/Ministério Público", total: 938, facil: 231, medio: 530, dificil: 177, pf: 24.6, pm: 56.5, pd: 18.9 },
+  { tipo: "Universidade", total: 140, facil: 16, medio: 87, dificil: 37, pf: 11.4, pm: 62.1, pd: 26.4 },
+  { tipo: "Secretaria de Educação", total: 120, facil: 38, medio: 63, dificil: 19, pf: 31.7, pm: 52.5, pd: 15.8 },
+  { tipo: "Outro (Polícia Civil)", total: 70, facil: 14, medio: 50, dificil: 6, pf: 20.0, pm: 71.4, pd: 8.6 },
+  { tipo: "Outro (especifique)", total: 70, facil: 0, medio: 70, dificil: 0, pf: 0.0, pm: 100.0, pd: 0.0 },
+  { tipo: "Instituições da área da saúde", total: 60, facil: 16, medio: 29, dificil: 15, pf: 26.7, pm: 48.3, pd: 25.0 },
+  { tipo: "Prefeitura", total: 50, facil: 17, medio: 29, dificil: 4, pf: 34.0, pm: 58.0, pd: 8.0 },
+  { tipo: "Agência", total: 46, facil: 12, medio: 24, dificil: 10, pf: 26.1, pm: 52.2, pd: 21.7 },
+  { tipo: "Outro (CAPES – Fundação Federal)", total: 46, facil: 19, medio: 24, dificil: 3, pf: 41.3, pm: 52.2, pd: 6.5 },
+  { tipo: "Instituição de pesquisa", total: 27, facil: 8, medio: 16, dificil: 3, pf: 29.6, pm: 59.3, pd: 11.1 }
+];
+
+// ============================================
+// CORES CÍCLICAS
+// ============================================
+const CORES_CICLO = ["#00A74A", "#FF6A39", "#FED141", "#9BCBEB", "#F4A6D7", "#B5BD00", "#00A74A", "#FF6A39", "#FED141", "#9BCBEB"];
+
+// ============================================
+// 1. PROVAS — TABELA COM BUSCA
+// ============================================
+function renderProvas() {
+  const tbody = document.getElementById('provas-tbody');
+  tbody.innerHTML = PROVAS.map((p, i) => `
+    <tr data-search="${(p.ano + ' ' + p.org + ' ' + p.cargo).toLowerCase()}"${p.novo ? ' class="prova-nova"' : ''}>
+      <td class="year">${p.ano}${p.novo ? ' <span class="badge-novo">novo</span>' : ''}</td>
+      <td class="org">${p.org}</td>
+      <td class="cargo">${p.cargo}</td>
+      <td class="qtd">${p.q}</td>
+    </tr>
+  `).join('');
+
+  const input = document.getElementById('provas-search-input');
+  const count = document.getElementById('provas-count');
+  input.addEventListener('input', () => {
+    const term = input.value.trim().toLowerCase();
+    let visible = 0;
+    tbody.querySelectorAll('tr').forEach(tr => {
+      const match = tr.dataset.search.includes(term);
+      tr.classList.toggle('hidden', !match);
+      if (match) visible++;
+    });
+    count.textContent = visible;
+  });
+}
+
+// ============================================
+// 2. ÁREAS — BARRAS + DETALHAMENTO
+// ============================================
+function renderAreas() {
+  const max = AREAS[0].q;
+  const bars = document.getElementById('areas-bars');
+  bars.innerHTML = AREAS.map((a, i) => {
+    const w = (a.q / max * 100).toFixed(1);
+    const cor = CORES_CICLO[i % CORES_CICLO.length];
+    const hidden = i >= 10 ? 'style="display:none"' : '';
+    return `
+      <div class="bar-row" data-extra="${i >= 10 ? 'true' : 'false'}" ${hidden}>
+        <div class="bar-meta">
+          <div class="bar-label-wrap">
+            <span class="rank-dot" style="background:${cor}">${i+1}</span>
+            <span class="bar-label" title="${a.area}">${a.area}</span>
+          </div>
+          <span class="bar-stats">${a.q} · ${a.pct.toFixed(1).replace('.', ',')}%</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" style="width:${w}%;background:${cor}"></div></div>
+      </div>`;
+  }).join('');
+
+  const toggle = document.getElementById('areas-toggle');
+  toggle.addEventListener('click', () => {
+    const extras = bars.querySelectorAll('[data-extra="true"]');
+    const open = extras[0].style.display !== 'none';
+    extras.forEach(e => e.style.display = open ? 'none' : 'flex');
+    toggle.textContent = open ? 'ver as 11 áreas restantes ↓' : 'recolher ↑';
+  });
+
+  // Detalhamento (acordeão)
+  const detail = document.getElementById('areas-detail');
+  detail.innerHTML = SUB_DETAIL.map((d, i) => {
+    const cor = CORES_CICLO[i % CORES_CICLO.length];
+    return `
+      <div class="area-detail" style="--accent:${cor}">
+        <div class="area-detail-header">
+          <span class="area-detail-rank">${i+1}</span>
+          <span class="area-detail-name">${d.area}</span>
+          <span class="area-detail-count">${AREAS[i].q} questões</span>
+          <span class="area-detail-arrow">▼</span>
+        </div>
+        <div class="area-detail-body">
+          <div class="sub-mini-title">top 5 subáreas</div>
+          <ul class="sub-mini-list">
+            ${d.subs.map((s, j) => `
+              <li>
+                <span class="sub-mini-rank">${j+1}</span>
+                <span class="sub-mini-name">${s.name}</span>
+                <span class="sub-mini-count">${s.q}</span>
+              </li>
+            `).join('')}
+          </ul>
+        </div>
+      </div>`;
+  }).join('');
+
+  detail.querySelectorAll('.area-detail-header').forEach(h => {
+    h.addEventListener('click', () => h.parentElement.classList.toggle('open'));
+  });
+}
+
+// ============================================
+// 3. SUBÁREAS RANKING
+// ============================================
+function renderSubareas() {
+  const list = document.getElementById('subareas-list');
+  list.innerHTML = SUBAREAS_RANK.map((s, i) => `
+    <div class="sub-row${i >= 10 ? ' hidden' : ''}" data-extra="${i >= 10}">
+      <div class="sub-rank">${String(i+1).padStart(2,'0')}</div>
+      <div>
+        <div class="sub-area-tag">${s.area}</div>
+        <div class="sub-name">${s.sub}</div>
+      </div>
+      <div class="sub-count">${s.q} questões</div>
+    </div>
+  `).join('');
+
+  const toggle = document.getElementById('subareas-toggle');
+  toggle.addEventListener('click', () => {
+    const extras = list.querySelectorAll('[data-extra="true"]');
+    const open = !extras[0].classList.contains('hidden');
+    extras.forEach(e => e.classList.toggle('hidden'));
+    toggle.textContent = open ? 'ver até o 30º lugar ↓' : 'recolher ↑';
+  });
+}
+
+// ============================================
+// 4. PEGADINHAS
+// ============================================
+function renderPegadinhas() {
+  const grid = document.getElementById('pegadinhas-grid');
+  grid.innerHTML = PEGADINHAS.map((p, i) => {
+    const erroLine = p.erro !== null ? `<span><strong>${p.erro}%</strong> ERRADO quando aparece</span>` : '';
+    return `
+      <div class="pegadinha-card" data-idx="${i}">
+        <div class="pega-header">
+          <div class="pega-num">${i+1}</div>
+          <div class="pega-text">
+            <div class="pega-title">${p.titulo}</div>
+            <div class="pega-stats">
+              <span><strong>${p.ocorrencias}</strong> ocorrências</span>
+              ${erroLine}
+            </div>
+          </div>
+          <div class="pega-arrow">▼</div>
+        </div>
+        <div class="pega-body">
+          <p class="pega-explain">${p.explicacao}</p>
+          <div class="pega-examples-title">exemplos no corpus</div>
+          ${p.exemplos.map(e => `
+            <div class="pega-example">
+              <div class="pega-ex-meta">
+                <span class="tag-mini tag-prova">${e.prova} · ${e.ano}</span>
+                <span class="tag-mini ${e.gab === 'C' ? 'tag-acerto' : 'tag-erro'}">Gabarito ${e.gab}</span>
+                <span class="tag-mini tag-subarea">${e.sub}</span>
+              </div>
+              <div class="pega-ex-text">${e.text}</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>`;
+  }).join('');
+
+  grid.querySelectorAll('.pegadinha-card').forEach(card => {
+    card.addEventListener('click', (ev) => {
+      // só fecha se clicar no header. clique no body não fecha.
+      const header = card.querySelector('.pega-header');
+      if (!card.classList.contains('open')) {
+        card.classList.add('open');
+      } else if (header.contains(ev.target)) {
+        card.classList.remove('open');
+      }
+    });
+  });
+}
+
+// ============================================
+// 5. PARES DE QUESTÕES REPETIDAS
+// ============================================
+function normGab(g) {
+  // normaliza "Certo" → "C", "Errado" → "E"
+  if (!g) return '';
+  const s = g.toString().trim();
+  if (s.toLowerCase() === 'certo') return 'C';
+  if (s.toLowerCase() === 'errado') return 'E';
+  return s.charAt(0).toUpperCase();
+}
+
+function renderPares() {
+  const grid = document.getElementById('pares-grid');
+  grid.innerHTML = PARES.map((par, i) => {
+    const g1 = normGab(par.q1.g);
+    const g2 = normGab(par.q2.g);
+    const sameG = g1 === g2;
+    return `
+      <div class="par${i >= 5 ? ' hidden' : ''}" data-extra="${i >= 5}">
+        <div class="par-header">
+          <div class="par-title">
+            <span class="par-num">par ${String(i+1).padStart(2,'0')}</span>
+            <span class="par-sim">similaridade <strong>${par.sim.toFixed(3).replace('.',',')}</strong></span>
+            ${!sameG ? '<span class="tag-mini tag-erro" style="margin-left:6px">⚠ gabarito invertido</span>' : ''}
+          </div>
+          <div class="par-subarea">${par.sub}</div>
+        </div>
+        <div class="par-body">
+          <div class="par-q">
+            <div class="par-q-meta">
+              <span class="tag-mini tag-prova">${par.q1.p} · ${par.q1.a}</span>
+              <span class="tag-mini tag-subarea">${par.q1.t}</span>
+              <span class="tag-mini ${g1 === 'C' ? 'tag-acerto' : 'tag-erro'}">Gab. ${g1}</span>
+            </div>
+            <div class="par-q-text">${par.q1.text}</div>
+          </div>
+          <div class="par-q">
+            <div class="par-q-meta">
+              <span class="tag-mini tag-prova">${par.q2.p} · ${par.q2.a}</span>
+              <span class="tag-mini tag-subarea">${par.q2.t}</span>
+              <span class="tag-mini ${g2 === 'C' ? 'tag-acerto' : 'tag-erro'}">Gab. ${g2}</span>
+            </div>
+            <div class="par-q-text">${par.q2.text}</div>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+
+  const toggle = document.getElementById('pares-toggle');
+  toggle.addEventListener('click', () => {
+    const extras = grid.querySelectorAll('[data-extra="true"]');
+    const open = !extras[0].classList.contains('hidden');
+    extras.forEach(e => e.classList.toggle('hidden'));
+    toggle.textContent = open ? 'ver os 16 pares restantes ↓' : 'recolher ↑';
+  });
+}
+
+// ============================================
+// 6 + 7. HEATMAP DE TENDÊNCIA
+// ============================================
+function renderHeatmap(containerId, data) {
+  const max = Math.max(...data.flatMap(r => r.values));
+
+  function bgColor(v) {
+    if (v === 0) return 'rgba(7, 39, 45, 0.04)';
+    const intensity = Math.sqrt(v / max); // sqrt para suavizar contraste
+    // gradiente de bege claro pra verde
+    const r = Math.round(232 - (232 - 0) * intensity);
+    const g = Math.round(244 - (244 - 167) * intensity);
+    const b = Math.round(237 - (237 - 74) * intensity);
+    return `rgb(${r}, ${g}, ${b})`;
+  }
+
+  function textColor(v) {
+    if (v === 0) return 'rgba(7, 39, 45, 0.3)';
+    const intensity = Math.sqrt(v / max);
+    return intensity > 0.5 ? '#fff' : 'var(--verde-escuro)';
+  }
+
+  const html = `
+    <table class="heatmap-table">
+      <thead>
+        <tr>
+          <th class="area-th">Área</th>
+          ${ANOS.map(a => `<th>${a}</th>`).join('')}
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${data.map(r => `
+          <tr>
+            <td class="area-name">${r.area}</td>
+            ${r.values.map(v => `
+              <td class="cell" style="background:${bgColor(v)};color:${textColor(v)}" title="${v} questões">${v}</td>
+            `).join('')}
+            <td class="total">${r.total}</td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>`;
+  document.getElementById(containerId).innerHTML = html;
+}
+
+// ============================================
+// 8. DIFICULDADE
+// ============================================
+function renderDificuldade() {
+  const tbl = document.getElementById('dif-table');
+  tbl.innerHTML = DIFICULDADE.map(d => `
+    <div class="dif-row">
+      <div class="dif-tipo">${d.tipo}</div>
+      <div class="dif-total"><strong>${d.total}</strong>questões</div>
+      <div class="dif-bar">
+        <div class="dif-segment ${d.pf === 0 ? 'zero' : ''}" style="flex:${d.pf};background:var(--dif-facil)" title="Fácil ${d.pf}%">${d.pf >= 8 ? d.pf.toFixed(1).replace('.',',')+'%' : ''}</div>
+        <div class="dif-segment ${d.pm === 0 ? 'zero' : ''}" style="flex:${d.pm};background:var(--dif-medio)" title="Médio ${d.pm}%">${d.pm >= 8 ? d.pm.toFixed(1).replace('.',',')+'%' : ''}</div>
+        <div class="dif-segment ${d.pd === 0 ? 'zero' : ''}" style="flex:${d.pd};background:var(--dif-dificil)" title="Difícil ${d.pd}%">${d.pd >= 8 ? d.pd.toFixed(1).replace('.',',')+'%' : ''}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ============================================
+// NAV — scrollspy
+// ============================================
+function setupNav() {
+  const navLinks = document.querySelectorAll('.nav a');
+  const sections = Array.from(navLinks).map(l => document.querySelector(l.getAttribute('href')));
+
+  function onScroll() {
+    const scrollY = window.scrollY + 140;
+    let activeIdx = 0;
+    sections.forEach((sec, i) => {
+      if (sec && sec.offsetTop <= scrollY) activeIdx = i;
+    });
+    navLinks.forEach((l, i) => l.classList.toggle('active', i === activeIdx));
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+}
+
+// ============================================
+// INIT
+// ============================================
+renderProvas();
+renderAreas();
+renderSubareas();
+renderPegadinhas();
+renderPares();
+renderHeatmap('heatmap-areas', TENDENCIA_AREAS);
+renderHeatmap('heatmap-subareas', TENDENCIA_SUBAREAS);
+renderDificuldade();
+setupNav();
+</script>
+
+</body>
+</html>
