@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🦭 Foca na Câmara · Simulado da semana 2</title>
+<meta name="description" content="Simulado da semana 2 do Foca na Câmara — 50 questões certo ou errado de Biblioteconomia. Prof. Suzane Lima.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --verde: #00A74A;
+    --rosa: #F4A6D7;
+    --bege: #F1F1DE;
+    --verde-escuro: #07272D;
+    --azul: #9BCBEB;
+    --verde-limao: #B5BD00;
+    --amarelo: #FED141;
+    --laranja: #FF6A39;
+
+    --bg-primary: var(--bege);
+    --bg-dark: var(--verde-escuro);
+    --text-on-light: var(--verde-escuro);
+    --text-on-dark: var(--bege);
+
+    --acerto: var(--verde);
+    --acerto-bg: rgba(0, 167, 74, 0.12);
+    --erro: var(--laranja);
+    --erro-bg: rgba(255, 106, 57, 0.12);
+
+    --linha: rgba(7, 39, 45, 0.15);
+    --linha-suave: rgba(7, 39, 45, 0.08);
+    --shadow-soft: 0 1px 3px rgba(7, 39, 45, 0.06), 0 4px 16px rgba(7, 39, 45, 0.04);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bege);
+    color: var(--verde-escuro);
+    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+    font-weight: 400;
+    line-height: 1.5;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ===== MARCA TEXTUAL ===== */
+  .brand {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    line-height: 1;
+    display: inline-block;
+  }
+  .brand .b-prof   { font-weight: 400; letter-spacing: 0; }
+  .brand .b-suzane { font-weight: 800; letter-spacing: -0.02em; }
+  .brand .b-lima   { font-weight: 800; font-style: italic; letter-spacing: -0.02em; }
+  .brand.light { color: var(--verde); }
+  .brand.dark  { color: var(--bege); }
+
+  /* ===== HEADER ===== */
+  .header {
+    background: var(--verde-escuro);
+    color: var(--bege);
+    padding: 16px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .header-brand-text { font-size: 16px; }
+  .header-tag {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--rosa);
+    font-weight: 700;
+  }
+
+  /* ===== PROGRESS BAR FIXA ===== */
+  .progress-sticky {
+    position: sticky;
+    top: 0;
+    background: var(--bege);
+    padding: 14px 32px;
+    border-bottom: 1px solid var(--linha-suave);
+    z-index: 50;
+    backdrop-filter: blur(8px);
+    background: rgba(241, 241, 222, 0.92);
+  }
+  .progress-inner {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .progress-meta strong { color: var(--verde); font-weight: 800; font-variant-numeric: tabular-nums; }
+  .progress-track {
+    background: rgba(7, 39, 45, 0.10);
+    height: 6px;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    background: var(--verde);
+    height: 100%;
+    border-radius: 999px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+
+  /* ===== CONTAINER ===== */
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  /* ===== HERO ===== */
+  .eyebrow {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--laranja);
+    margin-bottom: 14px;
+  }
+  h1 {
+    font-size: 48px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.02;
+    margin-bottom: 18px;
+  }
+  h1 em { font-style: normal; color: var(--verde); }
+  .lead {
+    font-size: 16px;
+    color: rgba(7, 39, 45, 0.78);
+    max-width: 600px;
+    margin-bottom: 12px;
+  }
+  .lead-meta {
+    font-size: 13px;
+    color: rgba(7, 39, 45, 0.6);
+    margin-bottom: 28px;
+  }
+
+  .toolbar {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 36px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--linha-suave);
+  }
+  .btn-link {
+    background: transparent;
+    border: 1.5px solid var(--linha);
+    color: var(--verde-escuro);
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    font-family: inherit;
+  }
+  .btn-link:hover {
+    border-color: var(--verde-escuro);
+    background: rgba(7, 39, 45, 0.04);
+  }
+  .btn-link.danger:hover {
+    border-color: var(--laranja);
+    color: var(--laranja);
+    background: var(--erro-bg);
+  }
+
+  /* ===== SEÇÃO DE ASSUNTO ===== */
+  .assunto-section {
+    margin-bottom: 56px;
+  }
+  .assunto-header {
+    margin-bottom: 22px;
+    padding-bottom: 14px;
+    border-bottom: 2px solid var(--verde-escuro);
+  }
+  .assunto-eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--verde);
+    margin-bottom: 6px;
+  }
+  .assunto-titulo {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+
+  /* ===== CARD DA QUESTÃO ===== */
+  .questao {
+    background: white;
+    border: 1px solid var(--linha-suave);
+    border-radius: 14px;
+    padding: 24px 26px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow-soft);
+    scroll-margin-top: 90px;
+  }
+  .questao-num-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .questao-num {
+    font-size: 13px;
+    font-weight: 800;
+    color: rgba(7, 39, 45, 0.5);
+    letter-spacing: 0.04em;
+    font-variant-numeric: tabular-nums;
+  }
+  .tag {
+    background: var(--verde-escuro);
+    color: var(--bege);
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .enunciado {
+    font-size: 16px;
+    line-height: 1.65;
+    margin-bottom: 22px;
+    white-space: pre-wrap;
+  }
+
+  /* ===== BOTÕES CERTO / ERRADO ===== */
+  .ce-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 4px;
+  }
+  .ce-btn {
+    flex: 1;
+    background: white;
+    border: 2px solid var(--linha);
+    color: var(--verde-escuro);
+    padding: 14px 16px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    font-family: inherit;
+    letter-spacing: 0.02em;
+  }
+  .ce-btn:hover:not(:disabled) {
+    border-color: var(--verde-escuro);
+    background: rgba(7, 39, 45, 0.04);
+  }
+  .ce-btn:disabled {
+    cursor: default;
+  }
+
+  /* Estados após resposta */
+  .ce-btn.correct-answer {
+    background: var(--acerto-bg);
+    border-color: var(--acerto);
+    color: var(--acerto);
+  }
+  .ce-btn.wrong-pick {
+    background: var(--erro-bg);
+    border-color: var(--erro);
+    color: var(--erro);
+  }
+  .ce-btn.fade {
+    opacity: 0.4;
+  }
+
+  /* ===== FEEDBACK + COMENTÁRIO ===== */
+  .feedback-block {
+    margin-top: 18px;
+    display: none;
+  }
+  .feedback-block.show {
+    display: block;
+    animation: fadeIn 0.3s ease;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .feedback-banner {
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .feedback-banner.acerto {
+    background: var(--acerto-bg);
+    color: var(--acerto);
+  }
+  .feedback-banner.erro {
+    background: var(--erro-bg);
+    color: var(--erro);
+  }
+  .feedback-banner .gab {
+    margin-left: auto;
+    font-weight: 500;
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 12px;
+    color: rgba(7, 39, 45, 0.65);
+  }
+
+  .comentario {
+    background: rgba(7, 39, 45, 0.025);
+    border-left: 3px solid var(--verde-escuro);
+    border-radius: 0 8px 8px 0;
+    padding: 16px 18px;
+  }
+  .comentario-tag {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--verde);
+    margin-bottom: 8px;
+  }
+  .comentario-tag.banca { color: var(--rosa-dark, #B85A8E); }
+  .comentario p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--verde-escuro);
+  }
+  .comentario-fonte {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed rgba(7, 39, 45, 0.18);
+    font-size: 11px;
+    font-style: italic;
+    color: rgba(7, 39, 45, 0.55);
+    line-height: 1.5;
+  }
+
+  /* ===== CARD DE RESULTADO ===== */
+  .result-section {
+    margin-top: 48px;
+  }
+  .result-card {
+    background: var(--verde-escuro);
+    color: var(--bege);
+    border-radius: 18px;
+    padding: 36px 32px;
+    margin-bottom: 28px;
+  }
+  .result-eyebrow {
+    color: var(--rosa);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .result-score {
+    font-size: 88px;
+    font-weight: 800;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    color: var(--rosa);
+    margin-bottom: 4px;
+    font-variant-numeric: tabular-nums;
+  }
+  .result-score em {
+    font-style: normal;
+    color: var(--bege);
+    font-size: 32px;
+    opacity: 0.65;
+    margin-left: 10px;
+    font-weight: 500;
+  }
+  .result-msg {
+    font-size: 17px;
+    margin-top: 14px;
+    color: rgba(241, 241, 222, 0.88);
+    line-height: 1.5;
+  }
+
+  .breakdown-title {
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    color: var(--verde-escuro);
+  }
+  .breakdown {
+    background: white;
+    border: 1px solid var(--linha-suave);
+    border-radius: 14px;
+    padding: 22px 24px;
+    box-shadow: var(--shadow-soft);
+  }
+  .area-row {
+    padding: 14px 0;
+    border-bottom: 1px solid var(--linha-suave);
+  }
+  .area-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .area-row:first-child { padding-top: 0; }
+  .area-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 14px;
+    margin-bottom: 8px;
+    gap: 10px;
+  }
+  .area-name { font-weight: 500; line-height: 1.3; }
+  .area-stats {
+    color: rgba(7, 39, 45, 0.7);
+    font-variant-numeric: tabular-nums;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .area-stats strong {
+    color: var(--verde);
+    font-weight: 800;
+    margin-left: 4px;
+  }
+  .area-track {
+    background: rgba(7, 39, 45, 0.08);
+    height: 6px;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .area-fill {
+    height: 100%;
+    background: var(--verde);
+    border-radius: 4px;
+    transition: width 0.5s ease;
+  }
+  .area-fill.low { background: var(--laranja); }
+  .area-fill.mid { background: var(--amarelo); }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    margin-top: 56px;
+    padding: 28px 32px;
+    background: var(--verde-escuro);
+    color: rgba(241, 241, 222, 0.7);
+    text-align: center;
+    font-size: 13px;
+  }
+  .footer .brand { display: inline-block; font-size: 15px; margin-bottom: 6px; }
+  .footer-tag {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--rosa);
+    font-weight: 700;
+    display: block;
+    margin-top: 8px;
+  }
+
+  /* ===== RESPONSIVO ===== */
+  @media (max-width: 600px) {
+    .header { padding: 14px 20px; }
+    .progress-sticky { padding: 12px 20px; }
+    .container { padding: 28px 18px 48px; }
+    h1 { font-size: 34px; }
+    .assunto-titulo { font-size: 22px; }
+    .questao { padding: 20px 18px; }
+    .enunciado { font-size: 15px; }
+    .ce-row { flex-direction: column; gap: 8px; }
+    .result-card { padding: 28px 22px; }
+    .result-score { font-size: 64px; }
+    .result-score em { font-size: 24px; }
+    .footer { padding: 24px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <span class="brand dark header-brand-text">
+    <span class="b-prof">prof.</span> <span class="b-suzane">suzane</span> <span class="b-lima">lima</span>
+  </span>
+  <div class="header-tag">🦭 foca na câmara</div>
+</header>
+
+<!-- Barra de progresso fixa -->
+<div class="progress-sticky">
+  <div class="progress-inner">
+    <div class="progress-meta">
+      <span><strong id="p-respondidas">0</strong> de <span id="p-total">50</span> respondidas</span>
+      <span><strong id="p-acertos">0</strong> acertos · <span id="p-percent">0%</span></span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+  </div>
+</div>
+
+<main class="container">
+
+  <div class="eyebrow">🦭 foca na câmara</div>
+  <h1>simulado da <em>semana 2</em></h1>
+  <p class="lead">50 questões certo ou errado, organizadas por disciplina. responda no seu ritmo: clica em <strong>certo</strong> ou <strong>errado</strong> e o gabarito aparece logo abaixo, junto com o comentário.</p>
+  <p class="lead-meta">seu progresso fica salvo neste navegador — pode fechar a página e voltar depois. cuidado: se você trocar de dispositivo ou limpar os dados do navegador, o progresso se perde.</p>
+
+  <div class="toolbar">
+    <button class="btn-link" id="btn-jump" type="button">↓ ir para a próxima não respondida</button>
+    <button class="btn-link danger" id="btn-clear" type="button">limpar progresso</button>
+  </div>
+
+  <!-- Aqui são injetadas as seções de assunto + questões via JS -->
+  <div id="questoes-root"></div>
+
+  <!-- Card de resultado / ranking -->
+  <section class="result-section">
+    <div class="result-card">
+      <div class="result-eyebrow" id="r-eyebrow">seu desempenho</div>
+      <div class="result-score">
+        <span id="r-percent">0</span>%
+        <em><span id="r-frac">0/50</span></em>
+      </div>
+      <div class="result-msg" id="r-msg">comece a responder — o ranking aparece aqui à medida que você avança.</div>
+    </div>
+
+    <div class="breakdown-title">desempenho por disciplina</div>
+    <div class="breakdown" id="breakdown"></div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <span class="brand dark">
+    <span class="b-prof">prof.</span> <span class="b-suzane">suzane</span> <span class="b-lima">lima</span>
+  </span>
+  <span class="footer-tag">🦭 foca na câmara · simulado da semana 2</span>
+</footer>
+
+<script>
+/* ===== DADOS ===== */
+const QUESTOES = [{"n":1,"assunto":"Indexação","especifico":"Índices pré e pós-coordenados","orgao":"MPCE","ano":2025,"enunciado":"O processo SLIC (selective listing in combination) gera um conjunto de entradas de índice a partir de uma sequência de termos e permite todas as justaposições deles enquanto forem mantidos em ordem alfabética.","gabarito":"C","comentario":"O método SLIC (Selective Listing in Combination) organiza uma sequência de termos em ordem alfabética — essa sequência vira a primeira entrada — e em seguida gera todas as demais entradas necessárias, mantendo os termos sempre em ordem alfabética e eliminando sequências redundantes. A definição da questão está exatamente alinhada a Lancaster.","fonte":"md"},{"n":2,"assunto":"Indexação","especifico":"Revocação e Precisão","orgao":"TJ-ES","ano":2023,"enunciado":"Revocação e precisão são elementos importantes para a recuperação da informação.","gabarito":"C","comentario":"Revocação (capacidade de recuperar documentos úteis) e precisão (capacidade de evitar documentos inúteis) são, segundo Lancaster, os dois indicadores centrais na avaliação de sistemas de recuperação da informação. Toda discussão sobre qualidade da indexação e estratégias de busca passa por esses dois conceitos.","fonte":"md"},{"n":3,"assunto":"Indexação","especifico":"Revocação e Precisão","orgao":"MPCE","ano":2020,"enunciado":"A ciência da informação delimita e identifica seu objeto de estudo, bem como pesquisa processos, sistemas de construção e comunicação e uso da informação. A respeito desse assunto e de aspectos a ele relacionados, julgue o item a seguir.\n \n\n O objetivo dos sistemas de informação é oferecer ao usuário a informação relevante, sendo denominada revocação a proporção de documentos relevantes recuperados.","gabarito":"C","comentario":"Revocação é exatamente isso: a proporção de documentos relevantes que foram recuperados em relação ao total de relevantes existentes na base. Lembre-se da fórmula: documentos relevantes recuperados ÷ total de relevantes existentes na coleção.","fonte":"md"},{"n":4,"assunto":"Indexação","especifico":"Revocação e Precisão","orgao":"PGDF","ano":2019,"enunciado":"A precisão, na indexação, é a relação entre os documentos relevantes recuperados e o número total de documentos considerados relevantes e existentes na coleção.","gabarito":"E","comentario":"ERRADO. A precisão é a relação entre os documentos relevantes recuperados e o número total de documentos recuperados.","fonte":"banca"},{"n":5,"assunto":"Indexação","especifico":"Revocação e Precisão","orgao":"EBSERH","ano":2018,"enunciado":"No processo de busca e recuperação da informação, a gestão da precisão está diretamente vinculada ao valor da informação.","gabarito":"C","comentario":"Precisão tem a ver com qualidade: é a capacidade de evitar documentos inúteis. Quando o sistema entrega resultados precisos, o usuário recebe informação realmente valiosa — daí a ligação direta com o valor da informação para quem busca.","fonte":"md"},{"n":6,"assunto":"Indexação","especifico":"Revocação e Precisão","orgao":"EBSERH","ano":2018,"enunciado":"Situação hipotética: 50 documentos foram recuperados em um processo de busca e, desses documentos, o usuário selecionou 10 como documentos úteis, isto é, uma proporção de 10/50; ou seja, 20% eram documentos úteis. Assertiva: A situação apresentada caracteriza um exemplo do que se denomina revocação.","gabarito":"E","comentario":"Cuidado com a pegadinha: 10 úteis sobre 50 recuperados é coeficiente de precisão (itens úteis ÷ total recuperados em uma busca), não revocação. Revocação compararia os úteis recuperados com o total de úteis existentes na base, não com o total recuperado.","fonte":"md"},{"n":7,"assunto":"Indexação","especifico":"Revocação e Precisão","orgao":"DPU","ano":2016,"enunciado":"Revocação, uma medida para a avaliação da qualidade da recuperação da informação, representa a medida de interesse do que foi encontrado em um processo de busca e recuperação da informação pelo usuário.","gabarito":"E","comentario":"Revocação não é \"medida de interesse\" — quem mede interesse/utilidade do que foi recuperado é a precisão. Revocação tem a ver com quantidade: o quanto dos documentos relevantes existentes na base o sistema conseguiu recuperar.","fonte":"md"},{"n":8,"assunto":"Indexação","especifico":"Revocação e Precisão","orgao":"MPCE","ano":2020,"enunciado":"A ciência da informação delimita e identifica seu objeto de estudo, bem como pesquisa processos, sistemas de construção e comunicação e uso da informação. A respeito desse assunto e de aspectos a ele relacionados, julgue o item a seguir.\n \n\n O objetivo dos sistemas de informação é oferecer ao usuário a informação relevante, sendo denominada revocação a proporção de documentos relevantes recuperados.","gabarito":"C","comentario":"Mesma definição da Q3: revocação é a proporção de documentos relevantes recuperados em relação ao total existente na base. Lancaster define como a capacidade de recuperar documentos úteis.","fonte":"md"},{"n":9,"assunto":"Indexação","especifico":"Qualidade da indexação","orgao":"STJ","ano":2018,"enunciado":"A produtividade exigida, a iluminação e o ruído, a ambiguidade e a imprecisão são fatores que influenciam a qualidade da indexação.","gabarito":"C","comentario":"Todos esses fatores realmente influenciam a qualidade da indexação: produtividade exigida (fator ligado ao processo), iluminação e ruído (fatores ambientais), ambiguidade e imprecisão (fatores ligados ao vocabulário). Vale memorizar os 5 grupos de fatores: indexador, documento, vocabulário, processo e ambientais.","fonte":"md"},{"n":10,"assunto":"Indexação","especifico":"Como melhorar a indexação","orgao":"MPCE","ano":2020,"enunciado":"Julgue o item a seguir, relativo a linguagem documentária, indexação e resumos.\n \n\n Indexação ponderada é aquela em que se atribuem valores numéricos para mostrar a importância dos termos em um documento.","gabarito":"C","comentario":"Indexação ponderada é exatamente isso: o indexador atribui um valor numérico (peso) que reflete sua opinião sobre a importância de cada termo. Quanto mais dominante o assunto no documento, maior o peso atribuído. É um dispositivo de precisão, junto com elos e indicadores de função.","fonte":"md"},{"n":11,"assunto":"Tecnologias da Informação, Automação e Bibliotecas Digitais","especifico":"Sistemas de Recuperação da Informação (SRIs)","orgao":"TJ-AM","ano":2019,"enunciado":"O Google é um metabuscador que utiliza palavras-chave para encontrar resultados em todas as bases de dados disponíveis na Internet.","gabarito":"C","comentario":"O Google é citado pela própria Suzane como exemplo clássico de metabuscador — uma interface única que busca em diversas bases de dados/fontes simultaneamente, usando palavras-chave.","fonte":"md"},{"n":12,"assunto":"Tecnologias da Informação, Automação e Bibliotecas Digitais","especifico":"Sistemas de Recuperação da Informação (SRIs)","orgao":"MPCE","ano":2025,"enunciado":"Entre as nomenclaturas utilizadas para o serviço de metabusca incluem-se busca federada, busca distribuída e broadcast search.","gabarito":"C","comentario":"Os três termos são equivalentes: busca federada = metabusca = busca distribuída. \"Broadcast search\" também aparece como nomenclatura por descrever exatamente esse comportamento de \"transmitir\" a busca para várias bases ao mesmo tempo.","fonte":"md"},{"n":13,"assunto":"Tecnologias da Informação, Automação e Bibliotecas Digitais","especifico":"Sistemas de Recuperação da Informação (SRIs)","orgao":"MPCE","ano":2025,"enunciado":"Metabuscadores apresentam a vantagem de possibilitar buscas em até três dos maiores mecanismos de busca.","gabarito":"E","comentario":"O limite \"até três mecanismos\" é arbitrário e está errado. Metabuscadores realizam buscas simultâneas em diversos mecanismos/bases de dados — não há essa restrição numérica. A graça do metabuscador é justamente cobrir o maior número possível de fontes em uma interface única.","fonte":"md"},{"n":14,"assunto":"Tecnologias da Informação, Automação e Bibliotecas Digitais","especifico":"Sistemas de Recuperação da Informação (SRIs)","orgao":"STJ","ano":2024,"enunciado":"O metabuscador, também conhecido como metamecanismo de busca, caracteriza-se pela capacidade de realizar uma pesquisa simultaneamente em vários mecanismos de busca.","gabarito":"C","comentario":"É exatamente a definição de metabuscador (ou metamecanismo de busca): a capacidade de pesquisar simultaneamente em vários mecanismos de busca por meio de uma interface única. Esse comportamento corresponde ao nível de federação na interoperabilidade.","fonte":"md"},{"n":15,"assunto":"Tecnologias da Informação, Automação e Bibliotecas Digitais","especifico":"Classificação de bases de dados","orgao":"PGDF","ano":2019,"enunciado":"Bases de dados de fontes são um tipo de sistema de recuperação de informação que permitem apenas acessar os metadados dos documentos.","gabarito":"E","comentario":"ERRADO. Bases de dados de fontes e referenciais são tipos de sistemas de recuperação da informação. As bases de dados referenciais permitem buscar apenas os metadados dos documentos, enquanto as bases de dados de fontes permitem localizar informações contidas nos documentos.","fonte":"banca"},{"n":16,"assunto":"Tecnologias da Informação, Automação e Bibliotecas Digitais","especifico":"Projeto e gerenciamento de sistemas de informação","orgao":"MPCE","ano":2020,"enunciado":"A respeito de formatos de intercâmbio de dados, planejamentos de sistemas de informação e segurança da informação, julgue o item a seguir.\n \n\n No processo de planejamento da automação de sistemas de informação, a avaliação é uma etapa que deve ocorrer preferencialmente apenas no início e no fim do processo.","gabarito":"E","comentario":"A avaliação no processo de planejamento de sistemas de informação não fica restrita ao início e ao fim — ela é cíclica e ocorre ao longo de todas as fases do ciclo de vida (análise, projeto, implementação, evolução operacional, deterioração e substituição), produzindo subsídios continuamente.","fonte":"md"},{"n":17,"assunto":"Tecnologias da Informação, Automação e Bibliotecas Digitais","especifico":"Classificação de bases de dados","orgao":"IPHAN","ano":2018,"enunciado":"Catálogos online são exemplos de bases de dados de fontes, pois apresentam apenas as informações referenciais dos registros do acervo.","gabarito":"E","comentario":"Catálogos online são bases de dados REFERENCIAIS, não de fontes. A diferença: bases referenciais entregam apenas os metadados/referências dos documentos (autor, título, localização etc.); bases de fontes contêm o documento na íntegra ou seu conteúdo completo. Um catálogo aponta para o item, não entrega o item em si.","fonte":"ia"},{"n":18,"assunto":"Tecnologias da Informação, Automação e Bibliotecas Digitais","especifico":"Classificação de bases de dados","orgao":"SEE/PE","ano":2022,"enunciado":"Diretórios são bases de dados de fontes que contêm dados cadastrais sobre pessoas, instituições e produtos.","gabarito":"E","comentario":"Diretórios são bases de dados REFERENCIAIS, não de fontes. Eles trazem dados cadastrais (referências) sobre pessoas, instituições e produtos — apontam, não entregam conteúdo. Bases de fontes contêm o próprio conteúdo (texto completo, dados numéricos, imagens etc.).","fonte":"ia"},{"n":19,"assunto":"Tecnologias da Informação, Automação e Bibliotecas Digitais","especifico":"Interoperabilidade","orgao":"MPCE","ano":2025,"enunciado":"O OAI-PMH (Protocol for Metadata Harvesting) é um protocolo que permite que fornecedores de informação disponibilizem na Internet os metadados de seus recursos, possibilitando a interoperabilidade dos dados.","gabarito":"C","comentario":"Definição precisa do OAI-PMH (Open Archives Initiative — Protocol for Metadata Harvesting): protocolo para coleta automática de metadados (harvesting) de recursos em repositórios digitais distribuídos. É um dos três níveis de interoperabilidade (junto com federação e gathering), e o que tem menor ônus para os participantes.","fonte":"md"},{"n":20,"assunto":"Tecnologias da Informação, Automação e Bibliotecas Digitais","especifico":"Interoperabilidade","orgao":"MPCE","ano":2020,"enunciado":"A respeito de metabuscadores, julgue o item a seguir.\n \n\n Os metabuscadores realizam as chamadas buscas federadas, que consistem em perguntas feitas a variados grupos de bases de dados, e agrupam os resultados encontrados nessas bases, apresentando-os em um único resultado.","gabarito":"C","comentario":"Definição correta de busca federada (= metabusca = busca distribuída): perguntas dirigidas simultaneamente a várias bases de dados, com os resultados agregados em um único conjunto. É o nível mais alto de interoperabilidade — o que o Z39.50 implementa, por exemplo.","fonte":"md"},{"n":21,"assunto":"Catalogação","especifico":"Modelos conceituais - FRBR - Requisitos Funcionais para Registros Bibliográficos","orgao":"STJ","ano":2024,"enunciado":"Os FRBR são um modelo conceitual do tipo entidade-relacionamento que fornece uma visão geral do universo bibliográfico, sendo independentes de qualquer código de catalogação e implementação.","gabarito":"C","comentario":"Definição exata dos FRBR: modelo conceitual do tipo entidade-relacionamento (E-R), desenvolvido pela IFLA em 1998. São independentes de qualquer código de catalogação (não confundir FRBR com código de catalogação — eles são modelo conceitual).","fonte":"md"},{"n":22,"assunto":"Catalogação","especifico":"Modelos conceituais - FRBR - Requisitos Funcionais para Registros Bibliográficos","orgao":"STJ","ano":2024,"enunciado":"São entidades dos FRBR a obra, a expressão, a manifestação, o recurso, a pessoa física, a entidade coletiva, o conceito, o objeto, o evento e o lugar.","gabarito":"E","comentario":"O erro está em \"recurso\" e \"pessoa física\" — não são entidades dos FRBR. As 10 entidades corretas são, divididas em 3 grupos: Grupo 1 (produto do trabalho) — obra, expressão, manifestação e ITEM (não \"recurso\"); Grupo 2 (responsáveis) — PESSOA (não \"pessoa física\") e entidade coletiva; Grupo 3 (assuntos) — conceito, objeto, evento e lugar.","fonte":"md"},{"n":23,"assunto":"Catalogação","especifico":"Modelos conceituais - FRBR - Requisitos Funcionais para Registros Bibliográficos","orgao":"PCDF","ano":2024,"enunciado":"Considere que, em um catálogo, a obra Dom Quixote esteja relacionada à sua tradução para a língua portuguesa. Essa situação é um exemplo de relação entre as entidades obra e expressão, que possibilita ao usuário identificar outras obras do mesmo autor ou localizar traduções específicas de seu interesse.","gabarito":"C","comentario":"Certo. \"As relações representam as conexões significativas entre as entidades, oferecendo ao usuário um entendimento mais rico e completo do contexto bibliográfico. Essas conexões ajudam a explorar como as entidades interagem e se associam no domínio do catálogo. Exemplos: A relação entre uma Obra e suas Expressões: 'Dom Quixote' (obra) está relacionado à sua tradução para o português (expressão). A relação entre uma Manifestação e um Exemplar: Uma edição de 'Dom Quixote' publicada pela Editora X (manifestação) está conectada a um exemplar específico dessa edição disponível na biblioteca. A relação entre Pessoa e Obra: Miguel de Cervantes (pessoa) é o autor de 'Dom Quixote' (obra).\" (International Federation of Library Associations and Institutions. Declaração dos Princípios Internacionais de Catalogação (PIC). Haia: IFLA, 2018)","fonte":"banca"},{"n":24,"assunto":"Catalogação","especifico":"Modelos conceituais - FRBR - Requisitos Funcionais para Registros Bibliográficos","orgao":"FUB","ano":2015,"enunciado":"Segundo o FRBR (functional requirement for bibliographic records), obra é um conteúdo intelectual que pode ser reproduzido em um item virtual, mas, nesse formato, descaracteriza-se como obra.","gabarito":"E","comentario":"Obra, nos FRBR, é uma criação intelectual ou artística distinta — o conteúdo intelectual em si, INDEPENDENTE de seu suporte ou forma. Ou seja: a obra continua sendo obra mesmo quando expressa/manifestada em formato virtual. Não há \"descaracterização\".","fonte":"md"},{"n":25,"assunto":"Catalogação","especifico":"Modelos conceituais - FRBR - Requisitos Funcionais para Registros Bibliográficos","orgao":"SEE-DF","ano":2017,"enunciado":"Os Requisitos Funcionais para Registros Bibliográficos (FRBR) — do inglês Functional Requirements for Bibliographic Records — são amplamente adotados pelas bibliotecas brasileiras e representam uma mudança de paradigma na descrição física de imagens digitais.","gabarito":"E","comentario":"Dois erros. Primeiro: os FRBR não são amplamente adotados pelas bibliotecas brasileiras — sua aplicação ainda é pontual no Brasil. Segundo: o foco dos FRBR é o universo bibliográfico como um todo (obras, expressões, manifestações, itens), não \"descrição física de imagens digitais\".","fonte":"md"},{"n":26,"assunto":"Catalogação","especifico":"Modelos conceituais - FRBR - Requisitos Funcionais para Registros Bibliográficos","orgao":"DPU","ano":2016,"enunciado":"Conforme os requisitos funcionais para registros bibliográficos, mudanças no tamanho da fonte ou na disposição das páginas de uma obra, ou mudanças no seu invólucro, não são suficientes para que se considere uma nova manifestação, devendo ser considerada, nesse caso, ainda como cópia de uma manifestação.","gabarito":"E","comentario":"Pelos FRBR, mudanças no design da publicação — incluindo tamanho da fonte, disposição das páginas ou invólucro/embalagem — SIM caracterizam nova manifestação, e não apenas uma cópia. A manifestação representa todos os objetos físicos com as mesmas características de conteúdo e forma física; alterar a forma física gera nova manifestação.","fonte":"ia"},{"n":27,"assunto":"Catalogação","especifico":"Modelos conceituais - FRBR - Requisitos Funcionais para Registros Bibliográficos","orgao":"TJDFT","ano":2015,"enunciado":"Conforme os functional requirements for bibliographic records, um item é considerado uma entidade concreta que corresponde a um objeto físico, o qual pode estar também no formato digital.","gabarito":"C","comentario":"Item, nos FRBR, é exemplificação única de uma manifestação — o objeto concreto que permite acessar o conteúdo, podendo ser tanto físico (um livro impresso na estante) quanto digital (um arquivo específico armazenado em um repositório).","fonte":"md"},{"n":28,"assunto":"Catalogação","especifico":"Modelos conceituais - FRBR - Requisitos Funcionais para Registros Bibliográficos","orgao":"DPU","ano":2016,"enunciado":"Embora os requisitos funcionais para registros bibliográficos (FRBR) sejam um modelo conceitual proposto para o universo bibliográfico, é possível a sua adoção em bibliotecas digitais.","gabarito":"C","comentario":"Embora os FRBR tenham sido propostos no contexto bibliográfico tradicional, sua estrutura entidade-relacionamento (obra–expressão–manifestação–item, mais responsáveis e assuntos) é perfeitamente aplicável a bibliotecas digitais — inclusive ajudando a organizar conteúdos com múltiplas versões e formatos.","fonte":"md"},{"n":29,"assunto":"Catalogação","especifico":"A prática da catalogação - As três partes da catalogação","orgao":"STJ","ano":2018,"enunciado":"A catalogação compreende três partes: descrição bibliográfica, pontos de acesso e dados de localização.","gabarito":"C","comentario":"É exatamente a divisão clássica: a catalogação compreende a descrição bibliográfica (individualiza o recurso), os pontos de acesso (reúnem recursos por semelhança) e os dados de localização (permitem encontrar o item no acervo).","fonte":"md"},{"n":30,"assunto":"Catalogação","especifico":"A prática da catalogação - Definição de entrada ou registro bibliográfico","orgao":"SEE-DF","ano":2017,"enunciado":"Os registros de informação, unidade principal de uma base de dados, são produtos da representação de documentos e correspondem a um documento, a partes de um documento, a documentos em seu conjunto, ou a dados esparsos.","gabarito":"C","comentario":"Definição precisa de registro/entrada bibliográfica: o conjunto completo da representação — descrição bibliográfica + pontos de acesso + dados de localização. Cada registro pode representar um documento inteiro, parte dele, um conjunto de documentos ou mesmo dados esparsos.","fonte":"md"},{"n":31,"assunto":"Serviços de Referência","especifico":"Competência informacional e letramento informacional","orgao":"TJPA","ano":2025,"enunciado":"No ambiente digital e no uso das mídias sociais no trabalho do bibliotecário, as competências infocomunicacionais abrangem o saber operacional, o saber informacional e o saber comunicacional.","gabarito":"C","comentario":"As competências infocomunicacionais, no trabalho do bibliotecário em ambiente digital, articulam três saberes: operacional (domínio das ferramentas e plataformas), informacional (busca, avaliação e uso da informação) e comunicacional (interação efetiva com usuários nas redes). É um conceito que expande a competência informacional tradicional para o cenário das mídias sociais.","fonte":"ia"},{"n":32,"assunto":"Serviços de Referência","especifico":"Serviço de referência virtual","orgao":"SEE-DF","ano":2017,"enunciado":"Na entrevista de referência mediada por tecnologias síncronas, como o Skype, é inteiramente suprimida a comunicação não verbal, que envolve expressão facial, olhar, gesto, postura, resmungos, suspiros, tom de voz e pausas silenciosas.","gabarito":"E","comentario":"Tecnologias síncronas como Skype, videoconferência e chat com vídeo PRESERVAM grande parte da comunicação não verbal — expressões faciais, gestos, postura, tom de voz e até pausas silenciosas são percebidos. A supressão da comunicação não verbal é mais característica de canais assíncronos e textuais, como e-mail.","fonte":"md"},{"n":33,"assunto":"Serviços de Referência","especifico":"Serviço de referência virtual","orgao":"ABIN","ano":2018,"enunciado":"O serviço de referência virtual diz respeito à disponibilização do serviço de referência por meio de tecnologia de informação, de modo a agregar valor tanto para as bibliotecas quanto para os usuários que interagem por meio dessa ferramenta.","gabarito":"C","comentario":"Definição correta do serviço de referência virtual (SRV): é o serviço de referência mediado por tecnologias da informação e comunicação, agregando valor ao processo — aumenta eficiência, capacidade de atendimento e economiza tempo e recursos para a biblioteca.","fonte":"md"},{"n":34,"assunto":"Serviços de Referência","especifico":"Serviço de referência virtual","orgao":"IPHAN","ano":2018,"enunciado":"Os serviços digitais de atendimento ao usuário, chamados de serviços de referência virtual (SRV), fornecem orientações para a elaboração de trabalhos acadêmicos e catálogos online, porém ainda não têm suporte para serviços como a elaboração de fichas catalográficas, o que deve ser feito de maneira presencial, pois, nesse caso, se faz necessário que o trabalho esteja fisicamente em mãos do bibliotecário.","gabarito":"E","comentario":"Não há essa limitação. O SRV pode contemplar a elaboração de fichas catalográficas remotamente — o documento pode ser enviado em arquivo digital, fotografado ou descrito pelo próprio usuário com orientação do bibliotecário. A premissa de que \"precisa estar fisicamente em mãos\" é falsa.","fonte":"ia"},{"n":35,"assunto":"Serviços de Referência","especifico":"Disseminação Seletiva da Informação (DSI)","orgao":"TJPA","ano":2025,"enunciado":"Enquanto um serviço de notificação corrente, a disseminação seletiva da informação surgiu da necessidade de se oferecer informação identificada nas bibliotecas públicas.","gabarito":"E","comentario":"DSI (Disseminação Seletiva da Informação) não nasceu nas bibliotecas públicas — foi concebida por Hans Peter Luhn, da IBM Corporation, em 1958, no contexto da informação científica e tecnológica. O serviço é personalizado, com valor agregado e direcionado às necessidades particulares de cada usuário.","fonte":"md"},{"n":36,"assunto":"Serviços de Referência","especifico":"Disseminação Seletiva da Informação (DSI)","orgao":"MPCE","ano":2025,"enunciado":"Uma das ferramentas desenvolvidas para DSI é a análise da navegação do usuário pelas plataformas eletrônicas, na qual suas preferências são gravadas e seu perfil de consulta é definido automaticamente.","gabarito":"C","comentario":"Em plataformas eletrônicas, é comum a geração automatizada de perfis de interesse a partir da análise da navegação do usuário — rastreando suas consultas, downloads e cliques. Essa é uma evolução tecnológica da etapa clássica de \"levantamento de perfis\" da DSI, agora feita de forma automática em vez de manual.","fonte":"ia"},{"n":37,"assunto":"Serviços de Referência","especifico":"Disseminação Seletiva da Informação (DSI)","orgao":"TJPA","ano":2025,"enunciado":"A filosofia que direciona um serviço de disseminação seletiva da informação baseia-se na maximização do uso dos acervos e na minimização do esforço do usuário.","gabarito":"C","comentario":"A filosofia da DSI gira em torno de duas premissas: entregar ao usuário informação relevante de forma proativa (maximização do uso do acervo) e poupar seu tempo de busca (minimização do esforço). É um serviço personalizado, de valor agregado, que antecipa as necessidades do usuário.","fonte":"ia"},{"n":38,"assunto":"Serviços de Referência","especifico":"Disseminação Seletiva da Informação (DSI)","orgao":"MPCE","ano":2025,"enunciado":"A lógica utilizada por todos os programas de busca de informações nos serviços de DSI é a lógica booleana.","gabarito":"C","comentario":"Os sistemas que executam a DSI realmente se baseiam em lógica booleana para confrontar os perfis dos usuários com a base de dados. Operadores AND, OR e NOT estruturam as estratégias de recuperação que retornam os itens correspondentes a cada perfil.","fonte":"ia"},{"n":39,"assunto":"Serviços de Referência","especifico":"Disseminação Seletiva da Informação (DSI)","orgao":"STJ","ano":2024,"enunciado":"A necessidade de informação é um dos fatores centrais para a criação de um serviço de disseminação seletiva da informação, assim como a mediação da informação é preponderante para a prestação desse serviço.","gabarito":"C","comentario":"A DSI parte de uma necessidade de informação previamente identificada (o perfil de interesse do usuário) e depende da mediação do bibliotecário, que analisa esse perfil, traduz para linguagem do sistema, controla a qualidade dos resultados e expede aos usuários. Sem necessidade e sem mediação, não há DSI.","fonte":"md"},{"n":40,"assunto":"Serviços de Referência","especifico":"Disseminação Seletiva da Informação (DSI)","orgao":"PGDF","ano":2019,"enunciado":"O serviço de alerta surgiu no contexto analógico da biblioteconomia e migrou para o digital, com o advento de novas formas de alertas que atualizam as informações na área de interesse de cada pessoa.","gabarito":"C","comentario":"CERTO. O serviço de alerta busca manter o usuário atualizado com o desenvolvimento na sua área de interesse.","fonte":"banca"},{"n":41,"assunto":"Gestão de Bibliotecas","especifico":"Planejamento","orgao":"TSE","ano":2024,"enunciado":"O planejamento em bibliotecas e unidades de informação compreende os níveis de planejamento intermediário e operacional, ficando o planejamento estratégico a cargo dos níveis de direção da organização a que pertencem as bibliotecas.","gabarito":"C","comentario":"Aplicação direta da lição da Suzane: o planejamento em bibliotecas e unidades de informação localiza-se frequentemente nos níveis tático (intermediário) e operacional. O planejamento estratégico é prerrogativa dos níveis de direção da organização à qual a biblioteca pertence.","fonte":"md"},{"n":42,"assunto":"Gestão de Bibliotecas","especifico":"Planejamento","orgao":"MPCE","ano":2020,"enunciado":"A respeito da organização e administração de bibliotecas, julgue o item a seguir.\n \n\n O planejamento integra os recursos organizacionais, estabelece a divisão de trabalho e estipula os níveis de autoridade, ao passo que a organização, última função do processo, é a etapa em que os objetivos institucionais traçados são atingidos.","gabarito":"E","comentario":"Inversão clássica das funções administrativas. O planejamento é o que estabelece objetivos, recursos e linhas de ação. A organização é apenas UMA das funções (não a última) e cuida da divisão do trabalho e autoridade. A função em que objetivos são efetivamente alcançados é a execução/direção — não a organização.","fonte":"md"},{"n":43,"assunto":"Gestão de Bibliotecas","especifico":"Planejamento","orgao":"MPCE","ano":2020,"enunciado":"A respeito da organização e administração de bibliotecas, julgue o item a seguir.\n \n\n Organização e administração de bibliotecas são processos administrativos, ou seja, são um conjunto de funções que se sucedem sistematicamente a partir das ações de planejamento, organização, controle e direção.","gabarito":"C","comentario":"A questão descreve corretamente o processo administrativo, sintetizado nas quatro funções clássicas (PODC): Planejamento, Organização, Direção e Controle. Essas funções se sucedem e se complementam sistematicamente — sem essa estrutura, a gestão da biblioteca fica desorganizada e reativa.","fonte":"ia"},{"n":44,"assunto":"Gestão de Bibliotecas","especifico":"Planejamento","orgao":"PGDF","ano":2019,"enunciado":"No planejamento estratégico, denominam-se fatores-chave os objetivos quantificados expressos no tempo de execução.","gabarito":"E","comentario":"ERRADO. Os objetivos quantificados e expressos no tempo de execução são denominados de metas.","fonte":"banca"},{"n":45,"assunto":"Gestão de Bibliotecas","especifico":"Planejamento","orgao":"TJ-AM","ano":2019,"enunciado":"Na gestão de uma unidade de informação, deve-se evitar estabelecer objetivos e metas, pois a função da referida unidade é trabalhar sob a demanda dos usuários.","gabarito":"E","comentario":"Erro frontal. Estabelecer objetivos e metas é justamente uma das essências do planejamento — não algo a ser evitado. Sem objetivos quantificáveis e mensuráveis (metas), não há como avaliar desempenho nem garantir eficácia. Trabalhar \"sob a demanda\" não significa abdicar do planejamento.","fonte":"md"},{"n":46,"assunto":"Gestão de Bibliotecas","especifico":"Planejamento","orgao":"DPU","ano":2016,"enunciado":"É tarefa dos dirigentes da instituição que mantém a biblioteca a responsabilidade de verificar mudanças e atualizações que devem ser incorporadas ao planejamento bibliotecário, conforme as necessidades existentes; desses dirigentes é também a competência de verificar os objetivos e as metas a serem cumpridas.","gabarito":"E","comentario":"O planejamento da biblioteca não é prerrogativa exclusiva dos dirigentes da instituição mantenedora — é tarefa do próprio bibliotecário responsável pela unidade de informação, especialmente nos níveis tático e operacional. Os dirigentes da instituição cuidam do planejamento estratégico geral, ao qual o da biblioteca deve estar alinhado.","fonte":"md"},{"n":47,"assunto":"Gestão de Bibliotecas","especifico":"Planejamento","orgao":"IPHAN","ano":2018,"enunciado":"As funções administrativas em bibliotecas e centros de documentação especializados prescindem dos processos relacionados ao planejamento, uma vez que este deve ser estruturado pela alta administração da instituição e refletir seus objetivos.","gabarito":"E","comentario":"As funções administrativas em bibliotecas NÃO prescindem do planejamento — ao contrário, dependem dele. \"Prescindir\" significa \"dispensar\", o que torna a frase absurda. O planejamento é função essencial em qualquer unidade de informação, independente do porte ou tipo.","fonte":"md"},{"n":48,"assunto":"Gestão de Bibliotecas","especifico":"Planejamento","orgao":"STJ","ano":2018,"enunciado":"Assim como o planejamento formal deve ser visto como uma responsabilidade exclusiva dos gerentes e administradores, portanto não pertinente aos bibliotecários, a preocupação sobre o impacto da informação em formatos digitais também não deve ser uma atribuição dos bibliotecários, pois existem setores específicos que tratam desse assunto, como os centros de tecnologia da informação.","gabarito":"E","comentario":"Dupla absurdez. Primeiro: o planejamento formal não é exclusivo de gerentes — bibliotecários planejam suas unidades, especialmente nos níveis tático e operacional. Segundo: o impacto da informação digital é tema central da biblioteconomia contemporânea — bibliotecários precisam compreender e gerir esse contexto.","fonte":"md"},{"n":49,"assunto":"Gestão de Bibliotecas","especifico":"Planejamento","orgao":"SEE-DF","ano":2017,"enunciado":"Para que o serviço de acesso à informação seja oferecido com eficiência e eficácia, é necessário haver planejamento, sendo necessário, ainda, que esse planejamento seja seguido pelos colaboradores da unidade de informação.","gabarito":"C","comentario":"Eficiência (recursos × benefícios) e eficácia (cumprimento de objetivos e satisfação do usuário) são justamente o que se busca com o planejamento. Sem planejamento sistemático e seguido por toda a equipe, o serviço perde direção, gasta mais e atende pior.","fonte":"md"},{"n":50,"assunto":"Gestão de Bibliotecas","especifico":"Relatório como instrumento de planejamento e avaliação","orgao":"PGDF","ano":2019,"enunciado":"O relatório é utilizado como instrumento de marketing da biblioteca, na medida em que funciona como meio de divulgação e prestação de contas dos serviços realizados aos dirigentes e à comunidade atendida.","gabarito":"C","comentario":"CERTO. O relatório funciona como instrumento do marketing para divulgação dos serviços e prestação de informações para os stakeholders (grupos interessados).","fonte":"banca"}];
+
+const ASSUNTO_LABEL = {
+  "Indexação": "indexação",
+  "Tecnologias da Informação, Automação e Bibliotecas Digitais": "tecnologias da informação, automação e bibliotecas digitais",
+  "Catalogação": "catalogação",
+  "Serviços de Referência": "serviços de referência",
+  "Gestão de Bibliotecas": "gestão de bibliotecas"
+};
+
+const FONTE_LABEL = {
+  banca: "justificativa da banca",
+  md: null,
+  ia: null
+};
+const FONTE_SUFIXO = {
+  banca: null,
+  md: "comentário gerado por inteligência artificial, a partir do material da prof. suzane lima.",
+  ia: "comentário gerado por inteligência artificial. caso tenha dúvida de sua confiabilidade, compartilhe com a prof e os colegas no grupo foca chat."
+};
+
+const STORAGE_KEY = "foca:simulado2:respostas";
+
+/* ===== STATE ===== */
+let respostas = {};  // { "1": "C", "2": "E", ... }
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) respostas = JSON.parse(raw) || {};
+  } catch (e) {
+    respostas = {};
+  }
+}
+function saveState() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(respostas));
+  } catch (e) {
+    // ignora — pode acontecer se localStorage está cheio ou indisponível
+  }
+}
+
+/* ===== HELPERS ===== */
+function escapeHtml(s) {
+  return String(s)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function gabaritoLabel(g) {
+  return g === "C" ? "certo" : "errado";
+}
+
+/* ===== RENDER ===== */
+function renderQuestoes() {
+  const root = document.getElementById("questoes-root");
+  // Agrupa por assunto (mantendo ordem do CSV)
+  const grupos = [];
+  const seen = new Set();
+  for (const q of QUESTOES) {
+    if (!seen.has(q.assunto)) {
+      grupos.push({ assunto: q.assunto, questoes: [] });
+      seen.add(q.assunto);
+    }
+    grupos[grupos.length - 1].questoes.push(q);
+  }
+
+  let html = "";
+  grupos.forEach((g, gi) => {
+    const ini = g.questoes[0].n;
+    const fim = g.questoes[g.questoes.length - 1].n;
+    html += `<section class="assunto-section">
+      <div class="assunto-header">
+        <div class="assunto-eyebrow">disciplina ${gi + 1} · questões ${String(ini).padStart(2, '0')} a ${String(fim).padStart(2, '0')}</div>
+        <h2 class="assunto-titulo">${ASSUNTO_LABEL[g.assunto] || g.assunto}</h2>
+      </div>`;
+    for (const q of g.questoes) {
+      html += renderQuestao(q);
+    }
+    html += `</section>`;
+  });
+
+  root.innerHTML = html;
+
+  // Reaplica estado salvo
+  for (const q of QUESTOES) {
+    if (respostas[q.n]) {
+      applyAnswer(q, respostas[q.n], false);
+    }
+  }
+
+  // Liga handlers
+  document.querySelectorAll(".ce-btn").forEach(btn => {
+    btn.addEventListener("click", onCEClick);
+  });
+}
+
+function renderQuestao(q) {
+  const tag = `${q.orgao} · ${q.ano}`;
+  const num = String(q.n).padStart(2, '0');
+  return `
+  <article class="questao" id="q-${q.n}" data-n="${q.n}">
+    <div class="questao-num-row">
+      <span class="questao-num">questão ${num}</span>
+      <span class="tag">${escapeHtml(tag)}</span>
+    </div>
+    <p class="enunciado">${escapeHtml(q.enunciado)}</p>
+    <div class="ce-row">
+      <button class="ce-btn" data-q="${q.n}" data-val="C" type="button">certo</button>
+      <button class="ce-btn" data-q="${q.n}" data-val="E" type="button">errado</button>
+    </div>
+    <div class="feedback-block" id="fb-${q.n}">
+      <div class="feedback-banner" id="fbb-${q.n}">
+        <span id="fbb-text-${q.n}"></span>
+        <span class="gab">gabarito: <strong id="fbb-gab-${q.n}"></strong></span>
+      </div>
+      <div class="comentario" id="cm-${q.n}">
+        <div class="comentario-tag" id="cm-tag-${q.n}" style="display:none;"></div>
+        <p id="cm-text-${q.n}"></p>
+        <p class="comentario-fonte" id="cm-fonte-${q.n}" style="display:none;"></p>
+      </div>
+    </div>
+  </article>`;
+}
+
+function onCEClick(e) {
+  const btn = e.currentTarget;
+  const n = parseInt(btn.dataset.q, 10);
+  const val = btn.dataset.val;
+  if (respostas[n]) return; // já respondeu, ignora
+  respostas[n] = val;
+  saveState();
+  const q = QUESTOES.find(x => x.n === n);
+  applyAnswer(q, val, true);
+  updateProgress();
+  updateResult();
+}
+
+function applyAnswer(q, val, animate) {
+  const btnC = document.querySelector(`.ce-btn[data-q="${q.n}"][data-val="C"]`);
+  const btnE = document.querySelector(`.ce-btn[data-q="${q.n}"][data-val="E"]`);
+  if (!btnC || !btnE) return;
+
+  // Desabilita ambos
+  btnC.disabled = true;
+  btnE.disabled = true;
+
+  const correct = q.gabarito; // "C" ou "E"
+  const acertou = val === correct;
+
+  // Marca o correto sempre
+  const btnCorrect = correct === "C" ? btnC : btnE;
+  const btnWrong = correct === "C" ? btnE : btnC;
+
+  btnCorrect.classList.add("correct-answer");
+
+  if (!acertou) {
+    // O botão clicado era o errado
+    btnWrong.classList.add("wrong-pick");
+  } else {
+    // Diminui visualmente o não escolhido
+    btnWrong.classList.add("fade");
+  }
+
+  // Mostra feedback + comentário
+  const fb = document.getElementById(`fb-${q.n}`);
+  const fbb = document.getElementById(`fbb-${q.n}`);
+  const fbbText = document.getElementById(`fbb-text-${q.n}`);
+  const fbbGab = document.getElementById(`fbb-gab-${q.n}`);
+  fbb.classList.remove("acerto", "erro");
+  if (acertou) {
+    fbb.classList.add("acerto");
+    fbbText.textContent = "✓ você acertou";
+  } else {
+    fbb.classList.add("erro");
+    fbbText.textContent = "✗ você errou";
+  }
+  fbbGab.textContent = gabaritoLabel(correct);
+
+  // Comentário
+  const cmTag = document.getElementById(`cm-tag-${q.n}`);
+  const cmText = document.getElementById(`cm-text-${q.n}`);
+  const cmFonte = document.getElementById(`cm-fonte-${q.n}`);
+  const tagLabel = FONTE_LABEL[q.fonte];
+  if (tagLabel) {
+    cmTag.style.display = "block";
+    cmTag.textContent = tagLabel;
+    cmTag.className = "comentario-tag banca";
+    cmTag.style.color = "var(--verde-escuro)";
+  } else {
+    cmTag.style.display = "none";
+  }
+  cmText.textContent = q.comentario;
+  const sufixo = FONTE_SUFIXO[q.fonte];
+  if (sufixo) {
+    cmFonte.style.display = "block";
+    cmFonte.textContent = sufixo;
+  } else {
+    cmFonte.style.display = "none";
+  }
+
+  fb.classList.add("show");
+}
+
+/* ===== PROGRESSO + RANKING ===== */
+function updateProgress() {
+  const total = QUESTOES.length;
+  const respondidasN = Object.keys(respostas).length;
+  let acertosN = 0;
+  for (const q of QUESTOES) {
+    if (respostas[q.n] && respostas[q.n] === q.gabarito) acertosN++;
+  }
+  document.getElementById("p-respondidas").textContent = respondidasN;
+  document.getElementById("p-total").textContent = total;
+  document.getElementById("p-acertos").textContent = acertosN;
+  const pct = respondidasN > 0 ? Math.round((acertosN / respondidasN) * 100) : 0;
+  document.getElementById("p-percent").textContent = pct + "%";
+  document.getElementById("progress-fill").style.width = ((respondidasN / total) * 100) + "%";
+}
+
+function updateResult() {
+  const total = QUESTOES.length;
+  const respondidasN = Object.keys(respostas).length;
+  let acertosN = 0;
+  for (const q of QUESTOES) {
+    if (respostas[q.n] && respostas[q.n] === q.gabarito) acertosN++;
+  }
+  const pct = total > 0 ? Math.round((acertosN / total) * 100) : 0;
+
+  document.getElementById("r-percent").textContent = pct;
+  document.getElementById("r-frac").textContent = `${acertosN}/${total}`;
+
+  const completou = respondidasN === total;
+  const eyebrow = document.getElementById("r-eyebrow");
+  const msg = document.getElementById("r-msg");
+
+  if (completou) {
+    eyebrow.textContent = "🎉 simulado finalizado · seu desempenho final";
+    msg.textContent = msgFinal(pct);
+  } else if (respondidasN === 0) {
+    eyebrow.textContent = "seu desempenho";
+    msg.textContent = "comece a responder — o ranking aparece aqui à medida que você avança.";
+  } else {
+    eyebrow.textContent = `parcial · ${respondidasN} de ${total} respondidas`;
+    msg.textContent = `faltam ${total - respondidasN} questão${total - respondidasN === 1 ? '' : 'ões'}. continue no seu ritmo — você pode fechar a página e voltar quando quiser.`;
+  }
+
+  // Breakdown por assunto
+  renderBreakdown();
+}
+
+function msgFinal(pct) {
+  if (pct >= 80) return "excelente! você dominou os conteúdos da semana 2. revise os erros pra fechar com chave de ouro.";
+  if (pct >= 65) return "bom desempenho. dá pra ajustar alguns pontos — revise os comentários das questões que errou.";
+  if (pct >= 50) return "está no caminho. retome os assuntos com mais erros nas apostilas da prof. e refaça o simulado depois.";
+  return "respira fundo. esse simulado mostrou onde estão as lacunas — volta pras apostilas, foca nos assuntos com mais erros e refaz com calma.";
+}
+
+function renderBreakdown() {
+  const grupos = {};
+  for (const q of QUESTOES) {
+    if (!grupos[q.assunto]) grupos[q.assunto] = { total: 0, respondidas: 0, acertos: 0 };
+    grupos[q.assunto].total++;
+    if (respostas[q.n]) {
+      grupos[q.assunto].respondidas++;
+      if (respostas[q.n] === q.gabarito) grupos[q.assunto].acertos++;
+    }
+  }
+  const root = document.getElementById("breakdown");
+  let html = "";
+  // Mantém ordem dos assuntos como nas seções
+  const seen = new Set();
+  const ordem = [];
+  for (const q of QUESTOES) {
+    if (!seen.has(q.assunto)) { ordem.push(q.assunto); seen.add(q.assunto); }
+  }
+  for (const assunto of ordem) {
+    const g = grupos[assunto];
+    const pctRespondido = g.respondidas > 0 ? Math.round((g.acertos / g.respondidas) * 100) : 0;
+    const widthBar = g.total > 0 ? (g.acertos / g.total) * 100 : 0;
+    const label = ASSUNTO_LABEL[assunto] || assunto;
+    let cls = "";
+    if (g.respondidas > 0) {
+      if (pctRespondido < 50) cls = "low";
+      else if (pctRespondido < 75) cls = "mid";
+    }
+    const meta = g.respondidas === 0
+      ? `<span class="area-stats">sem respostas</span>`
+      : `<span class="area-stats">${g.acertos}/${g.respondidas} respondidas · <strong>${pctRespondido}%</strong></span>`;
+    html += `<div class="area-row">
+      <div class="area-meta">
+        <span class="area-name">${label}</span>
+        ${meta}
+      </div>
+      <div class="area-track"><div class="area-fill ${cls}" style="width: ${widthBar}%"></div></div>
+    </div>`;
+  }
+  root.innerHTML = html;
+}
+
+/* ===== AÇÕES ===== */
+function clearProgress() {
+  const respondidasN = Object.keys(respostas).length;
+  let msg;
+  if (respondidasN === 0) {
+    msg = "você ainda não respondeu nenhuma questão. quer mesmo limpar?";
+  } else {
+    msg = `tem certeza que quer apagar seu progresso? você vai perder as ${respondidasN} resposta${respondidasN === 1 ? '' : 's'} já registrada${respondidasN === 1 ? '' : 's'}.`;
+  }
+  if (!confirm(msg)) return;
+  respostas = {};
+  try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+  // Re-render
+  renderQuestoes();
+  updateProgress();
+  updateResult();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function jumpToNext() {
+  for (const q of QUESTOES) {
+    if (!respostas[q.n]) {
+      const el = document.getElementById(`q-${q.n}`);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      return;
+    }
+  }
+  // Se respondeu todas, scroll pro resultado
+  const r = document.querySelector(".result-section");
+  if (r) r.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* ===== INIT ===== */
+loadState();
+renderQuestoes();
+updateProgress();
+updateResult();
+
+document.getElementById("btn-clear").addEventListener("click", clearProgress);
+document.getElementById("btn-jump").addEventListener("click", jumpToNext);
+</script>
+</body>
+</html>
