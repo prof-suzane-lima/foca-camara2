@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🦭 Foca na Câmara - Simulado da semana 3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --verde: #00A74A;
+    --rosa: #F4A6D7;
+    --bege: #F1F1DE;
+    --verde-escuro: #07272D;
+    --azul: #9BCBEB;
+    --verde-limao: #B5BD00;
+    --amarelo: #FED141;
+    --laranja: #FF6A39;
+    --acerto: var(--verde);
+    --acerto-bg: rgba(0, 167, 74, 0.12);
+    --erro: var(--laranja);
+    --erro-bg: rgba(255, 106, 57, 0.12);
+    --linha: rgba(7, 39, 45, 0.15);
+    --linha-suave: rgba(7, 39, 45, 0.08);
+    --shadow-soft: 0 1px 3px rgba(7, 39, 45, 0.06), 0 4px 16px rgba(7, 39, 45, 0.04);
+    --dif-facil: #C9F7C5;
+    --dif-medio: #FCE5CD;
+    --dif-dificil: #FADBD8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bege);
+    color: var(--verde-escuro);
+    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+    font-weight: 400;
+    line-height: 1.5;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ===== MARCA TEXTUAL ===== */
+  .brand { font-family: 'Bricolage Grotesque', sans-serif; line-height: 1; display: inline-block; }
+  .brand .b-prof   { font-weight: 400; letter-spacing: 0; }
+  .brand .b-suzane { font-weight: 800; letter-spacing: -0.02em; }
+  .brand .b-lima   { font-weight: 800; font-style: italic; letter-spacing: -0.02em; }
+  .brand.light { color: var(--verde); }
+  .brand.dark  { color: var(--bege); }
+
+  /* ===== HEADER ===== */
+  .header {
+    background: var(--verde-escuro);
+    color: var(--bege);
+    padding: 16px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .header-brand-text { font-size: 16px; }
+  .header-tag {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--rosa);
+    font-weight: 700;
+  }
+
+  /* ===== BARRA DE PROGRESSO FIXA ===== */
+  .progress-bar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(241, 241, 222, 0.94);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--linha-suave);
+    padding: 12px 24px;
+  }
+  .progress-inner {
+    max-width: 820px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .progress-stats {
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+    color: rgba(7, 39, 45, 0.7);
+    white-space: nowrap;
+  }
+  .progress-stats strong { color: var(--verde-escuro); font-weight: 800; }
+  .progress-stats .ac { color: var(--verde); }
+  .progress-track {
+    flex: 1 1 160px;
+    background: rgba(7, 39, 45, 0.1);
+    height: 7px;
+    border-radius: 999px;
+    overflow: hidden;
+    min-width: 120px;
+  }
+  .progress-fill {
+    background: var(--verde);
+    height: 100%;
+    width: 0%;
+    border-radius: 999px;
+    transition: width 0.4s ease;
+  }
+  .reset-link {
+    background: none;
+    border: none;
+    color: rgba(7, 39, 45, 0.55);
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: underline;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .reset-link:hover { color: var(--laranja); }
+
+  .container { max-width: 820px; margin: 0 auto; padding: 44px 24px 90px; }
+
+  /* ===== HERO ===== */
+  .eyebrow {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--laranja);
+    margin-bottom: 14px;
+  }
+  h1 {
+    font-size: 46px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.02;
+    margin-bottom: 18px;
+  }
+  .lead {
+    font-size: 16px;
+    color: rgba(7, 39, 45, 0.78);
+    max-width: 600px;
+    margin-bottom: 10px;
+  }
+  .lead + .lead { margin-top: 8px; }
+  .lead strong { color: var(--verde-escuro); font-weight: 700; }
+  .hero-note {
+    margin-top: 18px;
+    font-size: 13px;
+    color: rgba(7, 39, 45, 0.6);
+    background: rgba(155, 203, 235, 0.18);
+    border-left: 3px solid var(--azul);
+    border-radius: 8px;
+    padding: 12px 16px;
+    max-width: 600px;
+  }
+
+  /* ===== GRUPO / SEÇÃO DE ASSUNTO ===== */
+  .grupo { margin-top: 52px; }
+  .grupo-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--verde-escuro);
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+  }
+  .grupo-title { font-size: 24px; font-weight: 800; letter-spacing: -0.02em; }
+  .grupo-count {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(7, 39, 45, 0.55);
+  }
+
+  /* ===== QUESTÃO ===== */
+  .questao {
+    background: white;
+    border: 1px solid var(--linha-suave);
+    border-radius: 16px;
+    padding: 26px 26px 24px;
+    box-shadow: var(--shadow-soft);
+    margin-bottom: 22px;
+  }
+  .questao-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+  .questao-num {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--verde);
+    font-variant-numeric: tabular-nums;
+  }
+  .questao-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tag {
+    background: var(--verde-escuro);
+    color: var(--bege);
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .tag.dif-facil { background: var(--dif-facil); color: var(--verde-escuro); }
+  .tag.dif-medio { background: var(--dif-medio); color: var(--verde-escuro); }
+  .tag.dif-dif   { background: var(--dif-dificil); color: var(--verde-escuro); }
+
+  .questao-esp {
+    font-size: 12px;
+    color: rgba(7, 39, 45, 0.55);
+    margin-bottom: 16px;
+  }
+  .enunciado { font-size: 16.5px; line-height: 1.62; margin-bottom: 22px; white-space: pre-line; }
+
+  /* ===== BOTÕES CERTO / ERRADO ===== */
+  .ce-opcoes { display: flex; gap: 12px; margin-bottom: 4px; }
+  .ce-btn {
+    flex: 1;
+    background: white;
+    border: 1.5px solid var(--linha);
+    color: var(--verde-escuro);
+    padding: 14px 18px;
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.16s ease;
+    letter-spacing: 0.01em;
+  }
+  .ce-btn:hover:not(:disabled) { border-color: var(--verde-escuro); transform: translateY(-1px); }
+  .ce-btn:disabled { cursor: default; }
+  /* estados pós-resposta */
+  .ce-btn.is-correct {
+    border-color: var(--acerto);
+    background: var(--acerto-bg);
+    color: var(--verde-escuro);
+  }
+  .ce-btn.is-wrong {
+    border-color: var(--erro);
+    background: var(--erro-bg);
+    color: var(--verde-escuro);
+  }
+  .ce-btn.muted { opacity: 0.45; }
+  .ce-btn .mark { font-weight: 800; margin-left: 6px; }
+
+  /* ===== FEEDBACK ===== */
+  .feedback {
+    display: none;
+    margin-top: 18px;
+    border-radius: 12px;
+    padding: 18px 20px;
+    border-left: 4px solid;
+  }
+  .feedback.show { display: block; animation: fadeIn 0.28s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  .feedback.acerto { background: var(--acerto-bg); border-color: var(--acerto); }
+  .feedback.erro   { background: var(--erro-bg);   border-color: var(--erro); }
+
+  .feedback-status {
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .feedback.acerto .feedback-status { color: var(--acerto); }
+  .feedback.erro .feedback-status { color: var(--erro); }
+  .feedback-gab { font-size: 14px; margin-bottom: 14px; }
+  .feedback-gab strong { font-weight: 800; }
+
+  /* bloco de comentário */
+  .comentario {
+    background: white;
+    border-radius: 10px;
+    padding: 16px 18px;
+    border: 1px solid var(--linha-suave);
+  }
+  .com-label-top {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: lowercase;
+    color: var(--verde);
+    margin-bottom: 6px;
+  }
+  .com-texto { font-size: 14.5px; line-height: 1.6; }
+  .com-label-bottom {
+    display: block;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--linha);
+    font-size: 11.5px;
+    font-style: italic;
+    line-height: 1.45;
+    color: rgba(7, 39, 45, 0.6);
+  }
+  .com-label-bottom.material { color: rgba(0, 122, 54, 0.85); }
+  .com-label-bottom.ia { color: rgba(7, 39, 45, 0.6); }
+
+  /* ===== DESEMPENHO / RANKING ===== */
+  .desempenho { margin-top: 64px; scroll-margin-top: 80px; }
+  .result-hero {
+    background: var(--verde-escuro);
+    color: var(--bege);
+    border-radius: 18px;
+    padding: 38px 34px;
+    margin-bottom: 26px;
+  }
+  .result-eyebrow {
+    color: var(--rosa);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .result-score {
+    font-size: 80px;
+    font-weight: 800;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    color: var(--rosa);
+    font-variant-numeric: tabular-nums;
+  }
+  .result-score em { font-style: normal; color: var(--bege); font-size: 30px; opacity: 0.6; margin-left: 10px; }
+  .result-msg { font-size: 17px; margin-top: 14px; color: rgba(241, 241, 222, 0.85); }
+  .result-sub { font-size: 13px; margin-top: 8px; color: rgba(241, 241, 222, 0.6); }
+
+  .breakdown-title { font-size: 16px; font-weight: 800; margin-bottom: 16px; letter-spacing: -0.01em; }
+  .breakdown {
+    background: white;
+    border: 1px solid var(--linha-suave);
+    border-radius: 14px;
+    padding: 22px 24px;
+    box-shadow: var(--shadow-soft);
+  }
+  .area-row { display: grid; gap: 6px; padding: 13px 0; border-bottom: 1px solid var(--linha-suave); }
+  .area-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .area-row:first-child { padding-top: 0; }
+  .area-meta { display: flex; justify-content: space-between; font-size: 14px; gap: 12px; }
+  .area-name { font-weight: 700; }
+  .area-stats { color: rgba(7, 39, 45, 0.7); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .area-track { background: rgba(7, 39, 45, 0.08); height: 8px; border-radius: 4px; overflow: hidden; }
+  .area-fill { height: 100%; background: var(--verde); width: 0%; border-radius: 4px; transition: width 0.4s ease; }
+
+  .footer {
+    margin-top: 56px;
+    padding-top: 22px;
+    border-top: 1px solid var(--linha);
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    font-size: 12px;
+    color: rgba(7, 39, 45, 0.55);
+  }
+  .footer .brand { font-size: 13px; }
+
+  @media (max-width: 600px) {
+    .header { padding: 14px 20px; }
+    .container { padding: 32px 18px 70px; }
+    h1 { font-size: 32px; }
+    .questao { padding: 20px 18px; }
+    .result-score { font-size: 60px; }
+    .grupo-title { font-size: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <span class="brand dark header-brand-text">
+    <span class="b-prof">prof.</span> <span class="b-suzane">suzane</span> <span class="b-lima">lima</span>
+  </span>
+  <div class="header-tag">simulado · semana 3</div>
+</header>
+
+<div class="progress-bar">
+  <div class="progress-inner">
+    <div class="progress-stats">
+      <strong id="ps-respondidas">0</strong>/50 respondidas
+      &nbsp;·&nbsp; <span class="ac"><strong id="ps-acertos">0</strong> acertos</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="ps-fill"></div></div>
+    <button class="reset-link" id="btn-reset">recomeçar</button>
+  </div>
+</div>
+
+<main class="container">
+
+  <section>
+    <div class="eyebrow">🦭 foca na câmara</div>
+    <h1>simulado da semana 3</h1>
+    <p class="lead">50 questões certo ou errado da banca <strong>Cebraspe</strong>, organizadas por disciplina. responda no seu ritmo: ao confirmar cada questão, o gabarito e o comentário aparecem na hora.</p>
+    <div class="hero-note">
+      seu progresso fica salvo automaticamente <strong>neste navegador</strong> — você pode fechar a página e continuar depois. ele não sincroniza entre dispositivos, então retome no mesmo aparelho.
+    </div>
+  </section>
+
+  <div id="grupos-container"></div>
+
+  <section class="desempenho" id="desempenho">
+    <div class="result-hero">
+      <div class="result-eyebrow">seu desempenho</div>
+      <div class="result-score"><span id="rk-acertos">0</span><em>/ <span id="rk-respondidas">0</span> respondidas</em></div>
+      <p class="result-msg" id="rk-msg">comece a responder para ver seu desempenho aqui.</p>
+      <p class="result-sub" id="rk-sub"></p>
+    </div>
+    <div class="breakdown-title">desempenho por disciplina</div>
+    <div class="breakdown" id="rk-breakdown"></div>
+  </section>
+
+  <div class="footer">
+    <span class="brand light">
+      <span class="b-prof">prof.</span> <span class="b-suzane">suzane</span> <span class="b-lima">lima</span>
+    </span>
+    <span>biblioteconomia descomplicada para concursos · foca na câmara</span>
+  </div>
+
+</main>
+
+<script>
+const DATA = {"grupos": ["Indexação", "Tecnologias da Informação", "Catalogação", "Gestão de Bibliotecas", "Introdução à Biblioteconomia"], "questoes": [{"n": 1, "assunto": "Indexação", "grupo": "Indexação", "especifico": "Coerência da indexação", "enunciado": "O processo de indexação é considerado uma prática complexa, que demanda cuidado e reflexão, porque, apesar de política de indexação estabelecer diretrizes para esse processo, fatores pessoais e profissionais, entre outros, podem influenciar na tomada de decisão.", "gab": "C", "orgao": "MPTO", "ano": "2024", "difClass": "dif-medio", "difLabel": "médio", "comentario": "A indexação é um processo essencialmente subjetivo. Ainda que a política de indexação trace diretrizes, fatores ligados ao próprio indexador — formação, experiência, conhecimento do tema e dos usuários — pesam na tomada de decisão. É por isso que se estuda a coerência inter e intraindexador.", "fonte": "material"}, {"n": 2, "assunto": "Indexação", "grupo": "Indexação", "especifico": "Indexação automática", "enunciado": "Por não envolver diretamente processos cognitivos humanos, a indexação automática frequentemente é considerada mais precisa do que aquela realizada manualmente.", "gab": "E", "orgao": "TJPA", "ano": "2025", "difClass": "dif-facil", "difLabel": "fácil", "comentario": "Cuidado para não trocar coerência por precisão. A vantagem reconhecida da indexação automática é ser totalmente coerente, porque o computador aplica sempre os mesmos critérios de frequência, posição e contexto — e não que ela seja mais precisa. Aliás, a indexação automática por atribuição é mais difícil de executar com eficiência do que a humana.", "fonte": "material"}, {"n": 3, "assunto": "Indexação", "grupo": "Indexação", "especifico": "Tipos de índice", "enunciado": "Nas práticas de organização da informação, os índices oriundos da indexação usados para otimizar a recuperação em catálogos se fundem aos índices bibliográficos, produto final que organiza conjuntos de obras.", "gab": "E", "orgao": "TJPA", "ano": "2025", "difClass": "dif-medio", "difLabel": "médio", "comentario": "Os índices não se 'fundem'. O índice resultante da indexação representa o conteúdo temático para fins de recuperação, enquanto o índice bibliográfico é um produto distinto, que organiza referências de obras. A banca criou uma relação que não existe.", "fonte": "ia"}, {"n": 4, "assunto": "Indexação", "grupo": "Indexação", "especifico": "Tipos de índice", "enunciado": "O índice de autores é um índice do arranjo por assuntos, no qual o nome do autor se remete aos números dos resumos associados a esse nome.", "gab": "C", "orgao": "MPCE", "ano": "2025", "difClass": "dif-medio", "difLabel": "médio", "comentario": "Item correto. No índice de autores de um serviço de resumos, o corpo é arranjado por assunto e o nome de cada autor remete aos números dos resumos a ele associados — funcionando como porta de entrada por autoria a um arranjo temático.", "fonte": "ia"}, {"n": 5, "assunto": "Indexação", "grupo": "Indexação", "especifico": "Indexação e resumos - Tipos de resumo", "enunciado": "Na elaboração de resumos documentais, a condensação deve resultar da seleção e reescrita de informações essenciais do documento, promovendo-se economia cognitiva para o leitor, além de ser espaço de interpretação crítica autônoma do resumidor.", "gab": "E", "orgao": "TJPA", "ano": "2025", "difClass": "dif-medio", "difLabel": "médio", "comentario": "O erro está no final. O resumo documental condensa e seleciona o essencial, sim, mas não é espaço de interpretação crítica autônoma do resumidor — isso caracterizaria o resumo crítico (recensão). O resumo comum representa o conteúdo de forma sucinta e exata, sem opinião do resumidor.", "fonte": "material"}, {"n": 6, "assunto": "Indexação", "grupo": "Indexação", "especifico": "Indexação e resumos - Tipos de resumo", "enunciado": "Os resumos documentais cumprem papel secundário em relação à indexação, pois são considerados produtos auxiliares e opcionais na representação temática dos documentos.", "gab": "E", "orgao": "TJPA", "ano": "2025", "difClass": "dif-facil", "difLabel": "fácil", "comentario": "Indexação e elaboração de resumos são áreas relacionadas: ambas condensam o conteúdo temático dos documentos. O resumo não é produto secundário, auxiliar nem opcional em relação à indexação.", "fonte": "material"}, {"n": 7, "assunto": "Indexação", "grupo": "Indexação", "especifico": "Indexação e resumos - Tipos de resumo", "enunciado": "Os resumos modulares têm o objetivo de ser descrições completas de conteúdo e são compostos por três partes: o resumo indicativo, o resumo informativo e o resumo crítico.", "gab": "E", "orgao": "TSE", "ano": "2024", "difClass": "dif-dif", "difLabel": "difícil", "comentario": "São cinco partes, não três. O resumo modular — o mais completo segundo Lancaster — reúne citação, anotação, resumo indicativo, resumo informativo e resumo crítico. A questão omitiu a citação e a anotação.", "fonte": "material"}, {"n": 8, "assunto": "Indexação", "grupo": "Indexação", "especifico": "NBR 6034:2004 — Preparação de índice de publicações", "enunciado": "No início do cabeçalho de publicações, entre os termos utilizados para a apresentação de índices, devem-se empregar artigos, adjetivos e conjunções.", "gab": "E", "orgao": "MPCE", "ano": "2025", "difClass": "dif-dif", "difLabel": "difícil", "comentario": "Pela NBR 6034, deve-se justamente evitar artigos, adjetivos e conjunções no início dos cabeçalhos. A banca inverteu a regra.", "fonte": "material"}, {"n": 9, "assunto": "Indexação", "grupo": "Indexação", "especifico": "NBR 12676:1992 — Métodos para análise de documentos", "enunciado": "A Norma ABNT 12676 — Métodos para análise de documentos — Determinação de seus assuntos e Seleção de Termos de Indexação — orienta a preparação de resumos e o emprego de técnicas de indexação automática.", "gab": "E", "orgao": "FUB", "ano": "2022", "difClass": "dif-medio", "difLabel": "médio", "comentario": "A NBR 12676 trata do exame de documentos, da determinação de assuntos e da seleção de termos de indexação, e pode até orientar a preparação de resumos. Mas ela não se aplica a serviços que empregam indexação automática — aí está o erro.", "fonte": "material"}, {"n": 10, "assunto": "Indexação", "grupo": "Indexação", "especifico": "NBR 12676:1992 — Métodos para análise de documentos", "enunciado": "A Norma Brasileira 12676 (Métodos para análise de documentos — determinação de seus assuntos e seleção de termos de indexação) define o termo precisão como aquele que se refere ao número de conceitos representados pelos termos atribuídos pelo indexador; e preceitua essa norma que a especificidade diz respeito ao grau de eficácia com que se conceitua determinado termo no documento.", "gab": "E", "orgao": "FUB", "ano": "2015", "difClass": "dif-dif", "difLabel": "difícil", "comentario": "As definições foram embaralhadas. A NBR 12676 trabalha com exaustividade e especificidade, não com 'precisão' nos termos descritos. A questão troca e distorce os conceitos.", "fonte": "material"}, {"n": 11, "assunto": "Tecnologias da Informação, Automação e Bibliotecas Digitais", "grupo": "Tecnologias da Informação", "especifico": "Automação de bibliotecas", "enunciado": "Em bibliotecas, o acesso à Internet proporciona vários benefícios, tais como o alcance de melhorias em relação ao serviço aos usuários e à imagem institucional, bem como a visibilidade da instituição, apesar do alto custo desse processo de comunicação.", "gab": "E", "orgao": "TJPA", "ano": "2025", "difClass": "dif-medio", "difLabel": "médio", "comentario": "O erro está em 'alto custo'. O acesso à internet traz ganhos de serviço ao usuário, de imagem e de visibilidade institucional justamente por ser uma forma de comunicação de amplo alcance e baixo custo.", "fonte": "ia"}, {"n": 12, "assunto": "Tecnologias da Informação, Automação e Bibliotecas Digitais", "grupo": "Tecnologias da Informação", "especifico": "Automação de bibliotecas", "enunciado": "A estrutura do MARC 21 bibliográfico é compatível com o padrão ISO 2709, o que viabiliza a troca internacional de dados bibliográficos legíveis por máquina.", "gab": "C", "orgao": "TJPA", "ano": "2025", "difClass": "dif-medio", "difLabel": "médio", "comentario": "Certo. O MARC 21 é um formato de implementação que obedece à ISO 2709 (e ao ANSI Z39.2). Essa compatibilidade é o que viabiliza o intercâmbio internacional de registros legíveis por máquina.", "fonte": "material"}, {"n": 13, "assunto": "Tecnologias da Informação, Automação e Bibliotecas Digitais", "grupo": "Tecnologias da Informação", "especifico": "Automação de bibliotecas", "enunciado": "A existência de um sistema de gestão de documentos digitais é fundamental para a administração de informações, pois, além de garantir a acessibilidade e a preservação documental, promove a transparência da instituição e a conformidade com as regulamentações, sendo indispensável para a eficiência organizacional em contextos dinâmicos.", "gab": "C", "orgao": "MPCE", "ano": "2025", "difClass": "dif-facil", "difLabel": "fácil", "comentario": "Item correto. Um sistema de gestão de documentos digitais sustenta acessibilidade, preservação, transparência e conformidade regulatória, sendo peça-chave da eficiência organizacional em ambientes dinâmicos.", "fonte": "ia"}, {"n": 14, "assunto": "Tecnologias da Informação, Automação e Bibliotecas Digitais", "grupo": "Tecnologias da Informação", "especifico": "Automação de bibliotecas", "enunciado": "Os formatos de intercâmbio de dados bibliográficos, cujo uso é associado às redes de informação especializada, têm pouca interferência no padrão de entrada de dados e de apresentação da informação.", "gab": "E", "orgao": "MPCE", "ano": "2025", "difClass": "dif-dif", "difLabel": "difícil", "comentario": "Errado. Formatos de intercâmbio como o que decorre da ISO 2709 são centrais para padronizar registros e viabilizar a troca de informações — ou seja, têm forte interferência sobre os dados, não 'pouca'.", "fonte": "material"}, {"n": 15, "assunto": "Tecnologias da Informação, Automação e Bibliotecas Digitais", "grupo": "Tecnologias da Informação", "especifico": "Automação de bibliotecas", "enunciado": "Os catálogos coletivos online são resultado do processo de automação em bibliotecas, que culminou na maior exposição dos conteúdos informacionais.", "gab": "C", "orgao": "STJ", "ano": "2024", "difClass": "dif-facil", "difLabel": "fácil", "comentario": "Certo. A automação e a adoção de padrões como o MARC permitiram às bibliotecas compartilhar registros, e desse compartilhamento resultam os catálogos coletivos on-line, que ampliam a exposição dos acervos.", "fonte": "material"}, {"n": 16, "assunto": "Tecnologias da Informação, Automação e Bibliotecas Digitais", "grupo": "Tecnologias da Informação", "especifico": "Esquemas de metadados - Conceitos, funções e tipos", "enunciado": "Metadados representam as características de um objeto digital por meio de uma descrição longa e subjetiva do conteúdo de um documento.", "gab": "E", "orgao": "TJES", "ano": "2023", "difClass": "dif-medio", "difLabel": "médio", "comentario": "Metadados são dados estruturados sobre dados — descrições objetivas e padronizadas das características de um recurso. 'Descrição longa e subjetiva' é o oposto do que caracteriza um metadado.", "fonte": "ia"}, {"n": 17, "assunto": "Tecnologias da Informação, Automação e Bibliotecas Digitais", "grupo": "Tecnologias da Informação", "especifico": "Esquemas de metadados - MARC 21 - Introdução", "enunciado": "A evolução da catalogação eliminou a necessidade de padrões de metadados, tornando obsoletos formatos como o MARC, de modo que bibliotecas e repositórios digitais passaram a organizar, indexar e recuperar informações sem depender desses modelos.", "gab": "E", "orgao": "MPCE", "ano": "2025", "difClass": "dif-medio", "difLabel": "médio", "comentario": "Errado. O MARC não ficou obsoleto: ele permite compartilhar recursos, evita duplicidade de trabalho e garante compatibilidade ao trocar de sistema. Padrões de metadados seguem indispensáveis.", "fonte": "material"}, {"n": 18, "assunto": "Tecnologias da Informação, Automação e Bibliotecas Digitais", "grupo": "Tecnologias da Informação", "especifico": "Esquemas de metadados - MARC 21 - Três elementos do registro MARC", "enunciado": "Um registro MARC é composto de quatro seções principais: campo de registro, diretório, formato para intercâmbio de dados e ligação implícita.", "gab": "E", "orgao": "DPU", "ano": "2016", "difClass": "dif-dif", "difLabel": "difícil", "comentario": "São três elementos, não quatro: líder (estrutura do registro), diretório (designação de conteúdo) e campos variáveis (conteúdo propriamente dito). A questão inventou seções e nomes.", "fonte": "material"}, {"n": 19, "assunto": "Tecnologias da Informação, Automação e Bibliotecas Digitais", "grupo": "Tecnologias da Informação", "especifico": "Esquemas de metadados - MARC 21 - Campos MARC", "enunciado": "No MARC 21, o título equivalente integra o subcampo designado remanescente do título, o qual inclui outros elementos.", "gab": "C", "orgao": "TSE", "ano": "2024", "difClass": "dif-dif", "difLabel": "difícil", "comentario": "Item correto. No campo 245, o subcampo b (restante/remanescente do título) abriga, além do subtítulo, elementos como o título equivalente (paralelo) e outras informações sobre o título.", "fonte": "ia"}, {"n": 20, "assunto": "Tecnologias da Informação, Automação e Bibliotecas Digitais", "grupo": "Tecnologias da Informação", "especifico": "Esquemas de metadados - MODS", "enunciado": "O esquema de metadados denominado MODS (metadata object description schema) é derivado do MARC 21.", "gab": "C", "orgao": "FUB", "ano": "2015", "difClass": "dif-medio", "difLabel": "médio", "comentario": "Certo. O MODS (Metadata Object Description Schema), também da Library of Congress e expresso em XML, é derivado do MARC 21 — usa um subconjunto de seus campos com rótulos textuais em vez de códigos numéricos.", "fonte": "material"}, {"n": 21, "assunto": "Catalogação", "grupo": "Catalogação", "especifico": "AACR2 — Parte 1: Descrição - ISBD", "enunciado": "Em relação às regras de materiais e áreas, a área dos detalhes específicos do material constitui-se de informações específicas e é utilizada apenas para materiais cartográficos, música impressa, publicações periódicas e recursos eletrônicos.", "gab": "E", "orgao": "TSE", "ano": "2024", "difClass": "dif-dif", "difLabel": "difícil", "comentario": "A área 3 (detalhes específicos do material) aplica-se a materiais cartográficos, música, recursos eletrônicos, microformas (em alguns casos) e recursos contínuos. Ao fechar a lista com 'apenas' e omitir materiais previstos, a assertiva fica errada.", "fonte": "material"}, {"n": 22, "assunto": "Catalogação", "grupo": "Catalogação", "especifico": "AACR2 — Parte 1: Descrição - Regras gerais para descrição (Capítulo 1)", "enunciado": "Na catalogação descritiva, a data de publicação deve sempre corresponder à edição da obra e, havendo discrepância entre a data encontrada na página de rosto e a data real, registram-se ambas.", "gab": "C", "orgao": "MPTO", "ano": "2024", "difClass": "dif-medio", "difLabel": "médio", "comentario": "A data registrada é sempre a da edição do recurso. Havendo discrepância entre a data da página de rosto e a data real, registram-se ambas, na forma prevista pelo AACR2.", "fonte": "material"}, {"n": 23, "assunto": "Catalogação", "grupo": "Catalogação", "especifico": "AACR2 — Parte 1: Descrição - Regras gerais para descrição (Capítulo 1)", "enunciado": "Na catalogação, se o nome do lugar aparecer incompleto na fonte principal de informação, é permitido desconsiderar a localidade por insuficiência de dados, deixando-se o espaço em branco.", "gab": "E", "orgao": "PGDF", "ano": "2019", "difClass": "dif-medio", "difLabel": "médio", "comentario": "ERRADO. De acordo com a regra 1.4C4, deve-se acrescentar a forma completa, por exemplo: Rio [de Janeiro]: J. Olímpio.", "fonte": "banca"}, {"n": 24, "assunto": "Catalogação", "grupo": "Catalogação", "especifico": "AACR2 — Parte 1: Descrição - Regras gerais para descrição (Capítulo 1)", "enunciado": "Em caso de ausência da data de publicação nas obras, cabe utilizar a data de copyright precedida da notação c, sem espaço, sendo permitida, ainda, a utilização da data de impressão no caso da falta da informação de copyright.", "gab": "C", "orgao": "PGDF", "ano": "2019", "difClass": "dif-medio", "difLabel": "médio", "comentario": "CERTO. Conforme a norma 1.4F6, na ausência da data de publicação, é permitido utilizar a data de copyright, com a notação c, sem espaço e data, ou na ausência dela, pode ser usada a da impressão.", "fonte": "banca"}, {"n": 25, "assunto": "Catalogação", "grupo": "Catalogação", "especifico": "AACR2 — Parte 1: Descrição - Regras gerais para descrição (Capítulo 1)", "enunciado": "O registro de [1978?] transmite a informação de século provável.", "gab": "E", "orgao": "PGDF", "ano": "2019", "difClass": "dif-medio", "difLabel": "médio", "comentario": "ERRADO. A informação corresponde a data provável. No caso do século, seria [19_ _?].", "fonte": "banca"}, {"n": 26, "assunto": "Catalogação", "grupo": "Catalogação", "especifico": "AACR2 — Parte 1: Descrição - Regras gerais para descrição (Capítulo 1)", "enunciado": "A seguinte nota relativa a uma tese de doutorado está de acordo com o AACR-2.\nTese (Ph.D.) – University of Michigan, 2014", "gab": "C", "orgao": "PGDF", "ano": "2019", "difClass": "dif-dif", "difLabel": "difícil", "comentario": "CERTO. De acordo com a norma 1.7B13, deve-se colocar o nome do documento seguido do grau, da instituição e do ano.", "fonte": "banca"}, {"n": 27, "assunto": "Catalogação", "grupo": "Catalogação", "especifico": "AACR2 — Parte 1: Descrição - Regras gerais para descrição (Capítulo 1)", "enunciado": "Se o item que estiver sendo descrito não apresentar indicação de responsabilidade em destaque na fonte principal da informação, não se deve registrar um responsável com base no conteúdo do item.", "gab": "C", "orgao": "TJAM", "ano": "2019", "difClass": "dif-medio", "difLabel": "médio", "comentario": "Sem indicação de responsabilidade em destaque na fonte principal, não se constrói um responsável a partir do conteúdo do item. A indicação de responsabilidade é transcrita como aparece na fonte; na falta dela, vai para nota ou é omitida.", "fonte": "material"}, {"n": 28, "assunto": "Catalogação", "grupo": "Catalogação", "especifico": "AACR2 — Parte 1: Descrição - Regras gerais para descrição (Capítulo 1)", "enunciado": "Um item desprovido de indicação de edição deve ser tratado como de primeira edição, mas normalmente nenhum dado é registrado na área de edição. Contudo, havendo a indicação de primeira edição na fonte principal de informação, tal registro deve ser feito.", "gab": "C", "orgao": "TJAM", "ano": "2019", "difClass": "dif-dif", "difLabel": "difícil", "comentario": "Item correto. Na ausência de indicação de edição, o item é tratado como primeira edição e, em regra, nada se registra na área de edição. Porém, se a fonte principal trouxer expressamente a indicação de primeira edição, essa indicação deve ser registrada.", "fonte": "ia"}, {"n": 29, "assunto": "Catalogação", "grupo": "Catalogação", "especifico": "AACR2 — Parte 1: Descrição - Regras gerais para descrição (Capítulo 1)", "enunciado": "De acordo com o AACR, versão 2, é opcional a descrição da data dos documentos.", "gab": "E", "orgao": "STJ", "ano": "2018", "difClass": "dif-medio", "difLabel": "médio", "comentario": "A data é elemento indispensável em qualquer tipo de recurso — comprovável, provável ou presumida —, nunca opcional. Por isso o AACR2 prevê tantas variações: [2012?], [ca. 1960], [199-] etc.", "fonte": "material"}, {"n": 30, "assunto": "Catalogação", "grupo": "Catalogação", "especifico": "AACR2 — Parte 1: Descrição - Tipos de título", "enunciado": "O título alternativo não é considerado parte integrante do título principal, por isso fica a critério do catalogador registrá-lo ou não. Se optar por registrá-lo, o catalogador deve fazê-lo após o título principal, introduzido pela conjunção ou e, quando for o caso, por suas equivalentes em outras línguas, entre vírgulas.", "gab": "E", "orgao": "TJAM", "ano": "2019", "difClass": "dif-medio", "difLabel": "médio", "comentario": "O título alternativo integra o título principal, não é opcional. A pontuação descrita (vírgula, ou, vírgula) está certa, mas a premissa de que registrá-lo fica a critério do catalogador torna a assertiva errada.", "fonte": "material"}, {"n": 31, "assunto": "Gestão de Bibliotecas", "grupo": "Gestão de Bibliotecas", "especifico": "Gestão do conhecimento", "enunciado": "A aplicação da gestão do conhecimento no contexto da biblioteconomia está restrita a ambientes corporativos com fins lucrativos.", "gab": "E", "orgao": "TJPA", "ano": "2025", "difClass": "dif-facil", "difLabel": "fácil", "comentario": "A gestão do conhecimento não se restringe a empresas com fins lucrativos. Ela se aplica a qualquer organização — inclusive órgãos públicos e bibliotecas — que precise criar, compartilhar e aplicar conhecimento.", "fonte": "ia"}, {"n": 32, "assunto": "Gestão de Bibliotecas", "grupo": "Gestão de Bibliotecas", "especifico": "Gestão do conhecimento", "enunciado": "Um dos objetivos estratégicos da gestão do conhecimento é a geração de vantagem competitiva nas organizações, por meio da identificação, renovação e aplicação de ativos intangíveis.", "gab": "C", "orgao": "TJPA", "ano": "2025", "difClass": "dif-facil", "difLabel": "fácil", "comentario": "Item correto. Um dos objetivos estratégicos da gestão do conhecimento é gerar vantagem competitiva por meio da identificação, renovação e aplicação dos ativos intangíveis da organização — o conhecimento.", "fonte": "ia"}, {"n": 33, "assunto": "Gestão de Bibliotecas", "grupo": "Gestão de Bibliotecas", "especifico": "Gestão do conhecimento", "enunciado": "A gestão do conhecimento nas organizações deve ser um processo neutro, aplicado de maneira universal e imparcial.", "gab": "E", "orgao": "MPCE", "ano": "2025", "difClass": "dif-medio", "difLabel": "médio", "comentario": "A gestão do conhecimento não é neutra nem universal. Ela depende da cultura, do contexto e dos objetivos de cada organização, sendo moldada por fatores humanos e sociais.", "fonte": "ia"}, {"n": 34, "assunto": "Gestão de Bibliotecas", "grupo": "Gestão de Bibliotecas", "especifico": "Gestão do conhecimento", "enunciado": "A gestão do conhecimento nas organizações contribui para estruturar o compartilhamento e a aplicação do conhecimento, melhorar a tomada de decisão e fortalecer a transparência da organização, garantindo maior controle e maior qualidade na prestação de serviços.", "gab": "C", "orgao": "MPCE", "ano": "2025", "difClass": "dif-medio", "difLabel": "médio", "comentario": "Item correto. A gestão do conhecimento estrutura o compartilhamento e a aplicação do conhecimento, qualifica a tomada de decisão e reforça a transparência, melhorando o controle e a qualidade dos serviços.", "fonte": "ia"}, {"n": 35, "assunto": "Gestão de Bibliotecas", "grupo": "Gestão de Bibliotecas", "especifico": "Gestão do conhecimento", "enunciado": "A eficácia da gestão do conhecimento de uma organização depende do alto investimento em tecnologia, sendo a infraestrutura digital e a automação determinantes para seu sucesso.", "gab": "E", "orgao": "MPCE", "ano": "2025", "difClass": "dif-medio", "difLabel": "médio", "comentario": "Tecnologia é facilitadora, não determinante. A eficácia da gestão do conhecimento depende sobretudo de pessoas, cultura e processos; infraestrutura digital e automação apoiam, mas não garantem o sucesso.", "fonte": "ia"}, {"n": 36, "assunto": "Gestão de Bibliotecas", "grupo": "Gestão de Bibliotecas", "especifico": "Gestão do conhecimento", "enunciado": "São processos básicos da gestão do conhecimento a criação, o armazenamento (recuperação), a transferência e a aplicação.", "gab": "C", "orgao": "EMBRAPA", "ano": "2025", "difClass": "dif-facil", "difLabel": "fácil", "comentario": "Item correto. Os processos básicos da gestão do conhecimento costumam ser apresentados como criação, armazenamento/recuperação, transferência e aplicação do conhecimento.", "fonte": "ia"}, {"n": 37, "assunto": "Gestão de Bibliotecas", "grupo": "Gestão de Bibliotecas", "especifico": "Gestão do conhecimento", "enunciado": "Enquanto a gestão da informação tem foco no capital intelectual da organização, como o mapeamento e a compreensão dos fluxos de informação, a gestão do conhecimento concentra-se no negócio da organização, especialmente quanto ao tratamento, à análise e à agregação de valor às informações.", "gab": "E", "orgao": "IPHAN", "ano": "2018", "difClass": "dif-medio", "difLabel": "médio", "comentario": "As definições estão trocadas. É a gestão do conhecimento que se volta ao capital intelectual; a gestão da informação é que trata, analisa e agrega valor às informações e aos seus fluxos.", "fonte": "ia"}, {"n": 38, "assunto": "Gestão de Bibliotecas", "grupo": "Gestão de Bibliotecas", "especifico": "Gestão da informação", "enunciado": "A gestão da informação ocorre nos níveis operacional, tático e estratégico. O processo de organização da informação é realizado no nível estratégico da gestão da informação.", "gab": "E", "orgao": "SEEDF", "ano": "2017", "difClass": "dif-medio", "difLabel": "médio", "comentario": "A organização da informação é tarefa dos níveis operacional e tático, não do estratégico. O nível estratégico lida com decisões de longo prazo, não com o tratamento documental em si.", "fonte": "ia"}, {"n": 39, "assunto": "Gestão de Bibliotecas", "grupo": "Gestão de Bibliotecas", "especifico": "Gestão da informação", "enunciado": "Gestão da informação, tal como a gestão do conhecimento, consiste na coordenação econômica, eficiente e efetiva, da produção, do controle, da organização, do armazenamento, da recuperação e disseminação da informação de fontes internas e externas, a fim de melhorar o desempenho da instituição.", "gab": "E", "orgao": "SEEDF", "ano": "2017", "difClass": "dif-dif", "difLabel": "difícil", "comentario": "O erro está em equiparar as duas. A definição apresentada é a de gestão da informação; a gestão do conhecimento tem objeto e abrangência distintos, voltados ao conhecimento e ao capital intelectual.", "fonte": "ia"}, {"n": 40, "assunto": "Gestão de Bibliotecas", "grupo": "Gestão de Bibliotecas", "especifico": "Teoria Geral da Administração (TGA)", "enunciado": "O domínio de aspectos financeiros, como cortes e incrementos de custos, é indispensável à execução do ato de administrar, tanto da instituição quanto de sua biblioteca.", "gab": "C", "orgao": "STJ", "ano": "2018", "difClass": "dif-facil", "difLabel": "fácil", "comentario": "Item correto. Administrar — a instituição ou a sua biblioteca — exige domínio de aspectos financeiros, como controle, corte e incremento de custos. É competência inerente ao ato de gerir.", "fonte": "ia"}, {"n": 41, "assunto": "Introdução à Biblioteconomia, Documentação e Ciência da Informação", "grupo": "Introdução à Biblioteconomia", "especifico": "Diferenças entre as 3 áreas", "enunciado": "Biblioteconomia e ciência da informação são termos sinônimos e intercambiáveis, e o termo documentação, que se caracteriza pelo armazenamento da informação, está associado à ciência da informação.", "gab": "E", "orgao": "TJPA", "ano": "2025", "difClass": "dif-facil", "difLabel": "fácil", "comentario": "Biblioteconomia e ciência da informação não são sinônimos: têm paradigmas distintos, e a CI não é evolução da Biblioteconomia. A documentação também é área própria, com objeto e instrumentos específicos.", "fonte": "material"}, {"n": 42, "assunto": "Introdução à Biblioteconomia, Documentação e Ciência da Informação", "grupo": "Introdução à Biblioteconomia", "especifico": "Diferenças entre as 3 áreas", "enunciado": "Biblioteconomia é a ciência que se ocupa da produção, difusão, conservação, circulação e utilização dos escritos e dos documentos sob todas as suas formas; a bibliologia é considerada uma das partes da biblioteconomia, por tratar de atividades como organização, administração e regulamentação de bibliotecas.", "gab": "E", "orgao": "MPTO", "ano": "2024", "difClass": "dif-dif", "difLabel": "difícil", "comentario": "Errado. A definição apresentada (produção, difusão, conservação e uso dos escritos sob todas as formas) aproxima-se mais da documentação/bibliologia do que da biblioteconomia, cujo objetivo é formação, informação e recreação. Além disso, a relação com a bibliologia está invertida.", "fonte": "ia"}, {"n": 43, "assunto": "Introdução à Biblioteconomia, Documentação e Ciência da Informação", "grupo": "Introdução à Biblioteconomia", "especifico": "Diferenças entre as 3 áreas", "enunciado": "O objetivo da biblioteconomia é o apoio documental à pesquisa científica, por meio da indexação, da tradução e do resumo das publicações primárias.", "gab": "E", "orgao": "TSE", "ano": "2024", "difClass": "dif-medio", "difLabel": "médio", "comentario": "Esse é o objetivo da documentação, não da biblioteconomia. Apoio documental à pesquisa por meio de indexação, tradução e resumo de publicações primárias pertence à documentação; a biblioteconomia tem por objetivo a formação, a informação e a recreação.", "fonte": "material"}, {"n": 44, "assunto": "Introdução à Biblioteconomia, Documentação e Ciência da Informação", "grupo": "Introdução à Biblioteconomia", "especifico": "Diferenças entre as 3 áreas", "enunciado": "A biblioteconomia é oriunda da documentação, sendo conceituada tanto pela sua dimensão técnica — registro do conhecimento — quanto pela sua noção humanística — disseminação de informação para usuários.", "gab": "E", "orgao": "PGDF", "ano": "2019", "difClass": "dif-dif", "difLabel": "difícil", "comentario": "ERRADO. Na verdade, a documentação tem o seu nascimento na ciência da informação, a partir de uma espécie de rompimento da própria biblioteconomia, e a biblioteconomia não surge da documentação. Ainda, o conceito de biblioteconomia constitui-se da dimensão técnica, a qual assume como objetos de estudo o registro do conhecimento e da informação (suporte técnico), e da noção humanística, que considera a informação como o seu objeto de estudo, valorizando o acesso a ela.", "fonte": "banca"}, {"n": 45, "assunto": "Introdução à Biblioteconomia, Documentação e Ciência da Informação", "grupo": "Introdução à Biblioteconomia", "especifico": "Biblioteconomia - Bibliotecas", "enunciado": "Com o crescimento da valorização da produção humana, das obras artísticas e das obras científicas, ocorrida no período renascentista, evidenciou-se o interesse pelo culto, pela guarda e pela preservação das obras.", "gab": "C", "orgao": "MPTO", "ano": "2024", "difClass": "dif-medio", "difLabel": "médio", "comentario": "Item correto. A valorização das obras humanas, artísticas e científicas no Renascimento intensificou o interesse pelo culto, pela guarda e pela preservação dos registros, fortalecendo o papel das bibliotecas.", "fonte": "ia"}, {"n": 46, "assunto": "Introdução à Biblioteconomia, Documentação e Ciência da Informação", "grupo": "Introdução à Biblioteconomia", "especifico": "Biblioteconomia - Bibliotecas", "enunciado": "A sociedade se estrutura e se beneficia de seus registros documentais de modo uniforme, o que fornece à biblioteca uma coerência institucional que permanece inalterada.", "gab": "E", "orgao": "MPTO", "ano": "2024", "difClass": "dif-facil", "difLabel": "fácil", "comentario": "Errado. A sociedade não usa seus registros de modo uniforme, e a biblioteca não é estática: pela quinta lei, ela é um organismo em crescimento, que muda de tamanho e assume novas formas.", "fonte": "material"}, {"n": 47, "assunto": "Introdução à Biblioteconomia, Documentação e Ciência da Informação", "grupo": "Introdução à Biblioteconomia", "especifico": "Biblioteconomia - Bibliotecas", "enunciado": "A perspectiva funcionalista conferiu às bibliotecas um caráter educativo e mais democrático, abandonando-se a caraterística unicamente tecnicista e patrimonialista.", "gab": "C", "orgao": "MPTO", "ano": "2024", "difClass": "dif-medio", "difLabel": "médio", "comentario": "Item correto. O olhar funcionalista deslocou a biblioteca da ênfase puramente técnica e patrimonialista (preocupada com guarda e conservação) para um caráter educativo e democrático, centrado no uso e nos usuários.", "fonte": "material"}, {"n": 48, "assunto": "Introdução à Biblioteconomia, Documentação e Ciência da Informação", "grupo": "Introdução à Biblioteconomia", "especifico": "Biblioteconomia - As cinco leis da Biblioteconomia", "enunciado": "A segunda lei da biblioteconomia diz respeito à transmutação de uma biblioteca de acesso restrito em uma instituição de livre acesso.", "gab": "E", "orgao": "EMBRAPA", "ano": "2025", "difClass": "dif-facil", "difLabel": "fácil", "comentario": "A segunda lei é 'a cada leitor seu livro' (os livros são para todos). O livre acesso às estantes está associado à terceira e à quarta leis, não à segunda.", "fonte": "material"}, {"n": 49, "assunto": "Introdução à Biblioteconomia, Documentação e Ciência da Informação", "grupo": "Introdução à Biblioteconomia", "especifico": "Biblioteconomia - Bibliotecas", "enunciado": "Bibliotecas são instituições cujas finalidades incluem suprir necessidades de informação de pessoas e organizações.", "gab": "C", "orgao": "STJ", "ano": "2024", "difClass": "dif-facil", "difLabel": "fácil", "comentario": "Item correto. A biblioteca é uma coleção organizada e administrada para atender necessidades de informação, estudo, consulta e recreação — de pessoas e de organizações.", "fonte": "material"}, {"n": 50, "assunto": "Introdução à Biblioteconomia, Documentação e Ciência da Informação", "grupo": "Introdução à Biblioteconomia", "especifico": "Biblioteconomia - As cinco leis da Biblioteconomia", "enunciado": "Atualmente, a biblioteconomia é regida pelas seguintes cinco leis: (i) a informação é para uso; (ii) a cada usuário sua informação; (iii) cada informação a seu usuário; (iv) economize o tempo do usuário e o tempo dos cientistas da informação; e (v) um sistema de informação é um organismo em crescimento.", "gab": "C", "orgao": "TJPA", "ano": "2025", "difClass": "dif-medio", "difLabel": "médio", "comentario": "Item correto. Trata-se da releitura contemporânea das leis de Ranganathan, em que livro vira informação, leitor vira usuário e biblioteca vira sistema de informação — preservando a lógica das cinco leis originais.", "fonte": "ia"}]};
+const STORAGE_KEY = "focacamara_simulado3_v1";
+const TOTAL = DATA.questoes.length;
+
+const SUFFIX = {
+  material: "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima",
+  ia: "comentário gerado por inteligência artificial. caso tenha dúvida de sua confiabilidade, compartilhe com a prof e os colegas no grupo Foca Chat"
+};
+
+// ---- persistência (localStorage: compatível com GitHub Pages) ----
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : { respostas: {} };
+  } catch (e) { return { respostas: {} }; }
+}
+function saveState(state) {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+}
+let state = loadState();
+
+function esc(s) {
+  return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+
+// ---- render dos grupos e questões ----
+function render() {
+  const container = document.getElementById("grupos-container");
+  container.innerHTML = "";
+  for (const grupo of DATA.grupos) {
+    const qs = DATA.questoes.filter(q => q.grupo === grupo);
+    const sec = document.createElement("section");
+    sec.className = "grupo";
+    sec.innerHTML =
+      '<div class="grupo-header">' +
+        '<div class="grupo-title">' + esc(grupo) + '</div>' +
+        '<div class="grupo-count">' + qs.length + ' questões</div>' +
+      '</div>';
+    for (const q of qs) sec.appendChild(renderQuestao(q));
+    container.appendChild(sec);
+  }
+  updateRanking();
+}
+
+function renderQuestao(q) {
+  const div = document.createElement("div");
+  div.className = "questao";
+  div.id = "q-" + q.n;
+
+  const num = String(q.n).padStart(2, "0");
+
+  // comentário com rótulos conforme a fonte
+  let comHTML = '<div class="comentario">';
+  if (q.fonte === "banca") {
+    comHTML += '<div class="com-label-top">justificativa da banca</div>';
+    comHTML += '<div class="com-texto">' + esc(q.comentario) + '</div>';
+  } else {
+    comHTML += '<div class="com-texto">' + esc(q.comentario) + '</div>';
+    comHTML += '<span class="com-label-bottom ' + q.fonte + '">' + esc(SUFFIX[q.fonte]) + '</span>';
+  }
+  comHTML += '</div>';
+
+  div.innerHTML =
+    '<div class="questao-top">' +
+      '<span class="questao-num">' + num + '</span>' +
+      '<span class="questao-tags">' +
+        '<span class="tag">' + esc(q.orgao) + ' · ' + esc(q.ano) + '</span>' +
+      '</span>' +
+    '</div>' +
+    '<div class="questao-esp">' + esc(q.especifico) + '</div>' +
+    '<div class="enunciado">' + esc(q.enunciado) + '</div>' +
+    '<div class="ce-opcoes">' +
+      '<button class="ce-btn" data-val="C">certo</button>' +
+      '<button class="ce-btn" data-val="E">errado</button>' +
+    '</div>' +
+    '<div class="feedback">' +
+      '<div class="feedback-status"></div>' +
+      '<div class="feedback-gab"></div>' +
+      comHTML +
+    '</div>';
+
+  const botoes = div.querySelectorAll(".ce-btn");
+  botoes.forEach(btn => {
+    btn.addEventListener("click", () => responder(q, div, btn.dataset.val));
+  });
+
+  // restaurar resposta salva
+  const salva = state.respostas[q.n];
+  if (salva) aplicarResposta(q, div, salva, false);
+
+  return div;
+}
+
+function responder(q, div, escolha) {
+  if (state.respostas[q.n]) return; // já respondida
+  state.respostas[q.n] = escolha;
+  saveState(state);
+  aplicarResposta(q, div, escolha, true);
+  updateRanking();
+}
+
+function aplicarResposta(q, div, escolha, animar) {
+  const botoes = div.querySelectorAll(".ce-btn");
+  const acertou = escolha === q.gab;
+  botoes.forEach(btn => {
+    btn.disabled = true;
+    const val = btn.dataset.val;
+    if (val === q.gab) {
+      btn.classList.add("is-correct");
+      btn.innerHTML = btn.textContent.replace(/ ✓$/,"") + ' <span class="mark">✓</span>';
+    } else if (val === escolha) {
+      btn.classList.add("is-wrong");
+      btn.innerHTML = btn.textContent.replace(/ ✗$/,"") + ' <span class="mark">✗</span>';
+    } else {
+      btn.classList.add("muted");
+    }
+  });
+  const fb = div.querySelector(".feedback");
+  const gabExt = q.gab === "C" ? "Certo" : "Errado";
+  fb.classList.add(acertou ? "acerto" : "erro");
+  fb.querySelector(".feedback-status").textContent = acertou ? "você acertou" : "não foi dessa vez";
+  fb.querySelector(".feedback-gab").innerHTML = "gabarito: <strong>" + gabExt + "</strong>";
+  fb.classList.add("show");
+  if (!animar) fb.style.animation = "none";
+}
+
+// ---- ranking / desempenho ----
+function updateRanking() {
+  const resp = state.respostas;
+  let respondidas = 0, acertos = 0;
+  const porGrupo = {};
+  for (const g of DATA.grupos) porGrupo[g] = { total: 0, acertos: 0, respondidas: 0 };
+
+  for (const q of DATA.questoes) {
+    porGrupo[q.grupo].total++;
+    const r = resp[q.n];
+    if (r) {
+      respondidas++;
+      porGrupo[q.grupo].respondidas++;
+      if (r === q.gab) { acertos++; porGrupo[q.grupo].acertos++; }
+    }
+  }
+
+  // barra fixa de progresso
+  document.getElementById("ps-respondidas").textContent = respondidas;
+  document.getElementById("ps-acertos").textContent = acertos;
+  document.getElementById("ps-fill").style.width = (respondidas / TOTAL * 100) + "%";
+
+  // hero de desempenho
+  document.getElementById("rk-acertos").textContent = acertos;
+  document.getElementById("rk-respondidas").textContent = respondidas;
+
+  const pct = respondidas ? Math.round(acertos / respondidas * 100) : 0;
+  const msgEl = document.getElementById("rk-msg");
+  const subEl = document.getElementById("rk-sub");
+  if (respondidas === 0) {
+    msgEl.textContent = "comece a responder para ver seu desempenho aqui.";
+    subEl.textContent = "";
+  } else {
+    let faixa;
+    if (pct >= 80) faixa = "excelente — você está no ritmo da aprovação. 🦭";
+    else if (pct >= 60) faixa = "bom desempenho. revise os erros e siga firme.";
+    else if (pct >= 40) faixa = "dá pra melhorar. volte ao material nos pontos que escaparam.";
+    else faixa = "vamos com calma: revise o conteúdo e tente de novo.";
+    msgEl.textContent = pct + "% de acerto · " + faixa;
+    subEl.textContent = respondidas < TOTAL
+      ? ("faltam " + (TOTAL - respondidas) + " questões para fechar o simulado.")
+      : "simulado concluído! confira a leitura dos comentários nos erros.";
+  }
+
+  // breakdown por disciplina
+  const bd = document.getElementById("rk-breakdown");
+  bd.innerHTML = "";
+  for (const g of DATA.grupos) {
+    const d = porGrupo[g];
+    const fill = d.total ? (d.acertos / d.total * 100) : 0;
+    const row = document.createElement("div");
+    row.className = "area-row";
+    row.innerHTML =
+      '<div class="area-meta">' +
+        '<span class="area-name">' + esc(g) + '</span>' +
+        '<span class="area-stats">' + d.acertos + '/' + d.total +
+          ' acertos · ' + d.respondidas + ' resp.</span>' +
+      '</div>' +
+      '<div class="area-track"><div class="area-fill" style="width:' + fill + '%"></div></div>';
+    bd.appendChild(row);
+  }
+}
+
+// ---- reset ----
+document.getElementById("btn-reset").addEventListener("click", () => {
+  if (confirm("Recomeçar o simulado? Suas respostas salvas neste navegador serão apagadas.")) {
+    state = { respostas: {} };
+    saveState(state);
+    render();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+});
+
+render();
+</script>
+</body>
+</html>
