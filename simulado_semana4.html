@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🦭 Foca na Câmara - Simulado da semana 4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --verde: #00A74A;
+    --rosa: #F4A6D7;
+    --bege: #F1F1DE;
+    --verde-escuro: #07272D;
+    --azul: #9BCBEB;
+    --verde-limao: #B5BD00;
+    --amarelo: #FED141;
+    --laranja: #FF6A39;
+    --acerto: var(--verde);
+    --acerto-bg: rgba(0, 167, 74, 0.12);
+    --erro: var(--laranja);
+    --erro-bg: rgba(255, 106, 57, 0.12);
+    --linha: rgba(7, 39, 45, 0.15);
+    --linha-suave: rgba(7, 39, 45, 0.08);
+    --shadow-soft: 0 1px 3px rgba(7, 39, 45, 0.06), 0 4px 16px rgba(7, 39, 45, 0.04);
+    --dif-facil: #C9F7C5;
+    --dif-medio: #FCE5CD;
+    --dif-dificil: #FADBD8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bege);
+    color: var(--verde-escuro);
+    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+    font-weight: 400;
+    line-height: 1.5;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ===== HEADER ===== */
+  .header {
+    background: var(--verde-escuro);
+    color: var(--bege);
+    padding: 16px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .brand {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    line-height: 1;
+    display: inline-block;
+    font-size: 16px;
+  }
+  .brand .b-prof   { font-weight: 400; letter-spacing: 0; }
+  .brand .b-suzane { font-weight: 800; letter-spacing: -0.02em; }
+  .brand .b-lima   { font-weight: 800; font-style: italic; letter-spacing: -0.02em; }
+  .brand.dark  { color: var(--bege); }
+  .header-tag {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--rosa);
+    font-weight: 700;
+  }
+
+  .container {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 44px 22px 120px;
+  }
+
+  /* ===== HERO ===== */
+  .eyebrow {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--laranja);
+    margin-bottom: 14px;
+  }
+  h1 {
+    font-size: 46px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.02;
+    margin-bottom: 16px;
+  }
+  h1 em { font-style: normal; color: var(--verde); }
+  .lead {
+    font-size: 16.5px;
+    color: rgba(7, 39, 45, 0.78);
+    max-width: 600px;
+    margin-bottom: 20px;
+  }
+  .nota {
+    font-size: 13.5px;
+    color: rgba(7, 39, 45, 0.62);
+    background: white;
+    border: 1px solid var(--linha-suave);
+    border-radius: 12px;
+    padding: 14px 18px;
+    box-shadow: var(--shadow-soft);
+    margin-bottom: 28px;
+  }
+  .nota strong { color: var(--verde-escuro); font-weight: 700; }
+
+  /* ===== BARRA DE PROGRESSO STICKY ===== */
+  .progress-bar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: var(--bege);
+    padding: 14px 0 12px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid var(--linha-suave);
+  }
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 13px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .progress-meta strong { color: var(--verde); font-weight: 800; }
+  .progress-meta .acertos { color: var(--verde-escuro); font-weight: 700; }
+  .progress-track {
+    background: rgba(7, 39, 45, 0.08);
+    height: 6px;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    background: var(--verde);
+    height: 100%;
+    border-radius: 999px;
+    width: 0;
+    transition: width 0.4s ease;
+  }
+  .reset-link {
+    background: none;
+    border: none;
+    color: rgba(7, 39, 45, 0.55);
+    font-family: inherit;
+    font-size: 12.5px;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 0;
+  }
+  .reset-link:hover { color: var(--laranja); }
+
+  /* ===== CABEÇALHO DE ÁREA ===== */
+  .area-header {
+    margin: 48px 0 8px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--verde-escuro);
+  }
+  .area-header:first-of-type { margin-top: 24px; }
+  .area-eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--laranja);
+    margin-bottom: 4px;
+  }
+  .area-title {
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  /* ===== QUESTÃO ===== */
+  .questao {
+    background: white;
+    border: 1px solid var(--linha-suave);
+    border-left: 4px solid var(--dif, var(--verde));
+    border-radius: 12px;
+    padding: 22px 22px 20px;
+    margin-top: 22px;
+    box-shadow: var(--shadow-soft);
+    scroll-margin-top: 90px;
+  }
+  .questao.facil { --dif: var(--dif-facil); }
+  .questao.medio { --dif: var(--dif-medio); }
+  .questao.dif   { --dif: var(--dif-dificil); }
+
+  .questao-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+  .questao-num {
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--verde);
+    font-variant-numeric: tabular-nums;
+  }
+  .tag {
+    background: var(--verde-escuro);
+    color: var(--bege);
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .enunciado {
+    font-size: 16.5px;
+    line-height: 1.62;
+    margin-bottom: 18px;
+    white-space: pre-line;
+  }
+
+  /* ===== BOTÕES CERTO/ERRADO ===== */
+  .ce-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 4px;
+    flex-wrap: wrap;
+  }
+  .ce-btn {
+    flex: 1;
+    min-width: 130px;
+    background: transparent;
+    border: 1.5px solid var(--linha);
+    color: var(--verde-escuro);
+    padding: 13px 18px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.16s ease;
+    font-family: inherit;
+  }
+  .ce-btn:hover { border-color: var(--verde-escuro); transform: translateY(-1px); }
+  .ce-btn.chosen { border-color: var(--verde-escuro); background: rgba(7, 39, 45, 0.05); }
+
+  /* estados pós-resposta */
+  .questao.answered .ce-btn { cursor: default; pointer-events: none; opacity: 0.55; }
+  .questao.answered .ce-btn.is-correct {
+    opacity: 1;
+    border-color: var(--acerto);
+    background: var(--acerto-bg);
+    color: var(--verde-escuro);
+  }
+  .questao.answered .ce-btn.is-wrong {
+    opacity: 1;
+    border-color: var(--erro);
+    background: var(--erro-bg);
+    color: var(--verde-escuro);
+  }
+
+  /* ===== FEEDBACK ===== */
+  .feedback {
+    display: none;
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-top: 16px;
+    border-left: 4px solid;
+  }
+  .questao.answered .feedback { display: block; animation: fadeIn 0.3s ease; }
+  .feedback.acerto { background: var(--acerto-bg); border-color: var(--acerto); }
+  .feedback.erro   { background: var(--erro-bg); border-color: var(--erro); }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  .fb-head {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .feedback.acerto .fb-head { color: var(--verde); }
+  .feedback.erro   .fb-head { color: var(--laranja); }
+  .fb-gab {
+    font-size: 12px;
+    font-weight: 700;
+    color: rgba(7, 39, 45, 0.6);
+    letter-spacing: 0.02em;
+    text-transform: none;
+  }
+  .fb-gab b { color: var(--verde-escuro); }
+
+  .fonte-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .fonte-label.banca    { color: var(--verde); }
+  .fonte-label.material { color: var(--verde-escuro); }
+  .fonte-label.ia       { color: var(--laranja); }
+  .coment {
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--verde-escuro);
+  }
+
+  /* ===== RESULTADO / RANKING ===== */
+  .resultado {
+    margin-top: 64px;
+    scroll-margin-top: 80px;
+  }
+  .result-hero {
+    background: var(--verde-escuro);
+    color: var(--bege);
+    border-radius: 18px;
+    padding: 38px 34px;
+  }
+  .result-eyebrow {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--rosa);
+    margin-bottom: 16px;
+  }
+  .result-score {
+    font-size: 84px;
+    font-weight: 800;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    color: var(--rosa);
+    font-variant-numeric: tabular-nums;
+  }
+  .result-score span { font-size: 34px; color: rgba(241,241,222,0.55); }
+  .result-pct {
+    font-size: 16px;
+    color: rgba(241,241,222,0.8);
+    margin-top: 10px;
+  }
+  .result-msg {
+    font-size: 15px;
+    color: var(--bege);
+    margin-top: 18px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(241,241,222,0.15);
+    max-width: 540px;
+  }
+
+  .breakdown-title {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--verde-escuro);
+    margin: 34px 0 16px;
+  }
+  .bd-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 10px 16px;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--linha-suave);
+  }
+  .bd-area { font-size: 14.5px; font-weight: 700; }
+  .bd-score {
+    font-size: 14.5px;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    color: var(--verde);
+  }
+  .bd-track {
+    grid-column: 1 / -1;
+    background: rgba(7, 39, 45, 0.08);
+    height: 6px;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .bd-fill { background: var(--verde); height: 100%; border-radius: 999px; }
+
+  .pendente {
+    margin-top: 40px;
+    background: rgba(255, 106, 57, 0.07);
+    border-left: 4px solid var(--laranja);
+    border-radius: 8px;
+    padding: 16px 20px;
+    font-size: 14px;
+    color: var(--verde-escuro);
+    display: none;
+  }
+  .pendente.show { display: block; }
+  .pendente strong { color: var(--laranja); }
+
+  .result-actions { margin-top: 30px; }
+  .btn {
+    background: var(--verde);
+    color: var(--bege);
+    border: none;
+    padding: 14px 26px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    font-family: inherit;
+  }
+  .btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,167,74,0.25); }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    margin-top: 60px;
+    padding-top: 24px;
+    border-top: 1px solid var(--linha);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    font-size: 12px;
+    color: rgba(7, 39, 45, 0.55);
+  }
+  .footer .brand { font-size: 14px; color: var(--verde-escuro); }
+  .footer .brand .b-prof, .footer .brand .b-suzane, .footer .brand .b-lima { color: var(--verde); }
+
+  @media (max-width: 560px) {
+    h1 { font-size: 36px; }
+    .result-score { font-size: 64px; }
+    .container { padding: 32px 16px 100px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <span class="brand dark">
+    <span class="b-prof">prof.</span> <span class="b-suzane">suzane</span> <span class="b-lima">lima</span>
+  </span>
+  <div class="header-tag">🦭 foca na câmara</div>
+</header>
+
+<div class="container">
+
+  <div class="eyebrow">simulado da semana 4</div>
+  <h1>🦭 foca na câmara — <em>simulado da semana&nbsp;4</em></h1>
+  <p class="lead">
+    50 questões cebraspe de certo ou errado, distribuídas em cinco disciplinas.
+    leia o item, decida entre <strong>certo</strong> e <strong>errado</strong> e veja na hora a resposta com o comentário.
+  </p>
+  <div class="nota">
+    seu progresso fica salvo <strong>só neste navegador</strong> — pode fechar a página e voltar depois que continua de onde parou.
+    não sincroniza entre aparelhos. o placar aparece no fim conforme você responde.
+  </div>
+
+  <!-- progresso sticky -->
+  <div class="progress-bar">
+    <div class="progress-meta">
+      <span>respondidas <strong id="pgDone">0</strong> de 50</span>
+      <span class="acertos">acertos: <span id="pgAcertos">0</span></span>
+      <button class="reset-link" id="btnReset" type="button">recomeçar do zero</button>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="pgFill"></div></div>
+  </div>
+
+  <main id="lista"></main>
+
+  <!-- resultado / ranking -->
+  <section class="resultado" id="resultado" style="display:none">
+    <div class="result-hero">
+      <div class="result-eyebrow">seu placar</div>
+      <div class="result-score"><span id="rsAcertos">0</span><span>/50</span></div>
+      <div class="result-pct" id="rsPct"></div>
+      <div class="result-msg" id="rsMsg"></div>
+    </div>
+
+    <div class="breakdown-title">desempenho por disciplina</div>
+    <div id="breakdown"></div>
+
+    <div class="pendente" id="pendente"></div>
+
+    <div class="result-actions">
+      <button class="btn" id="btnNova" type="button">refazer o simulado</button>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <span class="brand">
+      <span class="b-prof">prof.</span> <span class="b-suzane">suzane</span> <span class="b-lima">lima</span>
+    </span>
+    <span>compilado e organizado por prof. suzane lima · simulado da semana 4</span>
+  </footer>
+
+</div>
+
+<script>
+const QUESTOES = [{"n": 1, "enunciado": "Os metadados contêm informações relativas tanto à natureza bibliográfica do objeto quanto à localização onde é possível encontrá-lo.", "gabarito": "C", "area": "tecnologias da informação", "org": "CAPES", "ano": "2024", "dif": "facil", "difLabel": "fácil", "comentario": "Metadados são dados sobre dados: descrevem tanto a natureza bibliográfica do objeto (autor, título, assunto) quanto onde encontrá-lo (identificador/URL). No Dublin Core, por exemplo, o elemento Identifier costuma trazer o URL do recurso. A afirmação reúne as duas dimensões corretamente.", "fonte": "ia", "fonteLabel": "comentário gerado por inteligência artificial. caso tenha dúvida de sua confiabilidade, compartilhe com a prof e os colegas no grupo Foca Chat"}, {"n": 2, "enunciado": "A aplicação dos elementos qualificados do padrão de metadados Dublin Core é dispensável para a coleta do conteúdo disponibilizado pelas bibliotecas digitais.", "gabarito": "C", "area": "tecnologias da informação", "org": "PGDF", "ano": "2019", "dif": "dif", "difLabel": "difícil", "comentario": "CERTO. A coleta de metadados em bibliotecas digitais (havesting) pode ser executada a partir de diferentes padrões de metadados. No padrão Dublin Core, os elementos qualificados são uma expansão dos elementos simples, que não precisam, necessariamente, ser utilizados para a descrição dos recursos.", "fonte": "banca", "fonteLabel": "justificativa da banca"}, {"n": 3, "enunciado": "Padrões de metadados como o DC (dublin core) podem ser codificados pelas linguagens de marcação HTML (hypertext markup language) e XML (eXtensible markup language); o DC, no entanto, não se combina com a arquitetura RDF (resource description framework), pois o RDF exige um esquema de codificação próprio.", "gabarito": "E", "area": "tecnologias da informação", "org": "MPCE", "ano": "2020", "dif": "medio", "difLabel": "médio", "comentario": "As aplicações Dublin Core utilizam justamente o RDF e o XML. O RDF é a base para o processamento de metadados e proporciona interoperabilidade entre aplicações que trocam informações na Web, fazendo uso do XML. Logo, dizer que o DC não se combina com o RDF está errado — eles se combinam.", "fonte": "material", "fonteLabel": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"n": 4, "enunciado": "Entre os conceitos relevantes no âmbito da criação de uma biblioteca digital estão o de acesso e o de usabilidade, que se relacionam à representação da informação no sistema.", "gabarito": "C", "area": "tecnologias da informação", "org": "MPCE", "ano": "2025", "dif": "medio", "difLabel": "médio", "comentario": "Acesso e usabilidade são conceitos centrais na construção de bibliotecas digitais e se ligam à forma como a informação é representada e recuperada no sistema (interfaces ergonômicas e adaptativas, pensando inclusive em pessoas com deficiência, são requisitos desejáveis em software de biblioteca digital).", "fonte": "material", "fonteLabel": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"n": 5, "enunciado": "Entre os requisitos desejáveis para um software de biblioteca digital estão o uso de padrões de interoperabilidade e a linguagem de marcação HTML.", "gabarito": "E", "area": "tecnologias da informação", "org": "MPTO", "ano": "2024", "dif": "facil", "difLabel": "fácil", "comentario": "Entre os requisitos desejáveis está o uso de linguagens de marcação XML — não HTML. O XML tornou-se padrão na Web e proporciona maior interoperabilidade entre sistemas de bibliotecas digitais. A troca de HTML por XML é o erro do item.", "fonte": "material", "fonteLabel": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"n": 6, "enunciado": "Nas bibliotecas digitais, os metadados são itens fundamentais para a organização da coleção.", "gabarito": "C", "area": "tecnologias da informação", "org": "MPTO", "ano": "2024", "dif": "facil", "difLabel": "fácil", "comentario": "Os metadados são itens fundamentais para organizar a coleção em bibliotecas digitais: o Dublin Core, por exemplo, é um dos padrões mais usados em repositórios digitais justamente por permitir descrever e recuperar os recursos.", "fonte": "material", "fonteLabel": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"n": 7, "enunciado": "O DSpace é um software proprietário amplamente utilizado como plataforma para bibliotecas digitais, especialmente para aquelas adequadas aos padrões de arquivos abertos.", "gabarito": "E", "area": "tecnologias da informação", "org": "PGDF", "ano": "2019", "dif": "medio", "difLabel": "médio", "comentario": "ERRADO. O DSpace é um software livre. Para efetivar as propostas dos arquivos abertos no contexto das bibliotecas digitais, é necessário evitar software proprietários, devendo-se utilizar, sempre que possível, software livres.", "fonte": "banca", "fonteLabel": "justificativa da banca"}, {"n": 8, "enunciado": "O armazenamento em nuvem, que oferece mecanismos avançados de segurança e preservação digital, assegura, a longo prazo, a integridade, a acessibilidade e a proteção dos documentos armazenados, minimizando a necessidade de intervenções contínuas por parte do usuário e garantindo a estabilidade dos dados.", "gabarito": "E", "area": "tecnologias da informação", "org": "MPCE", "ano": "2025", "dif": "medio", "difLabel": "médio", "comentario": "O armazenamento em nuvem não garante, por si só, preservação de longo prazo. Os dez mandamentos da preservação digital alertam: não confiar cegamente no suporte de armazenamento, migrar formatos periodicamente, replicar em locais separados e fazer backup. Preservação digital exige política e intervenção contínua — não é automática.", "fonte": "material", "fonteLabel": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"n": 9, "enunciado": "A digitalização de acervos garante a preservação perene das coleções das bibliotecas.", "gabarito": "E", "area": "tecnologias da informação", "org": "MPCE", "ano": "2025", "dif": "facil", "difLabel": "fácil", "comentario": "Digitalizar não é preservar de forma perene. A digitalização gera objetos digitais que também ficam sujeitos à obsolescência de formatos e suportes; sem política de preservação (migração, replicação, backup), não há garantia de perenidade.", "fonte": "material", "fonteLabel": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"n": 10, "enunciado": "Handles são identificadores persistentes e exclusivos para recursos digitais.", "gabarito": "C", "area": "tecnologias da informação", "org": "STJ", "ano": "2024", "dif": "facil", "difLabel": "fácil", "comentario": "Handles são identificadores persistentes e exclusivos de objetos digitais, geridos pelo Handle System (sistema distribuído que atribui, armazena e resolve esses nomes). É, inclusive, o sistema adotado pelo DSpace.", "fonte": "material", "fonteLabel": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"n": 11, "enunciado": "Na catalogação do nome Muhammad Ali, a entrada deve ser Ali, Muhammad.", "gabarito": "C", "area": "catalogação", "org": "PGDF", "ano": "2019", "dif": "medio", "difLabel": "médio", "comentario": "CERTO. Na catalogação do nome muçulmano de Muhammad Ali, a entrada é sobrenome Ali, e nome Muhammad, conforme regra 22.5B.", "fonte": "banca", "fonteLabel": "justificativa da banca"}, {"n": 12, "enunciado": "Na catalogação de filmes e vídeos, a entrada sempre é feita pelo título da obra, uma vez que se trata de obras resultantes da contribuição de várias pessoas ou grupos de pessoas responsáveis pela criação de seu conteúdo intelectual ou artístico.", "gabarito": "C", "area": "catalogação", "org": "TJ-AM", "ano": "2019", "dif": "medio", "difLabel": "médio", "comentario": "Filmes e vídeos resultam da contribuição de várias pessoas/grupos responsáveis pelo conteúdo intelectual ou artístico, sem que se possa atribuir responsabilidade principal a um só. Nesses casos de responsabilidade mista/difusa, a entrada principal é feita pelo título da obra.", "fonte": "material", "fonteLabel": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"n": 13, "enunciado": "Situação hipotética: No seguinte conjunto de informações, que aparece, nessa ordem, na folha de rosto de uma publicação, os dois últimos nomes são de autores.\n\nMarcos Vinícius Seratto (Coordenação)\nAntônio César Bonnavitta (Coordenação)\nMarlúcia de Castro Souza\nMônica Bourdignon\n\nAssertiva: Nesse caso, a entrada principal será feita para o primeiro coordenador; as entradas secundárias, para o segundo coordenador e autoras.", "gabarito": "E", "area": "catalogação", "org": "EBSERH", "ano": "2018", "dif": "dif", "difLabel": "difícil", "comentario": "São dois coordenadores e duas autoras (quatro responsáveis, com dois indicados como principais — os coordenadores). Quando há quatro ou mais responsáveis e nenhum único é indicado como principal, a entrada principal é pelo título, não pelo primeiro coordenador. O item erra ao fazer entrada principal pelo primeiro coordenador.", "fonte": "material", "fonteLabel": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"n": 14, "enunciado": "No caso de um anteprojeto de lei, a entrada principal é feita pelo nome da pessoa ou da entidade autora da referida norma.", "gabarito": "C", "area": "catalogação", "org": "EBSERH", "ano": "2018", "dif": "dif", "difLabel": "difícil", "comentario": "Pela AACR2, a entrada de anteprojetos de lei (textos ainda não promulgados como lei) é feita pela pessoa ou entidade autora da norma — diferentemente das leis em vigor, cuja entrada é pela jurisdição. Por isso o item está certo.", "fonte": "material", "fonteLabel": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"n": 15, "enunciado": "Situação hipotética: Na folha de rosto de um livro encontram-se os seguintes dados: Defensoria Pública da União, registrado na primeira linha da página; na linha logo abaixo está o título \"Programa de encarreiramento no âmbito da DPU\", ao que segue abaixo dois nomes de responsáveis, sem destaque para nenhum deles e tampouco menção de que sejam organizadores ou coordenadores. O título reflete o conteúdo da obra, que trata com detalhes das carreiras específicas no âmbito da Defensoria Pública da União. Assertiva: Nesse caso, a entrada principal para essa obra deve ser feita pelo órgão ao qual o programa se subordina, seguida da palavra Brasil, entre parênteses: Defensoria Pública da União (Brasil); a entrada secundária será feita para o título: Programa de encarreiramento no âmbito da DPU.", "gabarito": "E", "area": "catalogação", "org": "DPU", "ano": "2016", "dif": "dif", "difLabel": "difícil", "comentario": "A obra tem título que reflete seu conteúdo e responsáveis sem destaque/indicação de coordenação. A entrada de leis e atos que governam uma jurisdição é pela jurisdição, mas aqui não se trata de norma jurídica e sim de publicação institucional com dois responsáveis indistintos — caso em que a entrada principal recai sobre o título, não sobre o órgão. Por isso o item está errado.", "fonte": "material", "fonteLabel": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"n": 16, "enunciado": "Na catalogação de uma constituição estadual, o ponto de acesso principal é realizado pelo cabeçalho da jurisdição.", "gabarito": "C", "area": "catalogação", "org": "TJDFT", "ano": "2015", "dif": "medio", "difLabel": "médio", "comentario": "Constituições são feitas sob o cabeçalho da jurisdição governada, acrescido do título uniforme apropriado (ex.: Brasil [Constituição (1988)]). Logo, o ponto de acesso principal de uma constituição estadual é o cabeçalho da jurisdição — item correto.", "fonte": "material", "fonteLabel": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"n": 17, "enunciado": "Na descrição do cabeçalho de uma lei municipal, o nome do município deve ter o acréscimo do nome completo da unidade da Federação a que pertence, entre parênteses, após o nome do município e um espaço.", "gabarito": "E", "area": "catalogação", "org": "TJDFT", "ano": "2015", "dif": "dif", "difLabel": "difícil", "comentario": "No cabeçalho de lei municipal, acrescenta-se a unidade da federação, mas de forma abreviada/entre parênteses conforme padronização da jurisdição, não o nome completo da UF por extenso após o município e um espaço como descreve o item. O detalhe da forma é o que torna a assertiva errada.", "fonte": "ia", "fonteLabel": "comentário gerado por inteligência artificial. caso tenha dúvida de sua confiabilidade, compartilhe com a prof e os colegas no grupo Foca Chat"}, {"n": 18, "enunciado": "O ponto de acesso principal, em texto que é adaptação de obra já existente, é feito pelo cabeçalho do autor original da obra.", "gabarito": "E", "area": "catalogação", "org": "FUB", "ano": "2015", "dif": "medio", "difLabel": "médio", "comentario": "Em adaptações, a obra resultante tem identidade própria: a entrada principal é feita pelo adaptador (responsável pela nova obra), e não pelo autor original — para este faz-se entrada secundária de nome-título quando cabível. O item inverte essa lógica.", "fonte": "ia", "fonteLabel": "comentário gerado por inteligência artificial. caso tenha dúvida de sua confiabilidade, compartilhe com a prof e os colegas no grupo Foca Chat"}, {"n": 19, "enunciado": "De acordo com o AACR-2, a forma correta de entrada na catalogação de um texto do papa João Paulo II é João Paulo, II, Papa.", "gabarito": "E", "area": "catalogação", "org": "MPCE", "ano": "2020", "dif": "medio", "difLabel": "médio", "comentario": "Para papas, a AACR2 acrescenta a designação Papa ao nome que o identifica, na forma: João Paulo II, Papa. A forma 'João Paulo, II, Papa' (com vírgula separando o numeral) está incorreta.", "fonte": "material", "fonteLabel": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"n": 20, "enunciado": "Quanto à catalogação do nome de pessoas com título de nobreza, o AACR-2 orienta fazer a entrada principal pelo nome do próprio título e remissivas para o nome pessoal e do título de nobreza.", "gabarito": "C", "area": "catalogação", "org": "MPCE", "ano": "2020", "dif": "medio", "difLabel": "médio", "comentario": "Pessoas conhecidas por título de nobreza entram pela forma do nome pela qual a pessoa é conhecida, com remissivas para as demais formas (nome pessoal e título). O AACR2 manda escolher a forma pela qual a pessoa é conhecida e fazer remissivas às variantes.", "fonte": "material", "fonteLabel": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"n": 21, "enunciado": "O desenvolvimento de coleções é um processo cíclico que deve ser realizado em períodos predeterminados e contempla a seleção, a aquisição e a avaliação de coleções.", "gabarito": "E", "area": "desenvolvimento de coleções", "org": "TJPA", "ano": "2025", "dif": "medio", "difLabel": "médio", "comentario": "O desenvolvimento de coleções é um processo contínuo e ininterrupto (perspectiva sistêmica), sem começo e fim determinados — não algo realizado apenas em 'períodos predeterminados'. Esse é o erro do item; as etapas de seleção, aquisição e avaliação de fato o compõem.", "fonte": "material", "fonteLabel": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"n": 22, "enunciado": "A profusão contemporânea de publicações físicas e eletrônicas tornou o desenvolvimento de coleções um processo menos custoso e complexo, perante a maior facilidade conferida às etapas de seleção e aquisição de obras para compor o acervo.", "gabarito": "E", "area": "desenvolvimento de coleções", "org": "TJPA", "ano": "2025", "dif": "facil", "difLabel": "fácil", "comentario": "A profusão de publicações físicas e eletrônicas torna o desenvolvimento de coleções mais complexo e exigente — não menos custoso e mais fácil. O excesso de oferta amplia o trabalho de seleção e aquisição. Daí o item estar errado.", "fonte": "ia", "fonteLabel": "comentário gerado por inteligência artificial. caso tenha dúvida de sua confiabilidade, compartilhe com a prof e os colegas no grupo Foca Chat"}, {"n": 23, "enunciado": "A fase do descarte consiste no remanejamento provisório dos materiais que não possuem mais relevância e justificativa para continuarem pertencendo ao acervo.", "gabarito": "E", "area": "desenvolvimento de coleções", "org": "TJPA", "ano": "2025", "dif": "medio", "difLabel": "médio", "comentario": "Descarte é a retirada total e definitiva do material da coleção (também chamado de seleção negativa). O que corresponde ao 'remanejamento provisório' de materiais é o remanejamento, não o descarte. O item troca as definições.", "fonte": "material", "fonteLabel": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"n": 24, "enunciado": "No processo de desenvolvimento de coleções, a lista desiderata é um catálogo que reúne as obras da biblioteca, servindo como instrumento de divulgação e marketing dos serviços de informação.", "gabarito": "E", "area": "desenvolvimento de coleções", "org": "TJPA", "ano": "2025", "dif": "medio", "difLabel": "médio", "comentario": "A lista desiderata não é um catálogo de divulgação: é o arquivo de controle dos itens selecionados, em processo de aquisição ou já adquiridos, mantido pelo setor de aquisição. O item descreve algo que não corresponde à desiderata.", "fonte": "material", "fonteLabel": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"n": 25, "enunciado": "A verificação de bibliografias, catálogos e listas pode ser inútil na avaliação de uma coleção de bibliotecas.", "gabarito": "C", "area": "desenvolvimento de coleções", "org": "PCDF", "ano": "2024", "dif": "medio", "difLabel": "médio", "comentario": "Certo. De uma maneira geral, a verificação de bibliografias, catálogos e listas pode ser útil na avaliação de uma coleção de bibliotecas.", "fonte": "banca", "fonteLabel": "justificativa da banca"}, {"n": 26, "enunciado": "A política de desenvolvimento de coleções, embora importante na constituição do acervo de uma biblioteca, exerce pouca influência no planejamento geral da biblioteca.", "gabarito": "E", "area": "desenvolvimento de coleções", "org": "STJ", "ano": "2024", "dif": "facil", "difLabel": "fácil", "comentario": "A política de desenvolvimento de coleções relaciona o trabalho aos objetivos da instituição e orienta todo o planejamento geral da biblioteca — ela tem influência grande, não 'pouca'. Por isso o item está errado.", "fonte": "material", "fonteLabel": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"n": 27, "enunciado": "Diferentemente da compra e da permuta, a doação de material de informação não é uma função de aquisição.", "gabarito": "E", "area": "desenvolvimento de coleções", "org": "FUB", "ano": "2022", "dif": "medio", "difLabel": "médio", "comentario": "A doação é, sim, uma forma de aquisição (ao lado de compra e permuta). Dizer que a doação não é função de aquisição contraria o conteúdo: a aquisição pode se dar por compra, doação e permuta.", "fonte": "material", "fonteLabel": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"n": 28, "enunciado": "Uma política de desenvolvimento de coleções resume-se, basicamente, às tarefas de análise da comunidade, seleção, aquisição, desbastamento e avaliação de coleções.", "gabarito": "C", "area": "desenvolvimento de coleções", "org": "MPCE", "ano": "2020", "dif": "medio", "difLabel": "médio", "comentario": "Uma política de desenvolvimento de coleções de fato se estrutura em torno de análise da comunidade, seleção, aquisição, desbastamento e avaliação de coleções — as etapas clássicas do processo. Por isso o item está certo.", "fonte": "material", "fonteLabel": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"n": 29, "enunciado": "Nos programas de permuta, a lista de duplicatas permite oferecer a outras instituições material que será retirado definitivamente do acervo.", "gabarito": "C", "area": "desenvolvimento de coleções", "org": "TJ-ES", "ano": "2023", "dif": "medio", "difLabel": "médio", "comentario": "Na permuta, a lista de duplicatas oferece a outras instituições material excedente, que sai definitivamente do acervo da biblioteca de origem. A permuta pode ocorrer com duplicatas e doações. Item correto.", "fonte": "material", "fonteLabel": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"n": 30, "enunciado": "O processo de avaliar as coleções do acervo caracteriza um método de circulação.", "gabarito": "E", "area": "desenvolvimento de coleções", "org": "ABIN", "ano": "2018", "dif": "medio", "difLabel": "médio", "comentario": "Avaliar a coleção é etapa do desenvolvimento de coleções (abordagens quantitativas, qualitativas e por fatores de uso), não um 'método de circulação'. Os registros de circulação podem subsidiar a avaliação por fatores de uso, mas avaliar a coleção não se confunde com circulação. Por isso o item está errado.", "fonte": "material", "fonteLabel": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"n": 31, "enunciado": "As linguagens documentárias são instrumentos de controle da terminologia de determinada área do conhecimento.", "gabarito": "C", "area": "linguagens documentárias", "org": "EBSERH", "ano": "2018", "dif": "facil", "difLabel": "fácil", "comentario": "Linguagem documentária é um conjunto de termos usado para representar o conteúdo dos documentos, com fins de classificação ou busca. Como integra vocabulários controlados, funciona como instrumento de controle da terminologia de uma área. Item correto.", "fonte": "material", "fonteLabel": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"n": 32, "enunciado": "Todas as linguagens de indexação têm as mesmas funções: representar o conteúdo do documento de forma consistente; permitir a coincidência entre o vocabulário do indexador e a do usuário; proporcionar meios para que o usuário possa modelar sua busca e, assim, obter maior quantidade de documentos existentes no sistema.", "gabarito": "C", "area": "linguagens documentárias", "org": "DPU", "ano": "2016", "dif": "medio", "difLabel": "médio", "comentario": "São funções das linguagens de indexação representar o conteúdo de forma consistente, aproximar o vocabulário do indexador ao do usuário e permitir que o usuário modele sua busca para recuperar os documentos do sistema. O item descreve corretamente essas funções comuns.", "fonte": "material", "fonteLabel": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"n": 33, "enunciado": "A indexação em linguagem natural confere maior precisão à indexação.", "gabarito": "E", "area": "linguagens documentárias", "org": "TJ-ES", "ano": "2023", "dif": "medio", "difLabel": "médio", "comentario": "Quem confere maior precisão é o vocabulário controlado (linguagem documentária), não a linguagem natural. A linguagem natural tende a aumentar a revocação mas reduzir a precisão (recupera documentos irrelevantes). O item inverte isso.", "fonte": "material", "fonteLabel": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"n": 34, "enunciado": "A linguagem natural corresponde à linguagem falada, por isso facilita a recuperação da informação.", "gabarito": "E", "area": "linguagens documentárias", "org": "FUB", "ano": "2022", "dif": "medio", "difLabel": "médio", "comentario": "A linguagem natural não é apenas a 'linguagem falada' e não facilita por si a recuperação: por falta de padronização, gera mais respostas negativas e exige do usuário esforço para prever sinônimos e grafias. O item simplifica e erra.", "fonte": "material", "fonteLabel": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"n": 35, "enunciado": "A linguagem natural é a que deve ser empregada no tratamento, no armazenamento e na disseminação da informação.", "gabarito": "E", "area": "linguagens documentárias", "org": "DPU", "ano": "2016", "dif": "medio", "difLabel": "médio", "comentario": "No tratamento, armazenamento e disseminação da informação, o recomendável é a linguagem documentária (controlada), que padroniza e promove consistência. Afirmar que se deve empregar a linguagem natural nesses processos está errado.", "fonte": "material", "fonteLabel": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"n": 36, "enunciado": "O controle do vocabulário visa à padronização da forma gramatical e à identificação dos termos homônimos.", "gabarito": "E", "area": "linguagens documentárias", "org": "EMBRAPA", "ano": "2025", "dif": "medio", "difLabel": "médio", "comentario": "O controle do vocabulário visa controlar sinônimos (padronizando a forma) e diferenciar homógrafos — palavras de mesma grafia e significados distintos. 'Identificar termos homônimos' não é a finalidade central descrita; o foco é padronizar e distinguir homógrafos. Por isso o item está errado.", "fonte": "material", "fonteLabel": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"n": 37, "enunciado": "O vocabulário controlado é uma linguagem natural e serve para atender as necessidades de busca dos usuários.", "gabarito": "E", "area": "linguagens documentárias", "org": "EMBRAPA", "ano": "2025", "dif": "facil", "difLabel": "fácil", "comentario": "O vocabulário controlado é uma linguagem construída/controlada — não uma linguagem natural. É essencialmente uma lista de termos autorizados com estrutura semântica. Chamá-lo de linguagem natural é o erro.", "fonte": "material", "fonteLabel": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"n": 38, "enunciado": "Tesauros e vocabulários controlados são instrumentos que, aplicados aos sistemas de informação, fazem o controle terminológico do sistema.", "gabarito": "C", "area": "linguagens documentárias", "org": "FUB", "ano": "2022", "dif": "facil", "difLabel": "fácil", "comentario": "Tesauros e vocabulários controlados são instrumentos de controle terminológico do sistema de informação (o tesauro, aliás, é um dos tipos de vocabulário controlado). Item correto.", "fonte": "material", "fonteLabel": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"n": 39, "enunciado": "Na construção de uma linguagem documentária, é desnecessário utilizar vocabulário controlado.", "gabarito": "E", "area": "linguagens documentárias", "org": "TJ-AM", "ano": "2019", "dif": "facil", "difLabel": "fácil", "comentario": "Na construção de uma linguagem documentária é necessário, sim, o vocabulário controlado — as LDs integram vocabulários controlados. Dizer que é desnecessário contraria a própria definição. Item errado.", "fonte": "material", "fonteLabel": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"n": 40, "enunciado": "A inclusão da análise facetada para a elaboração de vocabulários controlados, que inclui cinco categorias fundamentais para a organização e a representação dos assuntos, é proposta pelo padrão ANSI/NISO Z39.19-2005.", "gabarito": "C", "area": "linguagens documentárias", "org": "FUB", "ano": "2015", "dif": "dif", "difLabel": "difícil", "comentario": "A norma ANSI/NISO Z39.19-2005 (diretrizes para vocabulários controlados monolíngues) admite a análise facetada e suas cinco categorias fundamentais (inspiradas nas PMEST de Ranganathan) para organizar e representar assuntos. Item correto.", "fonte": "ia", "fonteLabel": "comentário gerado por inteligência artificial. caso tenha dúvida de sua confiabilidade, compartilhe com a prof e os colegas no grupo Foca Chat"}, {"n": 41, "enunciado": "O surgimento da teoria da documentação não foi influenciado pelo desenvolvimento da indústria gráfica.", "gabarito": "E", "area": "introdução à biblioteconomia", "org": "TJ-ES", "ano": "2023", "dif": "medio", "difLabel": "médio", "comentario": "A documentação surgiu justamente em decorrência do desenvolvimento da indústria gráfica e do crescimento do conhecimento registrado, sobretudo em periódicos científicos (Otlet e La Fontaine). Dizer que a indústria gráfica não a influenciou está errado.", "fonte": "material", "fonteLabel": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"n": 42, "enunciado": "A ciência da informação é uma área do conhecimento que trata de aspectos sociais, culturais e cognitivos da informação.", "gabarito": "C", "area": "introdução à biblioteconomia", "org": "TJPA", "ano": "2025", "dif": "facil", "difLabel": "fácil", "comentario": "A ciência da informação é uma ciência social e interdisciplinar, que trata de aspectos sociais, culturais e cognitivos da informação. O item está alinhado a essa caracterização.", "fonte": "material", "fonteLabel": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"n": 43, "enunciado": "A ciência da informação mantém sua finalidade diante das inovações proporcionadas pela inteligência artificial, investigando as propriedades e o comportamento da informação produzida por outras áreas do conhecimento.", "gabarito": "C", "area": "introdução à biblioteconomia", "org": "TJPA", "ano": "2025", "dif": "medio", "difLabel": "médio", "comentario": "O objeto da CI permanece o estudo das propriedades e do comportamento da informação produzida e usada nas diversas áreas, mesmo diante de inovações como a IA. A finalidade da disciplina não se descaracteriza pela tecnologia; ela continua investigando as propriedades da informação. Item correto.", "fonte": "material", "fonteLabel": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"n": 44, "enunciado": "O advento do campo da ciência da informação está intimamente relacionado à consolidação da bibliografia e da documentação.", "gabarito": "C", "area": "introdução à biblioteconomia", "org": "MPCE", "ano": "2025", "dif": "medio", "difLabel": "médio", "comentario": "A ciência da informação consolidou-se a partir da documentação (e da recuperação da informação), as duas disciplinas que influenciaram sua gênese no pós-guerra. Relacionar seu advento à bibliografia/documentação está correto.", "fonte": "material", "fonteLabel": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"n": 45, "enunciado": "O uso e a transferência da informação compõem uma das lógicas estruturantes da ciência da informação.", "gabarito": "C", "area": "introdução à biblioteconomia", "org": "MPCE", "ano": "2025", "dif": "medio", "difLabel": "médio", "comentario": "Uso e transferência (comunicação) da informação estão entre os processos estruturantes da CI, ao lado da construção. A própria definição aponta a análise dos processos de construção, comunicação e uso da informação. Item correto.", "fonte": "material", "fonteLabel": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"n": 46, "enunciado": "O papel político, educacional, social e cultural que a ciência da informação desempenha atualmente é resultado de processos de mudanças que alteraram sua estrutura epistemológica.", "gabarito": "C", "area": "introdução à biblioteconomia", "org": "MPCE", "ano": "2025", "dif": "medio", "difLabel": "médio", "comentario": "A CI passou por mudanças que alteraram sua estrutura epistemológica, ampliando seu papel político, educacional, social e cultural — coerente com seu caráter de ciência social interdisciplinar em evolução. Item correto.", "fonte": "material", "fonteLabel": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"n": 47, "enunciado": "A ciência da informação delimita os seus problemas de pesquisa em dois pontos básicos: análise dos processos de construção, de comunicação e de uso da informação; e concepção dos produtos e dos sistemas que permitem a sua construção e o seu uso.", "gabarito": "C", "area": "introdução à biblioteconomia", "org": "PGDF", "ano": "2019", "dif": "dif", "difLabel": "difícil", "comentario": "CERTO. A ciência da informação objetiva o estudo das propriedades gerais da informação, como natureza, gênese e efeitos, a partir de ações como: análise dos processos de construção, comunicação e uso da informação; e desenvolvimento de produtos e sistemas que permitem a construção, comunicação, armazenamento e uso desses produtos. Ainda, salienta-se que essas propriedades, esses processos e esses sistemas foram, e são, estudados por diferentes disciplinas, como pela biblioteconomia, museologia, documentação, jornalismo, informática etc.", "fonte": "banca", "fonteLabel": "justificativa da banca"}, {"n": 48, "enunciado": "A documentação considera perfurações em série, sinais magnéticos, signos visuais e signos auditivos como documentos do tipo suporte de dados.", "gabarito": "C", "area": "introdução à biblioteconomia", "org": "EBSERH", "ano": "2018", "dif": "medio", "difLabel": "médio", "comentario": "Para a documentação, na perspectiva de que 'tudo pode ser documento' (Otlet), perfurações em série, sinais magnéticos e signos visuais e auditivos são considerados documentos do tipo suporte de dados. Item coerente com a ampliação do conceito de documento. Item correto.", "fonte": "ia", "fonteLabel": "comentário gerado por inteligência artificial. caso tenha dúvida de sua confiabilidade, compartilhe com a prof e os colegas no grupo Foca Chat"}, {"n": 49, "enunciado": "A Lei de Bradford permite avaliar o grau de relevância de periódicos em uma área específica do conhecimento.", "gabarito": "C", "area": "introdução à biblioteconomia", "org": "STJ", "ano": "2018", "dif": "medio", "difLabel": "médio", "comentario": "A Lei de Bradford (lei da dispersão) trata da dispersão de artigos científicos em periódicos e permite avaliar a relevância/produtividade de periódicos em uma área (mnemônico BLZ PAI: Bradford–Periódicos). Item correto.", "fonte": "material", "fonteLabel": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"n": 50, "enunciado": "A necessidade de visualização, análise e avaliação da dinâmica e da evolução da atividade científica e sua produção bem como a gestão dos livros e bibliotecas são contextos que deram origem aos estudos métricos da informação.", "gabarito": "C", "area": "introdução à biblioteconomia", "org": "EMBRAPA", "ano": "2025", "dif": "medio", "difLabel": "médio", "comentario": "Os estudos métricos da informação (infometria, com bibliometria e cientometria) surgem da necessidade de medir, analisar e avaliar a dinâmica e a evolução da atividade científica e da gestão de livros e bibliotecas. A bibliometria, inclusive, mede as atividades de gestão dos livros e documentos. Item correto.", "fonte": "material", "fonteLabel": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}];
+
+const STORAGE_KEY = 'foca-camara-simulado-s4';
+const TOTAL = QUESTOES.length;
+
+// estado: { "n": "C" | "E" }  (resposta dada pelo aluno)
+let respostas = {};
+
+function carregar() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    respostas = raw ? JSON.parse(raw) : {};
+    if (typeof respostas !== 'object' || respostas === null) respostas = {};
+  } catch (e) { respostas = {}; }
+}
+function salvar() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(respostas)); } catch (e) {}
+}
+
+const AREAS_ORDEM = [];
+QUESTOES.forEach(q => { if (!AREAS_ORDEM.includes(q.area)) AREAS_ORDEM.push(q.area); });
+
+function el(tag, cls, html) {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (html !== undefined) e.innerHTML = html;
+  return e;
+}
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function render() {
+  const lista = document.getElementById('lista');
+  lista.innerHTML = '';
+  let numArea = {};
+
+  AREAS_ORDEM.forEach((area, ai) => {
+    const head = el('div', 'area-header');
+    head.appendChild(el('div', 'area-eyebrow', 'disciplina ' + String(ai+1).padStart(2,'0')));
+    head.appendChild(el('div', 'area-title', esc(area)));
+    lista.appendChild(head);
+
+    QUESTOES.filter(q => q.area === area).forEach(q => {
+      numArea[area] = (numArea[area] || 0) + 1;
+      lista.appendChild(criarQuestao(q, numArea[area]));
+    });
+  });
+
+  atualizarProgresso();
+}
+
+function criarQuestao(q, numLocal) {
+  const card = el('div', 'questao ' + q.dif);
+  card.id = 'q' + q.n;
+
+  const top = el('div', 'questao-top');
+  top.appendChild(el('span', 'questao-num', 'questão ' + String(numLocal).padStart(2,'0')));
+  top.appendChild(el('span', 'tag', esc(q.org) + ' · ' + esc(q.ano)));
+  card.appendChild(top);
+
+  card.appendChild(el('p', 'enunciado', esc(q.enunciado)));
+
+  const row = el('div', 'ce-row');
+  const btnC = el('button', 'ce-btn', 'Certo'); btnC.type = 'button'; btnC.dataset.val = 'C';
+  const btnE = el('button', 'ce-btn', 'Errado'); btnE.type = 'button'; btnE.dataset.val = 'E';
+  btnC.addEventListener('click', () => responder(q, 'C'));
+  btnE.addEventListener('click', () => responder(q, 'E'));
+  row.appendChild(btnC); row.appendChild(btnE);
+  card.appendChild(row);
+
+  // feedback
+  const acertou = false; // definido ao aplicar estado
+  const fb = el('div', 'feedback');
+  const gabTxt = q.gabarito === 'C' ? 'Certo' : 'Errado';
+  const head = el('div', 'fb-head');
+  head.innerHTML = '<span class="fb-status"></span><span class="fb-gab">gabarito: <b>' + gabTxt + '</b></span>';
+  fb.appendChild(head);
+  fb.appendChild(el('div', 'fonte-label ' + q.fonte, esc(q.fonteLabel)));
+  fb.appendChild(el('div', 'coment', esc(q.comentario)));
+  card.appendChild(fb);
+
+  // aplica estado salvo
+  if (respostas[q.n]) aplicarEstado(card, q, respostas[q.n]);
+
+  return card;
+}
+
+function aplicarEstado(card, q, dada) {
+  card.classList.add('answered');
+  const acertou = dada === q.gabarito;
+  const fb = card.querySelector('.feedback');
+  fb.classList.add(acertou ? 'acerto' : 'erro');
+  fb.querySelector('.fb-status').textContent = acertou ? '✓ você acertou' : '✗ você errou';
+
+  card.querySelectorAll('.ce-btn').forEach(b => {
+    if (b.dataset.val === q.gabarito) b.classList.add('is-correct');
+    if (b.dataset.val === dada && dada !== q.gabarito) b.classList.add('is-wrong');
+    if (b.dataset.val === dada) b.classList.add('chosen');
+  });
+}
+
+function responder(q, dada) {
+  if (respostas[q.n]) return; // já respondida
+  respostas[q.n] = dada;
+  salvar();
+  const card = document.getElementById('q' + q.n);
+  aplicarEstado(card, q, dada);
+  atualizarProgresso();
+}
+
+function calcAcertos() {
+  let a = 0;
+  QUESTOES.forEach(q => { if (respostas[q.n] && respostas[q.n] === q.gabarito) a++; });
+  return a;
+}
+function calcRespondidas() {
+  return QUESTOES.filter(q => respostas[q.n]).length;
+}
+
+function atualizarProgresso() {
+  const done = calcRespondidas();
+  const ac = calcAcertos();
+  document.getElementById('pgDone').textContent = done;
+  document.getElementById('pgAcertos').textContent = ac;
+  document.getElementById('pgFill').style.width = (done / TOTAL * 100) + '%';
+  renderResultado(done, ac);
+}
+
+function renderResultado(done, ac) {
+  const sec = document.getElementById('resultado');
+  if (done === 0) { sec.style.display = 'none'; return; }
+  sec.style.display = 'block';
+
+  document.getElementById('rsAcertos').textContent = ac;
+  const pct = Math.round(ac / TOTAL * 100);
+  document.getElementById('rsPct').textContent = pct + '% de aproveitamento · ' + done + ' de ' + TOTAL + ' respondidas';
+
+  let msg;
+  if (done < TOTAL) {
+    msg = 'placar parcial — faltam ' + (TOTAL - done) + ' questões. o número se atualiza a cada resposta.';
+  } else if (pct >= 80) {
+    msg = 'mandou muito bem. esse é o patamar de quem está pronto pra prova. revise os poucos erros e siga firme.';
+  } else if (pct >= 60) {
+    msg = 'bom desempenho. vale revisar as disciplinas em que o aproveitamento ficou mais baixo no detalhamento abaixo.';
+  } else {
+    msg = 'simulado concluído. use o detalhamento por disciplina pra identificar onde concentrar a revisão da semana.';
+  }
+  document.getElementById('rsMsg').textContent = msg;
+
+  // breakdown por disciplina
+  const bd = document.getElementById('breakdown');
+  bd.innerHTML = '';
+  AREAS_ORDEM.forEach(area => {
+    const qs = QUESTOES.filter(q => q.area === area);
+    const resp = qs.filter(q => respostas[q.n]);
+    const ac2 = qs.filter(q => respostas[q.n] === q.gabarito).length;
+    const total = qs.length;
+    const row = el('div', 'bd-row');
+    row.appendChild(el('div', 'bd-area', esc(area)));
+    row.appendChild(el('div', 'bd-score', ac2 + '/' + total));
+    const track = el('div', 'bd-track');
+    const fill = el('div', 'bd-fill');
+    fill.style.width = (ac2 / total * 100) + '%';
+    track.appendChild(fill);
+    row.appendChild(track);
+    bd.appendChild(row);
+  });
+}
+
+document.getElementById('btnReset').addEventListener('click', () => {
+  if (confirm('Isso apaga todas as suas respostas salvas neste navegador e recomeça o simulado. Continuar?')) {
+    respostas = {};
+    salvar();
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+});
+document.getElementById('btnNova').addEventListener('click', () => {
+  document.getElementById('btnReset').click();
+});
+
+carregar();
+render();
+</script>
+</body>
+</html>
