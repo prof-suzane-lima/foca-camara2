@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🦭 Foca na Câmara - Simulado da semana 5</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --verde: #00A74A;
+  --rosa: #F4A6D7;
+  --bege: #F1F1DE;
+  --verde-escuro: #07272D;
+  --azul: #9BCBEB;
+  --verde-limao: #B5BD00;
+  --amarelo: #FED141;
+  --laranja: #FF6A39;
+  --bg-primary: var(--bege);
+  --bg-dark: var(--verde-escuro);
+  --bg-accent: var(--verde);
+  --text-on-light: var(--verde-escuro);
+  --text-on-dark: var(--bege);
+  --acerto: var(--verde);
+  --acerto-bg: rgba(0, 167, 74, 0.12);
+  --erro: var(--laranja);
+  --erro-bg: rgba(255, 106, 57, 0.12);
+  --linha: rgba(7, 39, 45, 0.15);
+  --linha-suave: rgba(7, 39, 45, 0.08);
+  --shadow-soft: 0 1px 3px rgba(7, 39, 45, 0.06), 0 4px 16px rgba(7, 39, 45, 0.04);
+  --dif-facil: #C9F7C5;
+  --dif-medio: #FCE5CD;
+  --dif-dificil: #FADBD8;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+  font-weight: 400;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  background: var(--bg-primary);
+  color: var(--text-on-light);
+}
+h1, h2, h3 { font-weight: 800; letter-spacing: -0.025em; }
+
+.header {
+  background: var(--verde-escuro);
+  color: var(--bege);
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.brand { font-family: 'Bricolage Grotesque', sans-serif; line-height: 1; display: inline-block; }
+.brand .b-prof   { font-weight: 400; letter-spacing: 0; }
+.brand .b-suzane { font-weight: 800; letter-spacing: -0.02em; }
+.brand .b-lima   { font-weight: 800; font-style: italic; letter-spacing: -0.02em; }
+.brand.dark  { color: var(--bege); font-size: 16px; }
+.brand.light { color: var(--verde); }
+.header-tag {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--rosa);
+  font-weight: 700;
+}
+
+.progress-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--bege);
+  border-bottom: 1px solid var(--linha-suave);
+  padding: 10px 24px;
+}
+.progress-inner { max-width: 820px; margin: 0 auto; }
+.progress-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  font-variant-numeric: tabular-nums;
+}
+.progress-meta .pm-score { color: var(--verde); font-weight: 700; }
+.progress-track { height: 6px; background: var(--linha-suave); border-radius: 999px; overflow: hidden; }
+.progress-fill { height: 100%; width: 0%; background: var(--verde); border-radius: 999px; transition: width 0.3s ease; }
+
+.container { max-width: 820px; margin: 0 auto; padding: 36px 24px 80px; }
+
+.eyebrow {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--laranja);
+  margin-bottom: 14px;
+}
+.hero h1 { font-size: clamp(30px, 6vw, 44px); line-height: 1.05; margin-bottom: 14px; }
+.hero .lead { font-size: 16.5px; max-width: 620px; color: rgba(7,39,45,0.85); }
+.hero .aviso {
+  margin-top: 18px;
+  font-size: 13.5px;
+  color: rgba(7,39,45,0.65);
+  border-left: 3px solid var(--rosa);
+  padding-left: 12px;
+  max-width: 620px;
+}
+
+.cat-header {
+  margin: 52px 0 8px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--verde-escuro);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.cat-header h2 { font-size: 22px; }
+.cat-header .cat-num { color: var(--verde); margin-right: 6px; }
+.cat-count { font-size: 13px; font-weight: 500; color: rgba(7,39,45,0.6); font-variant-numeric: tabular-nums; }
+
+.questao {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: var(--shadow-soft);
+  padding: 24px 24px 22px;
+  margin-top: 20px;
+}
+.questao-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.questao-num { font-weight: 800; font-size: 17px; color: var(--verde); font-variant-numeric: tabular-nums; }
+.tag {
+  background: var(--verde-escuro);
+  color: var(--bege);
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.enunciado { font-size: 16px; line-height: 1.6; }
+.enunciado strong { font-weight: 700; }
+
+.botoes { display: flex; gap: 10px; margin-top: 18px; }
+.btn-ce {
+  flex: 1;
+  max-width: 160px;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 11px 0;
+  border-radius: 999px;
+  border: 1.5px solid var(--linha);
+  background: transparent;
+  color: var(--verde-escuro);
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+.btn-ce:hover:not(:disabled) { border-color: var(--verde-escuro); }
+.btn-ce:disabled { cursor: default; opacity: 0.55; }
+.btn-ce.escolhida { opacity: 1; }
+.btn-ce.escolhida.ok { background: var(--acerto-bg); border-color: var(--acerto); color: var(--verde-escuro); }
+.btn-ce.escolhida.nok { background: var(--erro-bg); border-color: var(--erro); color: var(--verde-escuro); }
+.btn-ce.gab-certa { border-color: var(--acerto); }
+
+.feedback { display: none; margin-top: 18px; }
+.questao.respondida .feedback { display: block; }
+.questao.respondida .botoes .btn-ce:not(.escolhida):not(.gab-certa) { opacity: 0.4; }
+.fb-banner {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 7px 14px;
+  border-radius: 999px;
+}
+.fb-banner.acertou { background: var(--acerto-bg); color: var(--verde); }
+.fb-banner.errou { background: var(--erro-bg); color: #c84a1f; }
+.comentario {
+  margin-top: 14px;
+  background: var(--bege);
+  border-radius: 10px;
+  padding: 16px 18px;
+  font-size: 14.5px;
+  line-height: 1.6;
+}
+.comentario .com-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--verde);
+  margin-bottom: 8px;
+}
+.comentario .com-nota {
+  margin-top: 10px;
+  font-size: 12px;
+  color: rgba(7,39,45,0.55);
+  font-style: italic;
+}
+
+.resultado { margin-top: 64px; }
+.result-hero {
+  background: var(--verde-escuro);
+  color: var(--bege);
+  border-radius: 18px;
+  padding: 40px 36px;
+  position: relative;
+  overflow: hidden;
+}
+.result-hero .eyebrow { color: var(--rosa); }
+.result-score {
+  font-size: 88px;
+  font-weight: 800;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  color: var(--rosa);
+  font-variant-numeric: tabular-nums;
+}
+.result-sub { margin-top: 14px; font-size: 16px; }
+.result-pendente { margin-top: 10px; font-size: 13.5px; color: rgba(241,241,222,0.7); }
+
+.ranking { margin-top: 28px; }
+.ranking h3 { font-size: 19px; margin-bottom: 4px; }
+.ranking .rk-sub { font-size: 13.5px; color: rgba(7,39,45,0.6); margin-bottom: 18px; }
+.rk-item {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: var(--shadow-soft);
+  padding: 16px 20px;
+  margin-bottom: 10px;
+}
+.rk-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-size: 14.5px; }
+.rk-top .rk-pos { font-weight: 800; color: var(--verde); margin-right: 8px; font-variant-numeric: tabular-nums; }
+.rk-top .rk-nome { font-weight: 700; }
+.rk-top .rk-num { font-weight: 500; color: rgba(7,39,45,0.6); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.rk-bar { margin-top: 10px; height: 8px; background: var(--linha-suave); border-radius: 999px; overflow: hidden; }
+.rk-bar-fill { height: 100%; background: var(--verde); border-radius: 999px; transition: width 0.3s ease; }
+
+.acoes { margin-top: 36px; display: flex; gap: 12px; flex-wrap: wrap; }
+.btn {
+  font-family: inherit;
+  font-size: 14.5px;
+  font-weight: 700;
+  padding: 12px 24px;
+  border-radius: 999px;
+  border: none;
+  background: var(--verde-escuro);
+  color: var(--bege);
+  cursor: pointer;
+  transition: opacity 0.18s ease;
+}
+.btn:hover { opacity: 0.88; }
+.btn.secundario { background: transparent; border: 1.5px solid var(--linha); color: var(--verde-escuro); }
+.btn.secundario:hover { border-color: var(--verde-escuro); opacity: 1; }
+
+.footer {
+  margin-top: 70px;
+  padding-top: 24px;
+  border-top: 1px solid var(--linha-suave);
+  font-size: 13px;
+  color: rgba(7,39,45,0.6);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 560px) {
+  .container { padding: 28px 16px 70px; }
+  .questao { padding: 20px 16px 18px; }
+  .result-hero { padding: 32px 24px; }
+  .result-score { font-size: 64px; }
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <span class="brand dark">
+    <span class="b-prof">prof.</span> <span class="b-suzane">suzane</span> <span class="b-lima">lima</span>
+  </span>
+  <div class="header-tag">🦭 foca na câmara · simulado</div>
+</header>
+
+<div class="progress-sticky">
+  <div class="progress-inner">
+    <div class="progress-meta">
+      <span id="pm-resp">0 de 50 respondidas</span>
+      <span class="pm-score" id="pm-score"></span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+  </div>
+</div>
+
+<main class="container">
+
+  <section class="hero">
+    <div class="eyebrow">simulado da semana 5</div>
+    <h1>🦭 Foca na Câmara - Simulado da semana 5</h1>
+    <p class="lead">são 50 questões certo ou errado da banca Cebraspe, divididas em cinco disciplinas. marque sua resposta e veja na hora o gabarito e o comentário de cada questão. no fim da página, confira seu resultado e o ranking de desempenho por disciplina.</p>
+    <p class="aviso">seu progresso fica salvo automaticamente neste navegador e neste dispositivo — pode fechar a página e voltar depois de onde parou. ele não sincroniza entre dispositivos diferentes.</p>
+  </section>
+
+  <div id="questoes"></div>
+
+  <section class="resultado" id="resultado">
+    <div class="result-hero">
+      <div class="eyebrow">seu resultado</div>
+      <div class="result-score" id="r-score">0%</div>
+      <div class="result-sub" id="r-sub">nenhuma questão respondida ainda</div>
+      <div class="result-pendente" id="r-pendente"></div>
+    </div>
+
+    <div class="ranking">
+      <h3>ranking por disciplina</h3>
+      <div class="rk-sub">ordenado do seu melhor aproveitamento para o menor — foque sua revisão nas últimas posições. 😉</div>
+      <div id="rk-list"></div>
+    </div>
+
+    <div class="acoes">
+      <button class="btn secundario" id="btn-reset">zerar e recomeçar simulado</button>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <span>compilado e organizado por <strong>Prof. Suzane Lima</strong></span>
+    <span class="brand light">
+      <span class="b-prof">prof.</span> <span class="b-suzane">suzane</span> <span class="b-lima">lima</span>
+    </span>
+  </footer>
+
+</main>
+
+<script>
+const QUESTOES = [{"id": "q01", "disciplina": "Catalogação", "assunto": "Dados de localização - Notação de autor - Tabela de Cutter", "inst": "Fundação Universidade de Brasília (FUB)", "ano": "2015", "enunciado": "Caso a tabela de Cutter seja utilizada para a classificação de publicações de um autor que possua obras distintas, mas com a mesma letra iniciando o título dessas obras, deve-se utilizar primeiro a indicação de Cutter e, em seguida, a primeira letra do título de cada obra, seguida de numeração para diferenciá-las.", "gab": "E", "fonte": "ia", "comentario": "A tabela de Cutter individualiza as obras de um mesmo autor acrescentando, após a notação do sobrenome, a primeira letra do título (desconsiderando artigos iniciais). Quando os títulos de um mesmo autor começam pela mesma letra, a distinção é feita acrescentando letras subsequentes do título à marca da obra — e não uma numeração sequencial, como afirma o item."}, {"id": "q02", "disciplina": "Catalogação", "assunto": "RDA", "inst": "TJPA", "ano": "2025", "enunciado": "A adoção da RDA implica que o catalogador deixe de apenas aplicar regras fixas de descrição e passe a atuar com foco na modelagem conceitual de entidades e relações, o que exige maior domínio teórico e analítico.", "gab": "C", "fonte": "material", "comentario": "Certo. A RDA é baseada numa estrutura teórica — os modelos conceituais FRBR e FRAD (hoje em harmonização com o LRM) — e isso representa um novo paradigma: em vez de apenas aplicar regras fixas como no AACR2, o catalogador passa a trabalhar com entidades, atributos e relações, o que exige maior domínio teórico e analítico."}, {"id": "q03", "disciplina": "Catalogação", "assunto": "RDA", "inst": "MPCE", "ano": "2025", "enunciado": "A eficácia da catalogação em RDA no que se refere à facilidade de navegação e à encontrabilidade da informação depende da forma como os registros são apresentados e da utilização de mecanismos e interfaces de busca bem projetados.", "gab": "C", "fonte": "material", "comentario": "Certo. A RDA é uma norma de conteúdo: ela define quais dados registrar e como formulá-los, sem se atrelar a um único esquema de codificação ou estilo de apresentação. Por isso, na prática, a navegação e a encontrabilidade dependem de como os registros são apresentados e da qualidade das interfaces e dos mecanismos de busca."}, {"id": "q04", "disciplina": "Catalogação", "assunto": "RDA", "inst": "MPCE", "ano": "2025", "enunciado": "A implementação da catalogação proposta pela norma RDA facilita o acesso e a recuperação das informações pelo usuário ao eliminar abreviações e expressões latinas das normas anteriores e adequar-se às tecnologias digitais emergentes.", "gab": "C", "fonte": "material", "comentario": "Certo. Pelo princípio da representação (“aceite aquilo que vê”), a RDA prefere as informações por extenso, sem as abreviaturas e expressões latinas herdadas do AACR2 — que existiam para os dados caberem na ficha impressa. Além disso, a RDA já nasce projetada para o ambiente digital, o que facilita o acesso e a recuperação pelo usuário."}, {"id": "q05", "disciplina": "Catalogação", "assunto": "RDA", "inst": "STJ", "ano": "2024", "enunciado": "RDA (resource description and access) é uma forma inovadora de catalogação que substituiu o AACR2 (código de catalogação anglo-americano).", "gab": "C", "fonte": "material", "comentario": "Certo. A RDA (Resource Description and Access) é a nova norma de catalogação que substitui o AACR2. Em vez de uma terceira edição do código (o que seria o AACR3), optou-se por criar uma norma com estrutura diferente, baseada em modelos conceituais e projetada para o ambiente digital — daí o caráter inovador."}, {"id": "q06", "disciplina": "Catalogação", "assunto": "RDA", "inst": "STJ - Superior Tribunal de Justiça", "ano": "2018", "enunciado": "Com o desenvolvimento das novas tecnologias, são exigidas atualizações para adequação à nova estrutura proposta para catalogação, como as diretrizes RDA, desenvolvidas para substituir o AACR e baseadas nos modelos conceituais FRBR e FRAD.", "gab": "C", "fonte": "material", "comentario": "Certo. Com o surgimento de novos tipos de publicação, novas formas de conteúdo e novos suportes, a estrutura do AACR2 deixou de dar conta da realidade. A RDA foi desenvolvida para substituir o AACR e tem como chave a harmonização com os modelos conceituais FRBR e FRAD."}, {"id": "q07", "disciplina": "Catalogação", "assunto": "RDA", "inst": "STJ - Superior Tribunal de Justiça", "ano": "2018", "enunciado": "A RDA é o esquema proposto pela LC para substituir o AACR.", "gab": "E", "fonte": "material", "comentario": "Errado. A RDA não é uma proposta da Library of Congress: ela é fruto da cooperação entre quatro países (Austrália, Canadá, EUA e Grã-Bretanha) e foi desenvolvida pelo Comitê Misto de Direção (JSC) — o mesmo órgão que antes era responsável pela revisão do AACR2."}, {"id": "q08", "disciplina": "Catalogação", "assunto": "RDA", "inst": "STJ - Superior Tribunal de Justiça", "ano": "2018", "enunciado": "A equivalência entre os elementos do RDA e os conceitos do FRBR da catalogação descritiva é importante para facilitar a aplicação do esquema RDA, tanto pelo catalogador quanto pelos softwares, de forma a minimizar o ruído entre as informações.", "gab": "C", "fonte": "material", "comentario": "Certo. A RDA foi construída em harmonização com o FRBR, e cada instrução da norma se reporta às tarefas do usuário definidas no modelo. Essa correspondência entre os elementos da RDA e os conceitos do FRBR facilita a aplicação da norma tanto pelo catalogador quanto pelos softwares, minimizando ruído entre as informações."}, {"id": "q09", "disciplina": "Catalogação", "assunto": "RDA", "inst": "Defensoria Pública da União (DPU)", "ano": "2016", "enunciado": "A RDA, cujo objetivo principal é prover meio de descrição bibliográfica para os novos formatos, surgiu como consequência da disseminação dos recursos informacionais digitais e do surgimento de novos formatos e novas tecnologias disponíveis.", "gab": "C", "fonte": "material", "comentario": "Certo. Desde a criação do AACR surgiram novos tipos de publicações, novas formas de conteúdo e novos suportes, e a estrutura do código já não condizia com esse cenário. A RDA surge exatamente nesse contexto: com regras pensadas para o ambiente digital e uma estrutura extensível para descrever todos os tipos de recursos."}, {"id": "q10", "disciplina": "Catalogação", "assunto": "RDA", "inst": "Defensoria Pública da União (DPU)", "ano": "2016", "enunciado": "Um diferencial da RDA é a permissão para, em todos os casos, corrigir imprecisões ou erros encontrados na fonte de informação, por meio do acréscimo de informações extras em notas.", "gab": "E", "fonte": "material", "comentario": "Errado. É o contrário: na RDA não se devem corrigir imprecisões ou erros encontrados na fonte — transcreve-se como consta no recurso (princípio “aceite aquilo que vê”). Se a informação for muito relevante, podem-se fazer observações ou explicações em notas. Quem mandava transcrever a incorreção acompanhada de [sic] ou i.e. era o AACR2."}, {"id": "q11", "disciplina": "Desenvolvimento de Coleções", "assunto": "Seleção - Critérios de seleção", "inst": "EBSERH", "ano": "2018", "enunciado": "A formação da coleção de biblioteca deve ser feita pela filtragem adequada das informações, obedecendo a padrões estabelecidos de seleção que garantam a disponibilidade de obras confiáveis nos diversos suportes informacionais; para isso, é imprescindível conhecer as necessidades da comunidade, a fim de permitir um planejamento com qualidade e eficácia no desenvolvimento e formação das coleções.", "gab": "C", "fonte": "material", "comentario": "Certo. A seleção deve obedecer a critérios objetivos predeterminados — registrados na política de seleção — e não a preferências pessoais. E, entre os fatores que influenciam a seleção, está justamente o usuário: conhecer as necessidades da comunidade é condição para planejar o desenvolvimento da coleção com qualidade e eficácia."}, {"id": "q12", "disciplina": "Desenvolvimento de Coleções", "assunto": "Seleção - Critérios de seleção", "inst": "TJ/ES", "ano": "2023", "enunciado": "Autoridade, idioma, estilo, potencial contribuição na área e atualidade são critérios relacionados ao conteúdo dos documentos no processo de seleção em bibliotecas e centros de informação.", "gab": "E", "fonte": "material", "comentario": "Errado. Segundo Vergueiro, os critérios que abordam o conteúdo do documento são: autoridade, precisão, imparcialidade, atualidade e cobertura/tratamento. Idioma e estilo são critérios de adequação ao usuário, e a contribuição potencial é critério relativo a aspectos adicionais do documento."}, {"id": "q13", "disciplina": "Desenvolvimento de Coleções", "assunto": "Seleção - Seleção de periódicos", "inst": "MPCE", "ano": "2025", "enunciado": "A seleção de uma publicação periódica é muito semelhante à de um livro ou de uma monografia.", "gab": "E", "fonte": "material", "comentario": "Errado. Há uma diferença fundamental: na seleção de um livro, a decisão se esgota no momento da incorporação; na de um periódico, o ato de selecionar se repete de tempos em tempos, pois existe o compromisso com a decisão de continuidade ou encerramento da assinatura."}, {"id": "q14", "disciplina": "Desenvolvimento de Coleções", "assunto": "Seleção - Seleção de documentos eletrônicos", "inst": "TJPA", "ano": "2025", "enunciado": "Com a construção e operação em grande escala dos recursos informacionais disponibilizados online, as bibliotecas deixam de ter controle sobre obsolescência e direitos autorais.", "gab": "E", "fonte": "ia", "comentario": "Errado. A oferta de recursos online não retira da biblioteca o controle sobre esses aspectos — eles passam a integrar o próprio processo de seleção de documentos eletrônicos (conteúdo, acesso, suporte e custo) e a gestão de licenças. Obsolescência e direitos autorais continuam sendo avaliados e gerenciados pela biblioteca, agora em contratos de assinatura, renovação e atualização."}, {"id": "q15", "disciplina": "Desenvolvimento de Coleções", "assunto": "Seleção - Política de seleção", "inst": "TJPA", "ano": "2025", "enunciado": "A construção das políticas de seleção e aquisição deve ser norteada pela análise de questões tanto quantitativas quanto qualitativas.", "gab": "C", "fonte": "material", "comentario": "Certo. A construção da política se apoia em análises quantitativas (uso da coleção, demanda, orçamento, quantidade e concentração de exemplares por área) e qualitativas (critérios de conteúdo e de adequação ao usuário). Os próprios modelos de estruturação de políticas, como o Conspectus, combinam a quantidade de exemplares por classe com indicadores de profundidade da coleção."}, {"id": "q16", "disciplina": "Desenvolvimento de Coleções", "assunto": "Seleção - Política de seleção", "inst": "Ministério Público do Estado do Tocantins", "ano": "2024", "enunciado": "No documento da política pode haver critérios de seleção mais amplos ou mais rígidos para tipos de materiais específicos ou coleções especiais, como, por exemplo, obras raras e memória da instituição.", "gab": "C", "fonte": "material", "comentario": "Certo. Entre os componentes do documento de política de seleção estão as políticas específicas — por exemplo, para obras raras e memória da instituição — que podem prever critérios mais amplos ou mais rígidos para esses tipos de materiais e coleções especiais."}, {"id": "q17", "disciplina": "Desenvolvimento de Coleções", "assunto": "Seleção - Política de seleção", "inst": "TJPA", "ano": "2025", "enunciado": "São elementos da política de seleção os atores do processo de seleção (bibliotecários e comissão de seleção), os critérios estabelecidos e os instrumentos auxiliares.", "gab": "C", "fonte": "material", "comentario": "Certo. São componentes da política de seleção: a identificação dos responsáveis pela seleção (bibliotecário e/ou comissão de seleção), os critérios utilizados no processo, os instrumentos auxiliares, as políticas específicas e os documentos correlatos."}, {"id": "q18", "disciplina": "Desenvolvimento de Coleções", "assunto": "Seleção - Modelos para estruturação de políticas de desenvolvimento de coleções", "inst": "Secretaria de Estado de Educação do Distrito Federal", "ano": "2017", "enunciado": "No modelo Conspectus, os indicadores de profundidade da coleção representam um continuum, do nível mínimo de informação até o nível abrangente, ao longo de uma escala descendente que define, por meio da quantidade de materiais, a mobilidade de um nível para o seguinte.", "gab": "E", "fonte": "material", "comentario": "Errado. Quase tudo está certo, mas a escala é ascendente, e não descendente: os indicadores de profundidade do Conspectus formam um continuum que vai do nível mínimo de informação até o nível abrangente, com notas de 0 (fora do escopo da coleção) a 5 (nível completo de informação)."}, {"id": "q19", "disciplina": "Desenvolvimento de Coleções", "assunto": "Seleção - Modelos para estruturação de políticas de desenvolvimento de coleções", "inst": "Defensoria Pública da União (DPU)", "ano": "2016", "enunciado": "A metodologia conspectus é um instrumento de apoio à elaboração de políticas de descarte de coleções; as decisões devem estar estruturadas por áreas temáticas para indicar a intensidade ou a profundidade da coleção a ser descartada.", "gab": "E", "fonte": "material", "comentario": "Errado. O Conspectus é um dos modelos para estruturação de políticas de desenvolvimento de coleções — voltado à formação, e não ao descarte. Ele determina os temas e assuntos das coleções com base na quantidade e concentração de exemplares em classes e subclasses de um esquema de classificação, com indicadores de profundidade da coleção."}, {"id": "q20", "disciplina": "Desenvolvimento de Coleções", "assunto": "Seleção - Política de seleção", "inst": "Fundação Universidade de Brasília (FUB)", "ano": "2022", "enunciado": "Um documento formal de política de seleção tem caráter administrativo, de relações públicas e político.", "gab": "C", "fonte": "material", "comentario": "Certo. O instrumento formal de política de seleção justifica-se por três caracteres: administrativo (garantir a manutenção dos critérios independentemente da permanência dos profissionais), de relações públicas (esclarecer a comunidade sobre a incorporação ou não de materiais) e político (gerenciar conflitos em torno da coleção)."}, {"id": "q21", "disciplina": "Linguagens Documentárias", "assunto": "Análise documentária", "inst": "TJDFT", "ano": "2015", "enunciado": "Na biblioteconomia, análise, síntese e representação temática relacionam-se com as seguintes áreas de pesquisa, ensino e atuação profissional: análise documentária, representação temática, representação de conteúdo e classificação.", "gab": "C", "fonte": "material", "comentario": "Certo. Análise, síntese e representação são as três operações que constituem a análise documentária — campo que também aparece sob denominações como representação temática e representação de conteúdo e que dialoga diretamente com a classificação, já que todas tratam da representação do assunto dos documentos."}, {"id": "q22", "disciplina": "Linguagens Documentárias", "assunto": "Sistemas de Organização do Conhecimento (SOCs) - Definição", "inst": "STJ - Superior Tribunal de Justiça", "ano": "2018", "enunciado": "Os SOC consideram os signos como descritores, ou seja, como formas linguísticas que representam os conteúdos dos documentos.", "gab": "C", "fonte": "material", "comentario": "Certo. Os SOCs são ferramentas semânticas formadas por conceitos e relações. As linguagens documentárias normalizam as unidades significantes presentes nos textos, transformando-as em descritores: formas linguísticas controladas que representam o conteúdo dos documentos."}, {"id": "q23", "disciplina": "Linguagens Documentárias", "assunto": "Sistemas de Organização do Conhecimento (SOCs) - Intercâmbio e interoperabilidade de SOCs", "inst": "STJ - Superior Tribunal de Justiça", "ano": "2018", "enunciado": "O SKOS (Simple Knowledge Organization System) é um modelo de dados que fornece estrutura para a publicação de termos usados nos SOC, além de fornecer suporte para buscas e conexões entre SOC diferentes.", "gab": "C", "fonte": "material", "comentario": "Certo. O SKOS (Simple Knowledge Organization System), criado pelo W3C, usa uma sintaxe flexível de XML/RDF e fornece estrutura para a publicação dos termos usados nos SOCs e de seus relacionamentos, dando suporte a buscas, mapeamentos e conexões entre SOCs diferentes."}, {"id": "q24", "disciplina": "Linguagens Documentárias", "assunto": "Sistemas de Organização do Conhecimento (SOCs) - Classificação de SOCs", "inst": "STJ - Superior Tribunal de Justiça", "ano": "2018", "enunciado": "Os SOC apoiam-se em categorias de classificação e categorização, como, por exemplo, listas de cabeçalho de assunto, e em modelos de relacionamento, exemplificados por ontologias e redes semânticas.", "gab": "C", "fonte": "material", "comentario": "Certo. Na classificação de Hodge, os SOCs se dividem em: listas de termos (listas de autoridades, glossários, dicionários), classificações e categorizações (cabeçalhos de assunto, classificações, taxonomias) e grupos de relacionamento (tesauros, redes semânticas e ontologias) — exatamente as categorias citadas no item."}, {"id": "q25", "disciplina": "Linguagens Documentárias", "assunto": "Sistemas de Organização do Conhecimento (SOCs) - Classificação de SOCs - Web semântica x Web social", "inst": "TSE", "ano": "2024", "enunciado": "O uso de metadados no contexto da Web permite agenciar computadores e programas especiais, robôs e agentes de software para que eles compreendam as informações associadas aos documentos e possam, então, recuperá-los, avaliar sua relevância e manipulá-los com mais eficiência.", "gab": "C", "fonte": "material", "comentario": "Certo. É a lógica da web semântica: metadados estruturados (como os descritos em RDF) permitem que computadores e agentes de software “compreendam” as informações associadas aos documentos, viabilizando recuperação, avaliação de relevância e manipulação mais eficientes."}, {"id": "q26", "disciplina": "Linguagens Documentárias", "assunto": "Tesauros - Definição e características", "inst": "TJPA", "ano": "2025", "enunciado": "Enquanto instrumento de linguagem documentária, um tesauro é construído com base na ideia de taxonomias, que funcionam a partir da relação generalização-especialização.", "gab": "C", "fonte": "material", "comentario": "Certo. O tesauro é estruturado de modo que as relações hierárquicas entre os termos sejam claramente indicadas — a mesma lógica gênero-espécie (generalização-especialização) que fundamenta as taxonomias. É essa espinha hierárquica que organiza os descritores dentro do domínio coberto pelo tesauro."}, {"id": "q27", "disciplina": "Linguagens Documentárias", "assunto": "Tesauros - Definição e características", "inst": "TJPA", "ano": "2025", "enunciado": "Um tesauro pode ser entendido como uma lista de descritores, isto é, termos livres que representam conceitos de uma área do conhecimento e se estruturam de maneira hierárquica.", "gab": "E", "fonte": "material", "comentario": "Errado. O tesauro é um vocabulário controlado — não uma lista de “termos livres”. Além disso, sua estrutura não é apenas hierárquica: ele indica claramente relações de equivalência, homografia, hierarquia e associação entre os termos, por meio de indicadores de relacionamento padronizados."}, {"id": "q28", "disciplina": "Linguagens Documentárias", "assunto": "Tesauros - Definição e características", "inst": "TJ/ES", "ano": "2023", "enunciado": "Os tesauros permitem um controle terminológico apurado e possuem três elementos básicos: um léxico, uma rede paradigmática e uma rede sintagmática.", "gab": "C", "fonte": "ia", "comentario": "Certo. É a definição clássica: o tesauro reúne um léxico (a lista controlada de termos/descritores da área), uma rede paradigmática (as relações fixas entre os termos: hierarquia, equivalência, associação) e uma rede sintagmática (a combinação dos termos no uso, na indexação e na busca)."}, {"id": "q29", "disciplina": "Linguagens Documentárias", "assunto": "Tesauros - Definição e características", "inst": "TJ-AM", "ano": "2019", "enunciado": "O principal objetivo do tesauro é o controle terminológico.", "gab": "C", "fonte": "material", "comentario": "Certo. O tesauro é, por definição, um vocabulário controlado: seu principal objetivo é o controle terminológico — normalizar os termos de uma área específica do conhecimento, tratando sinonímias, homografias e relações entre conceitos, para dar consistência à indexação e à recuperação."}, {"id": "q30", "disciplina": "Linguagens Documentárias", "assunto": "Tesauros - Construção de tesauros", "inst": "TJPA", "ano": "2025", "enunciado": "Ordenação, subordinação e exclusão são elementos da macroestrutura e da superestrutura, que, por sua vez, definem a sintaxe de um tesauro.", "gab": "E", "fonte": "ia", "comentario": "Errado. O item embaralha os conceitos. Os princípios que regem a organização de conceitos nas linguagens documentárias são completude, irredutibilidade e mútua exclusividade — e dizem respeito à estrutura classificatória (dimensão hierárquico-semântica) da linguagem, não à sintaxe do tesauro."}, {"id": "q31", "disciplina": "Normalização", "assunto": "NBR 6023:2018 — Referências", "inst": "TJPA", "ano": "2025", "enunciado": "O livro A história de cada um — Aspectos de uma vida solitária, de autoria de Rui Bastos e Miguel Frota, publicado pela editora Atlas, sediada em São Paulo, deve ser assim referenciado: BASTOS, Rui. FROTA, Miguel; **A história de cada um. Aspectos de uma vida solitária.** Editora Atlas, São Paulo, 2012.", "gab": "E", "fonte": "material", "comentario": "Errado. A referência apresenta vários desvios em relação à NBR 6023:2018: os autores devem ser separados por ponto e vírgula (BASTOS, Rui; FROTA, Miguel.); o subtítulo é separado do título por dois pontos (A história de cada um: aspectos de uma vida solitária); o local vem antes da editora, separados por dois pontos, suprimindo-se a palavra que designa a natureza comercial (São Paulo: Atlas, 2012)."}, {"id": "q32", "disciplina": "Normalização", "assunto": "NBR 6023:2018 — Referências", "inst": "PCDF", "ano": "2024", "enunciado": "Na formulação da referência de um livro, a menção ao local de sua produção é um elemento essencial.", "gab": "C", "fonte": "banca", "comentario": "Certo. ABNT NBR 6023:2018 – \"Item 7.1.1 Os elementos essenciais para livro e/ou folheto são: autor, título, subtítulo (se houver), edição (se houver), local, editora e data de publicação\"."}, {"id": "q33", "disciplina": "Normalização", "assunto": "NBR 6023:2018 — Referências", "inst": "TJPA", "ano": "2025", "enunciado": "Por ser estritamente vinculada ao suporte documental e indispensável à identificação do documento, sua dimensão é elemento essencial em uma referência bibliográfica, devendo as medidas de altura e largura do documento ser indicadas em centímetros, sem aproximação.", "gab": "E", "fonte": "material", "comentario": "Errado. Os elementos essenciais para livro/folheto são: autor, título, subtítulo (se houver), edição (se houver), local, editora e data de publicação. A dimensão é elemento complementar — ajuda a caracterizar melhor o documento, mas não é indispensável à sua identificação."}, {"id": "q34", "disciplina": "Normalização", "assunto": "NBR 6023:2018 — Referências", "inst": "TJPA", "ano": "2025", "enunciado": "Quando, em coletâneas de vários autores, houver indicação explícita de responsabilidade pelo conjunto da obra, a entrada deve ser feita pelo nome do responsável, seguido da abreviação do tipo de participação (organizador, compilador, editor, coordenador, entre outros), entre parênteses.", "gab": "C", "fonte": "material", "comentario": "Certo. É a regra da norma: em coletâneas de vários autores com indicação explícita de responsabilidade pelo conjunto da obra, a entrada é feita pelo nome do responsável, seguido da abreviação do tipo de participação (organizador, compilador, editor, coordenador, entre outros), em letras minúsculas, no singular e entre parênteses. Ex.: FERREIRA, Léslie Piccolotto (org.)."}, {"id": "q35", "disciplina": "Normalização", "assunto": "NBR 6023:2018 — Referências", "inst": "TJPA", "ano": "2025", "enunciado": "A referência a seguir está de acordo com a citada norma para documentos disponíveis online: POLÍTICA. In: **Dicionário político brasileiro.** São Paulo, Casa Dourada, 2020; disponível em: http://www.casadourada.br. Acesso: 8/3/2023.", "gab": "E", "fonte": "material", "comentario": "Errado. Há vários desvios: o local deve ser separado da editora por dois pontos (São Paulo: Casa Dourada, 2020.); o endereço eletrônico deve ser precedido da expressão “Disponível em:” (e não “disponível em” após ponto e vírgula); e a data de acesso vem precedida de “Acesso em:” (e não “Acesso:”), com o mês abreviado — 8 mar. 2023 —, e não no formato 8/3/2023."}, {"id": "q36", "disciplina": "Normalização", "assunto": "NBR 6023:2018 — Referências", "inst": "MPCE", "ano": "2025", "enunciado": "As referências bibliográficas devem ser elaboradas em espaço simples, alinhadas à margem esquerda do texto e separadas entre si por uma linha em branco de espaço simples.", "gab": "C", "fonte": "material", "comentario": "Certo. É a literalidade da regra geral de apresentação da NBR 6023:2018: as referências devem ser elaboradas em espaço simples, alinhadas à margem esquerda do texto e separadas entre si por uma linha em branco de espaço simples."}, {"id": "q37", "disciplina": "Normalização", "assunto": "NBR 6023:2018 — Referências", "inst": "MPCE", "ano": "2025", "enunciado": "Nas referências bibliográficas de documentos online, além dos elementos essenciais e complementares, devem-se registrar o endereço eletrônico, precedido da expressão Disponível em:, e a data de acesso a ele, precedida da expressão Acesso em:.", "gab": "C", "fonte": "material", "comentario": "Certo. Para documentos online, além dos elementos essenciais e complementares, registram-se o endereço eletrônico precedido da expressão “Disponível em:” e a data de acesso precedida de “Acesso em:”. Detalhe que cai em prova: desde a versão 2018, o link não vem mais entre os sinais < >."}, {"id": "q38", "disciplina": "Normalização", "assunto": "NBR 6023:2018 — Referências", "inst": "CAPES", "ano": "2024", "enunciado": "Em títulos e subtítulos extensos, é admissível a omissão das palavras finais desde que tal procedimento não comprometa o sentido original da frase. A supressão deve ser sinalizada por meio da inserção de reticências entre colchetes.", "gab": "C", "fonte": "material", "comentario": "Certo. É a literalidade da NBR 6023:2018: em títulos e subtítulos longos, podem-se suprimir as últimas palavras, desde que não seja alterado o sentido, e a supressão deve ser indicada por reticências entre colchetes. Ex.: ARTE de furtar [...]."}, {"id": "q39", "disciplina": "Normalização", "assunto": "NBR 6023:2018 — Referências", "inst": "TSE", "ano": "2024", "enunciado": "De acordo com a NBR 6023, para documentos referentes a legislações são elementos essenciais a jurisdição, ou o cabeçalho da entidade em letras maiúsculas, a epígrafe e os dados da publicação; por isso não existe mais a necessidade de transcrição da ementa.", "gab": "E", "fonte": "material", "comentario": "Errado. Para legislação, os elementos essenciais são: jurisdição (ou cabeçalho da entidade, em letras maiúsculas), epígrafe e ementa transcrita conforme publicada, além dos dados da publicação. A ementa continua sendo elemento essencial — o que a norma permite é suprimir parte de epígrafes e ementas demasiadamente longas, sinalizando com reticências entre colchetes."}, {"id": "q40", "disciplina": "Normalização", "assunto": "NBR 6023:2018 — Referências", "inst": "Prefeitura Municipal de Cachoeiro de Itapemirim/ES", "ano": "2024", "enunciado": "Conforme a ABNT NBR 6023, atualizada em 2020, na elaboração de referência bibliográfica de legislação, como leis, medidas provisórias e decretos, as ementas sempre devem ser transcritas integralmente.", "gab": "E", "fonte": "material", "comentario": "Errado. A ementa deve ser transcrita conforme publicada, mas não “sempre integralmente”: em epígrafes e ementas demasiadamente longas, pode-se suprimir parte do texto, desde que não seja alterado o sentido, indicando a supressão por reticências entre colchetes."}, {"id": "q41", "disciplina": "Classificação", "assunto": "Introdução à classificação - Notação e número de chamada", "inst": "TJ/ES", "ano": "2023", "enunciado": "O código numérico formado na CDU é chamado de notação.", "gab": "C", "fonte": "material", "comentario": "Certo. Notação é o código que representa o assunto — na CDU, um código em números arábicos. Não confunda com o número de chamada, que reúne a notação de assunto (classificação) e a notação de autor para localizar e individualizar o item na estante."}, {"id": "q42", "disciplina": "Classificação", "assunto": "CDU — Classificação Decimal Universal - Noções básicas", "inst": "TJPA", "ano": "2025", "enunciado": "Ao ser associada a um tesauro, a CDU amplia seu poder de representação semântica e favorece a recuperação de informações em ambientes digitais, especialmente na Web, com maior especificidade e flexibilidade.", "gab": "C", "fonte": "ia", "comentario": "Certo. A CDU organiza o conhecimento de forma hierárquica e notacional; associada a um tesauro — que oferece controle terminológico verbal e relações de equivalência e associação —, ela ganha especificidade e flexibilidade na representação semântica, o que favorece a recuperação da informação em ambientes digitais e na web."}, {"id": "q43", "disciplina": "Classificação", "assunto": "CDU — Classificação Decimal Universal - Noções básicas", "inst": "TJPA", "ano": "2025", "enunciado": "A CDU apresenta desafios de aplicação em ambientes web e de interoperabilidade com outros vocabulários controlados, devido à sua estrutura desenvolvida para contextos bibliográficos tradicionais.", "gab": "E", "fonte": "ia", "comentario": "Errado. A leitura da banca é a oposta: a notação numérica da CDU independe de idioma e sua estrutura consegue expressar relações entre assuntos, características que favorecem a aplicação em ambientes web e a interoperabilidade com outros vocabulários controlados — tanto que a CDU mantém versão legível por máquina (Master Reference File) e é usada em mapeamentos com outros SOCs."}, {"id": "q44", "disciplina": "Classificação", "assunto": "CDU — Classificação Decimal Universal - Noções básicas", "inst": "TJPA", "ano": "2025", "enunciado": "A adoção da CDU demanda aderência estrita à notação oficial publicada, para evitar variações locais que comprometam a padronização e dificultem o intercâmbio entre instituições.", "gab": "C", "fonte": "ia", "comentario": "Certo. A CDU é uma linguagem padronizada, mantida e atualizada pelo Consórcio CDU. Seu valor para o intercâmbio de registros entre instituições depende justamente da aplicação uniforme da notação oficial publicada — variações e adaptações locais quebram a padronização e dificultam a cooperação."}, {"id": "q45", "disciplina": "Classificação", "assunto": "CDU — Classificação Decimal Universal - Noções básicas", "inst": "MPCE", "ano": "2025", "enunciado": "Os sistemas de classificação como a CDU têm o objetivo central de traduzir os assuntos abordados pelos documentos em nomenclaturas padronizadas, visando facilitar sua organização, garantir maior precisão na representação temática e otimizar a recuperação da informação.", "gab": "C", "fonte": "material", "comentario": "Certo. Classificar é introduzir ordem numa multiplicidade de conceitos, organizando-os em classes. Sistemas como a CDU traduzem os assuntos dos documentos em uma notação padronizada, garantindo precisão na representação temática e otimizando a organização e a recuperação da informação."}, {"id": "q46", "disciplina": "Classificação", "assunto": "CDU — Classificação Decimal Universal - Noções básicas", "inst": "TJ/ES", "ano": "2023", "enunciado": "A estrutura da CDU está dividida em tabelas principais, auxiliares e índice alfabético.", "gab": "C", "fonte": "material", "comentario": "Certo. A estrutura da CDU conta com tabelas principais (ou sistemáticas), tabelas auxiliares e índice alfabético de assuntos — na edição padrão, o 1º volume traz as tabelas auxiliares e principais, e o 2º volume, o índice alfabético."}, {"id": "q47", "disciplina": "Classificação", "assunto": "CDU — Classificação Decimal Universal - Noções básicas", "inst": "Ministério Público do Estado do Tocantins", "ano": "2024", "enunciado": "Todas as subdivisões existentes nas tabelas sistemáticas da CDU são consideradas classes subordinadas.", "gab": "C", "fonte": "material", "comentario": "Certo. A subordinação de um número é relativa: como todas as subdivisões derivam de uma classe mais geral, todas as subdivisões existentes nas tabelas principais (sistemáticas) podem ser consideradas classes subordinadas."}, {"id": "q48", "disciplina": "Classificação", "assunto": "CDU — Classificação Decimal Universal - Noções básicas", "inst": "MPCE", "ano": "2025", "enunciado": "Na CDU, cada termo ou assunto pode ser representado por diversos códigos diferentes, estratégia que permite maior flexibilidade na organização dos documentos, facilitando o acesso às informações.", "gab": "E", "fonte": "material", "comentario": "Errado. Na CDU não há livre escolha entre diversos códigos para representar o mesmo assunto. O que existe é a classificação por aspectos: um assunto é classificado segundo o seu contexto e, por isso, pode aparecer em lugares diferentes da tabela — carvão em petrologia (552.574) é diferente de carvão como fertilizante em agricultura (631.878). Em cada contexto, o conceito tem a sua notação; representar um mesmo assunto por códigos variados, livremente, comprometeria a padronização e a recuperação da informação."}, {"id": "q49", "disciplina": "Classificação", "assunto": "CDU — Classificação Decimal Universal - Noções básicas", "inst": "TJ-AM", "ano": "2019", "enunciado": "Ao contrário da Classificação Decimal de Dewey (CDD), a CDU não é considerada uma classificação documentária enumerativa.", "gab": "E", "fonte": "material", "comentario": "Errado. Tanto a CDD quanto a CDU são classificações documentárias enumerativas: ambas arrolam em números as categorias em que o conhecimento foi dividido."}, {"id": "q50", "disciplina": "Classificação", "assunto": "CDU — Classificação Decimal Universal - Noções básicas", "inst": "Prefeitura Municipal de Cachoeiro de Itapemirim/ES", "ano": "2024", "enunciado": "A CDU foi criada com o intuito de substituir a Classificação Decimal de Dewey (CDD).", "gab": "E", "fonte": "material", "comentario": "Errado. A CDU não foi criada para substituir a CDD — ela se baseou na CDD. Otlet e La Fontaine partiram da classificação de Dewey para conceber, em 1905, um instrumento voltado ao controle bibliográfico universal, dividido em 10 classes e dotado de tabelas auxiliares e sinais que permitem expressar as relações entre os assuntos."}];
+const STORAGE_KEY = 'bdc-foca-camara-s5-v1';
+const TOTAL = QUESTOES.length;
+
+let respostas = {};
+try {
+  const salvo = localStorage.getItem(STORAGE_KEY);
+  if (salvo) respostas = JSON.parse(salvo) || {};
+} catch (e) { respostas = {}; }
+
+function salvar() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(respostas)); } catch (e) {}
+}
+
+function esc(s) {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+// preserva quebras de linha e converte **negrito** caso presente no texto
+function fmt(s) {
+  return esc(s).replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+}
+
+function labelComentario(q) {
+  if (q.fonte === 'banca') return { label: 'justificativa da banca', nota: '' };
+  if (q.fonte === 'material') return { label: 'comentário', nota: 'comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima.' };
+  return { label: 'comentário', nota: 'comentário gerado por inteligência artificial. caso tenha dúvida de sua confiabilidade, compartilhe com a prof e os colegas no grupo Foca Chat.' };
+}
+
+// monta as questões agrupadas por disciplina, na ordem do arquivo
+const ordemDisc = [];
+QUESTOES.forEach(q => { if (!ordemDisc.includes(q.disciplina)) ordemDisc.push(q.disciplina); });
+
+const cont = document.getElementById('questoes');
+let numero = 0;
+ordemDisc.forEach((disc, di) => {
+  const doGrupo = QUESTOES.filter(q => q.disciplina === disc);
+  const header = document.createElement('div');
+  header.className = 'cat-header';
+  header.innerHTML = '<h2><span class="cat-num">' + String(di + 1).padStart(2, '0') + ' ·</span> ' + esc(disc) + '</h2>' +
+    '<span class="cat-count">' + doGrupo.length + ' questões</span>';
+  cont.appendChild(header);
+
+  doGrupo.forEach(q => {
+    numero += 1;
+    q.numero = numero;
+    const card = document.createElement('article');
+    card.className = 'questao';
+    card.id = q.id;
+    const lc = labelComentario(q);
+    card.innerHTML =
+      '<div class="questao-header">' +
+        '<span class="questao-num">' + String(numero).padStart(2, '0') + '</span>' +
+        '<span class="tag">' + esc(q.inst) + ' · ' + esc(q.ano) + '</span>' +
+      '</div>' +
+      '<p class="enunciado">' + fmt(q.enunciado) + '</p>' +
+      '<div class="botoes">' +
+        '<button class="btn-ce" data-q="' + q.id + '" data-v="C">certo</button>' +
+        '<button class="btn-ce" data-q="' + q.id + '" data-v="E">errado</button>' +
+      '</div>' +
+      '<div class="feedback">' +
+        '<span class="fb-banner"></span>' +
+        '<div class="comentario">' +
+          '<div class="com-label">' + lc.label + '</div>' +
+          '<div class="com-texto">' + fmt(q.comentario) + '</div>' +
+          (lc.nota ? '<div class="com-nota">' + lc.nota + '</div>' : '') +
+        '</div>' +
+      '</div>';
+    cont.appendChild(card);
+  });
+});
+
+function renderResposta(q, animar) {
+  const card = document.getElementById(q.id);
+  const escolha = respostas[q.id];
+  if (!escolha) return;
+  card.classList.add('respondida');
+  const acertou = escolha === q.gab;
+  card.querySelectorAll('.btn-ce').forEach(b => {
+    b.disabled = true;
+    if (b.dataset.v === escolha) b.classList.add('escolhida', acertou ? 'ok' : 'nok');
+    if (b.dataset.v === q.gab) b.classList.add('gab-certa');
+  });
+  const banner = card.querySelector('.fb-banner');
+  banner.className = 'fb-banner ' + (acertou ? 'acertou' : 'errou');
+  const gabTxt = q.gab === 'C' ? 'certo' : 'errado';
+  banner.textContent = acertou ? '✓ você acertou! gabarito: ' + gabTxt : '✗ você errou. gabarito: ' + gabTxt;
+}
+
+document.addEventListener('click', ev => {
+  const b = ev.target.closest('.btn-ce');
+  if (!b || b.disabled) return;
+  const q = QUESTOES.find(x => x.id === b.dataset.q);
+  if (!q || respostas[q.id]) return;
+  respostas[q.id] = b.dataset.v;
+  salvar();
+  renderResposta(q, true);
+  atualizar();
+});
+
+function atualizar() {
+  const ids = Object.keys(respostas).filter(id => QUESTOES.some(q => q.id === id));
+  const nResp = ids.length;
+  const nAcertos = QUESTOES.filter(q => respostas[q.id] && respostas[q.id] === q.gab).length;
+  const pct = nResp ? Math.round((nAcertos / nResp) * 100) : 0;
+
+  document.getElementById('pm-resp').textContent = nResp + ' de ' + TOTAL + ' respondidas';
+  document.getElementById('pm-score').textContent = nResp ? nAcertos + ' acertos (' + pct + '%)' : '';
+  document.getElementById('progress-fill').style.width = (nResp / TOTAL * 100) + '%';
+
+  const rScore = document.getElementById('r-score');
+  const rSub = document.getElementById('r-sub');
+  const rPend = document.getElementById('r-pendente');
+  if (nResp === 0) {
+    rScore.textContent = '—';
+    rSub.textContent = 'nenhuma questão respondida ainda';
+    rPend.textContent = '';
+  } else {
+    rScore.textContent = pct + '%';
+    rSub.textContent = 'você acertou ' + nAcertos + ' de ' + nResp + ' questões respondidas';
+    rPend.textContent = nResp < TOTAL ? 'faltam ' + (TOTAL - nResp) + ' questões para fechar o simulado.' : 'simulado completo! 🦭 compartilhe seu resultado no grupo Foca Chat.';
+  }
+
+  // ranking por disciplina
+  const stats = ordemDisc.map(disc => {
+    const qs = QUESTOES.filter(q => q.disciplina === disc);
+    const resp = qs.filter(q => respostas[q.id]);
+    const ac = resp.filter(q => respostas[q.id] === q.gab).length;
+    const p = resp.length ? ac / resp.length : -1;
+    return { disc, total: qs.length, resp: resp.length, ac, p };
+  });
+  stats.sort((a, b) => b.p - a.p || b.resp - a.resp);
+  const rk = document.getElementById('rk-list');
+  rk.innerHTML = '';
+  stats.forEach((s, i) => {
+    const pctD = s.resp ? Math.round(s.p * 100) : 0;
+    const div = document.createElement('div');
+    div.className = 'rk-item';
+    div.innerHTML =
+      '<div class="rk-top">' +
+        '<span><span class="rk-pos">' + (i + 1) + 'º</span><span class="rk-nome">' + esc(s.disc) + '</span></span>' +
+        '<span class="rk-num">' + (s.resp ? s.ac + '/' + s.resp + ' · ' + pctD + '%' : 'sem respostas') + '</span>' +
+      '</div>' +
+      '<div class="rk-bar"><div class="rk-bar-fill" style="width:' + (s.resp ? pctD : 0) + '%"></div></div>';
+    rk.appendChild(div);
+  });
+}
+
+document.getElementById('btn-reset').addEventListener('click', () => {
+  if (!confirm('zerar todas as respostas e recomeçar o simulado?')) return;
+  respostas = {};
+  try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+  document.querySelectorAll('.questao').forEach(card => {
+    card.classList.remove('respondida');
+    card.querySelectorAll('.btn-ce').forEach(b => {
+      b.disabled = false;
+      b.classList.remove('escolhida', 'ok', 'nok', 'gab-certa');
+    });
+  });
+  atualizar();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+// restaura progresso salvo
+QUESTOES.forEach(q => renderResposta(q, false));
+atualizar();
+</script>
+</body>
+</html>
