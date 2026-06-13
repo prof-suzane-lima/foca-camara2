@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🦭 Foca na Câmara - Simulado da semana 6</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --verde: #00A74A;
+    --rosa: #F4A6D7;
+    --bege: #F1F1DE;
+    --verde-escuro: #07272D;
+    --azul: #9BCBEB;
+    --verde-limao: #B5BD00;
+    --amarelo: #FED141;
+    --laranja: #FF6A39;
+    --acerto: var(--verde);
+    --acerto-bg: rgba(0, 167, 74, 0.12);
+    --erro: var(--laranja);
+    --erro-bg: rgba(255, 106, 57, 0.12);
+    --linha: rgba(7, 39, 45, 0.15);
+    --linha-suave: rgba(7, 39, 45, 0.08);
+    --shadow-soft: 0 1px 3px rgba(7, 39, 45, 0.06), 0 4px 16px rgba(7, 39, 45, 0.04);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bege);
+    color: var(--verde-escuro);
+    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+    font-weight: 400;
+    line-height: 1.5;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ===== Header ===== */
+  .header {
+    background: var(--verde-escuro);
+    color: var(--bege);
+    padding: 16px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .brand {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    line-height: 1;
+    display: inline-block;
+    font-size: 16px;
+  }
+  .brand .b-prof   { font-weight: 400; letter-spacing: 0; }
+  .brand .b-suzane { font-weight: 800; letter-spacing: -0.02em; }
+  .brand .b-lima   { font-weight: 800; font-style: italic; letter-spacing: -0.02em; }
+  .brand.dark { color: var(--bege); }
+  .header-tag {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--rosa);
+    font-weight: 700;
+  }
+
+  .container {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 44px 24px 96px;
+  }
+
+  /* ===== Hero ===== */
+  .eyebrow {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--laranja);
+    margin-bottom: 14px;
+  }
+  h1 {
+    font-size: clamp(34px, 7vw, 54px);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.02;
+    margin-bottom: 16px;
+  }
+  h1 .seal { font-style: normal; }
+  .lead {
+    font-size: 17px;
+    color: rgba(7, 39, 45, 0.75);
+    max-width: 600px;
+    margin-bottom: 24px;
+  }
+
+  /* ===== Sticky progress ===== */
+  .progress-wrap {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--bege);
+    padding: 14px 0 12px;
+    border-bottom: 1px solid var(--linha-suave);
+    margin-bottom: 8px;
+  }
+  .progress-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: rgba(7,39,45,0.7);
+    margin-bottom: 8px;
+  }
+  .progress-top strong { color: var(--verde-escuro); font-weight: 800; font-variant-numeric: tabular-nums; }
+  .progress-bar {
+    height: 8px;
+    background: rgba(7,39,45,0.1);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--verde);
+    border-radius: 999px;
+    transition: width 0.35s ease;
+  }
+  .reset-link {
+    background: none;
+    border: none;
+    color: var(--laranja);
+    font-family: inherit;
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 0;
+  }
+  .reset-link:hover { text-decoration: underline; }
+
+  /* ===== Question card ===== */
+  .questao {
+    background: white;
+    border: 1px solid var(--linha-suave);
+    border-radius: 16px;
+    padding: 26px 26px 24px;
+    box-shadow: var(--shadow-soft);
+    margin-bottom: 22px;
+    scroll-margin-top: 90px;
+  }
+  .q-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .q-num {
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--verde);
+    font-variant-numeric: tabular-nums;
+  }
+  .tag {
+    background: var(--verde-escuro);
+    color: var(--bege);
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .tag.assunto { background: var(--rosa); color: var(--verde-escuro); }
+  .tag.adaptada {
+    background: transparent;
+    border: 1.5px solid var(--laranja);
+    color: var(--laranja);
+  }
+  .enunciado {
+    font-size: 16.5px;
+    line-height: 1.62;
+    margin-bottom: 20px;
+    white-space: pre-line;
+  }
+
+  /* ===== Certo/Errado buttons ===== */
+  .ce-row { display: flex; gap: 12px; }
+  .ce-btn {
+    flex: 1;
+    padding: 14px 12px;
+    border: 1.5px solid var(--linha);
+    background: transparent;
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 15.5px;
+    font-weight: 800;
+    color: var(--verde-escuro);
+    cursor: pointer;
+    transition: all 0.16s ease;
+  }
+  .ce-btn:hover:not(:disabled) { border-color: var(--verde-escuro); transform: translateY(-1px); }
+  .ce-btn:disabled { cursor: default; }
+  .ce-btn.picked { border-color: var(--verde-escuro); }
+  /* states after answering */
+  .ce-btn.is-correct {
+    border-color: var(--acerto);
+    background: var(--acerto-bg);
+    color: var(--verde-escuro);
+  }
+  .ce-btn.is-wrong {
+    border-color: var(--erro);
+    background: var(--erro-bg);
+    color: var(--verde-escuro);
+  }
+
+  /* ===== Feedback ===== */
+  .feedback { display: none; margin-top: 18px; }
+  .feedback.show { display: block; animation: fade 0.3s ease; }
+  @keyframes fade { from { opacity: 0; transform: translateY(6px);} to {opacity:1; transform:none;} }
+
+  .verdict {
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .verdict.acerto { color: var(--verde); }
+  .verdict.erro { color: var(--laranja); }
+  .verdict .gab {
+    font-weight: 500;
+    color: rgba(7,39,45,0.6);
+    font-size: 13px;
+  }
+
+  .comment-box {
+    border-left: 4px solid var(--rosa);
+    background: rgba(244, 166, 215, 0.12);
+    border-radius: 8px;
+    padding: 14px 18px;
+  }
+  .comment-label {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    color: var(--verde);
+    margin-bottom: 8px;
+  }
+  .comment-label.before { margin-bottom: 8px; }
+  .comment-text { font-size: 14.5px; line-height: 1.6; }
+  .comment-after {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    color: var(--verde);
+    margin-top: 10px;
+    line-height: 1.45;
+  }
+  /* banca = green-left accent instead of pink */
+  .comment-box.banca { border-left-color: var(--verde); background: var(--acerto-bg); }
+
+  /* ===== Result / ranking ===== */
+  .result {
+    background: var(--verde-escuro);
+    color: var(--bege);
+    border-radius: 18px;
+    padding: 40px 34px;
+    margin-top: 34px;
+    scroll-margin-top: 90px;
+  }
+  .result .eyebrow { color: var(--rosa); }
+  .result-score {
+    font-size: 84px;
+    font-weight: 800;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    color: var(--rosa);
+    font-variant-numeric: tabular-nums;
+  }
+  .result-score small { font-size: 30px; color: rgba(241,241,222,0.55); font-weight: 700; }
+  .result-sub { font-size: 16px; color: rgba(241,241,222,0.8); margin: 8px 0 28px; }
+  .rank-title {
+    font-size: 12px; font-weight: 800; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--rosa); margin-bottom: 16px;
+  }
+  .rank-row {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 14px;
+  }
+  .rank-name { width: 168px; font-size: 14px; font-weight: 500; flex-shrink: 0; }
+  .rank-track {
+    flex: 1; height: 10px; background: rgba(241,241,222,0.12);
+    border-radius: 999px; overflow: hidden;
+  }
+  .rank-bar { height: 100%; border-radius: 999px; transition: width 0.5s ease; }
+  .rank-val { width: 56px; text-align: right; font-size: 13.5px; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .result-actions { margin-top: 30px; }
+  .btn {
+    background: var(--verde);
+    color: var(--bege);
+    border: none;
+    padding: 13px 24px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+    font-family: inherit;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,167,74,0.25); }
+
+  .save-note {
+    font-size: 12.5px;
+    color: rgba(7,39,45,0.55);
+    margin-top: 22px;
+    text-align: center;
+    line-height: 1.5;
+  }
+
+  .footer {
+    margin-top: 48px;
+    padding-top: 22px;
+    border-top: 1px solid var(--linha);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 12px;
+    color: rgba(7, 39, 45, 0.55);
+  }
+  .footer .handle { color: var(--verde); font-weight: 700; }
+
+  @media (max-width: 520px) {
+    .header { padding: 14px 18px; }
+    .rank-name { width: 120px; font-size: 13px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+</style>
+</head>
+<body>
+  <header class="header">
+    <span class="brand dark">
+      <span class="b-prof">prof.</span> <span class="b-suzane">suzane</span> <span class="b-lima">lima</span>
+    </span>
+    <div class="header-tag">🦭 foca na câmara</div>
+  </header>
+
+  <main class="container">
+    <div class="eyebrow">simulado · semana 6</div>
+    <h1><span class="seal">🦭</span> foca na câmara<br>simulado da semana 6</h1>
+    <p class="lead">51 questões de certo ou errado, no estilo Cebraspe. Responda cada uma e veja na hora se acertou, com a justificativa logo abaixo. No fim, confira seu desempenho por assunto. Seu progresso fica salvo neste navegador.</p>
+
+    <div class="progress-wrap">
+      <div class="progress-top">
+        <span>respondidas <strong id="done">0</strong> de <strong>51</strong> · acertos <strong id="hits">0</strong></span>
+        <button class="reset-link" id="reset">recomeçar</button>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="fill"></div></div>
+    </div>
+
+    <div id="quiz"></div>
+
+    <section class="result" id="result" style="display:none;">
+      <div class="eyebrow">resultado</div>
+      <div class="result-score"><span id="score">0</span><small> / 51</small></div>
+      <div class="result-sub" id="result-sub"></div>
+      <div class="rank-title">desempenho por assunto</div>
+      <div id="ranking"></div>
+      <div class="result-actions">
+        <button class="btn" id="restart">refazer o simulado</button>
+      </div>
+    </section>
+
+    <p class="save-note">seu progresso é salvo automaticamente apenas neste navegador — não sincroniza entre dispositivos.</p>
+
+    <footer class="footer">
+      <span>compilado e organizado por <strong>prof. suzane lima</strong></span>
+      <span class="handle">🦭 foca na câmara</span>
+    </footer>
+  </main>
+
+<script>
+const QUESTOES = [{"id": 1, "enunciado": "No contexto do campo semântico, descritores de um tesauro possuem uma relação interconceitual, baseada em gênero, subtipo e diferença.", "gabarito": "C", "assunto": "Linguagens Documentárias", "adaptada": false, "banca": "CEBRASPE", "orgao": "TJPA", "ano": "2025", "comentario": "Certo. No tesauro, a relação hierárquica (de gênero/espécie) organiza os descritores justamente a partir de gênero, subtipo e diferença: um termo genérico (TG) abrange termos específicos (TE) que dele se subordinam. Essa é uma relação interconceitual típica do campo semântico do tesauro.", "tier": "material", "label": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima", "pos": "depois"}, {"id": 2, "enunciado": "Um dos tipos de relação associativa em um tesauro é a relação de causa e efeito.", "gabarito": "C", "assunto": "Linguagens Documentárias", "adaptada": false, "banca": "CEBRASPE", "orgao": "TJPA", "ano": "2025", "comentario": "Certo. A relação associativa (TR – termo relacionado) liga conceitos que não pertencem à mesma hierarquia, mas têm proximidade semântica. A relação de causa e efeito é um dos tipos clássicos de relação associativa, ao lado de relações como produtor/produto, pessoa/disciplina e matéria/substância.", "tier": "material", "label": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima", "pos": "depois"}, {"id": 3, "enunciado": "Nos tesauros, os conceitos se relacionam entre si, hierarquicamente, de forma associativa ou por semelhanças de equivalência.", "gabarito": "E", "assunto": "Linguagens Documentárias", "adaptada": false, "banca": "CEBRASPE", "orgao": "PCDF", "ano": "2024", "comentario": "Errado. Em um tesauro, são as palavras-chave que se relacionam entre si, hierarquicamente, de forma associativa ou por semelhanças de equivalência.", "tier": "banca", "label": "justificativa da banca", "pos": "antes"}, {"id": 4, "enunciado": "A estrutura dos tesauros segue uma ordenação dos termos que os compõem, organizada em hierarquias e relações semânticas e sintáticas, sinalizadas por meio de convenções como TG (termo geral), TE (termo específico), TR (termo relacionado) e NE (nota de escopo).", "gabarito": "C", "assunto": "Linguagens Documentárias", "adaptada": false, "banca": "CEBRASPE", "orgao": "TSE", "ano": "2024", "comentario": "Certo. O tesauro organiza seus termos por meio de relações hierárquicas, de equivalência e associativas, sinalizadas por convenções como TG (termo geral/genérico), TE (termo específico), TR (termo relacionado) e NE (nota de escopo/explicativa). Essas siglas são as marcas características da estrutura de um tesauro.", "tier": "material", "label": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima", "pos": "depois"}, {"id": 5, "enunciado": "A rede paradigmática indica as relações contingentes entre descritores, por meio de regras de sintaxe.", "gabarito": "E", "assunto": "Linguagens Documentárias", "adaptada": false, "banca": "CEBRASPE", "orgao": "TJ/ES", "ano": "2023", "comentario": "Errado. A rede paradigmática (de paradigma) reúne as relações semânticas estáveis entre descritores — hierárquicas, de equivalência e associativas — e não relações \"contingentes\" obtidas por regras de sintaxe. Quem trata das relações sintáticas (de combinação dos termos no momento do uso) é a rede sintagmática. A questão troca os conceitos.", "tier": "proprio", "label": "comentário gerado por inteligência artificial. caso tenha dúvida de sua confiabilidade, compartilhe com a prof e os colegas no grupo Foca Chat", "pos": "depois"}, {"id": 6, "enunciado": "Na relação semântica em tesauros tradicionais, a equivalência de um conceito com outro pode ser representada adequadamente por USE – Usar ou UP – Usado para.", "gabarito": "C", "assunto": "Linguagens Documentárias", "adaptada": false, "banca": "CEBRASPE", "orgao": "TJ/ES", "ano": "2023", "comentario": "Certo. Na relação de equivalência do tesauro, escolhe-se um termo preferido (descritor) entre os sinônimos. A reciprocidade é expressa por USE (que remete do não preferido para o descritor) e UP – Usado Para (que parte do descritor para o sinônimo não autorizado). Ex.: Aves USE Pássaros / Pássaros UP Aves.", "tier": "material", "label": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima", "pos": "depois"}, {"id": 7, "enunciado": "As relações hierárquicas nos conceitos semelhantes são caracterizadas por um termo preferido e outro não preferido, representado por dois ou mais termos descritores.", "gabarito": "E", "assunto": "Linguagens Documentárias", "adaptada": false, "banca": "CEBRASPE", "orgao": "TJ/ES", "ano": "2023", "comentario": "Errado. A relação entre um termo preferido e outro não preferido, com dois ou mais termos referindo-se ao mesmo conceito, é a relação de equivalência (sinônimos e quase-sinônimos), não a relação hierárquica. A relação hierárquica baseia-se em superordenação e subordinação (TG/TE).", "tier": "material", "label": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima", "pos": "depois"}, {"id": 8, "enunciado": "No âmbito da linguagem documentária, o termo descritor designa um segmento de dados que tem a finalidade de indicar o conteúdo desse segmento.", "gabarito": "C", "assunto": "Linguagens Documentárias", "adaptada": false, "banca": "CESPE/CEBRASPE", "orgao": "Defensoria Pública da União (DPU)", "ano": "2016", "comentario": "Certo. No âmbito das linguagens documentárias, o descritor é o termo autorizado, escolhido para representar um conceito e indicar o conteúdo do documento na indexação e na recuperação. A definição apresentada está alinhada à função do descritor como representação do conteúdo.", "tier": "proprio", "label": "comentário gerado por inteligência artificial. caso tenha dúvida de sua confiabilidade, compartilhe com a prof e os colegas no grupo Foca Chat", "pos": "depois"}, {"id": 9, "enunciado": "Taxonomia corporativa consiste em uma lista de termos autorizados para serem usados em redação empresarial e para auxiliar na busca de informações. Diferentemente dos tesauros, a taxonomia não utiliza padrões de classificação e ordenação de informações.", "gabarito": "E", "assunto": "Linguagens Documentárias", "adaptada": false, "banca": "CESPE/CEBRASPE", "orgao": "Defensoria Pública da União (DPU)", "ano": "2016", "comentario": "Errado. A taxonomia também é um sistema de organização do conhecimento que utiliza padrões de classificação e ordenação, organizando termos preferenciais em estruturas hierárquicas (ou poli-hierárquicas). Dizer que, diferentemente do tesauro, ela \"não utiliza padrões de classificação e ordenação\" está incorreto.", "tier": "material", "label": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima", "pos": "depois"}, {"id": 10, "enunciado": "Na fase de modelagem conceitual da anotação multimídia, é possível determinar um conjunto de conceitos, com compromissos ontológicos estabelecidos, para a construção da conceituação para o domínio de interesse.", "gabarito": "C", "assunto": "Linguagens Documentárias", "adaptada": false, "banca": "CEBRASPE", "orgao": "STJ - Superior Tribunal de Justiça", "ano": "2018", "comentario": "Certo. Na modelagem conceitual (etapa inicial da construção de ontologias e de anotações semânticas), define-se um conjunto de conceitos com compromissos ontológicos explícitos, formando a conceituação do domínio de interesse. A afirmação descreve corretamente essa etapa.", "tier": "proprio", "label": "comentário gerado por inteligência artificial. caso tenha dúvida de sua confiabilidade, compartilhe com a prof e os colegas no grupo Foca Chat", "pos": "depois"}, {"id": 11, "enunciado": "A ontologia não permite a descrição exata do conhecimento, por ter como base a linguagem informal.", "gabarito": "E", "assunto": "Linguagens Documentárias", "adaptada": false, "banca": "CEBRASPE", "orgao": "STJ - Superior Tribunal de Justiça", "ano": "2018", "comentario": "Errado. A ontologia permite, sim, a descrição precisa do conhecimento: ela é uma estrutura de conceitos e relações explicitadas formalmente, em meio informatizado. Justamente por usar linguagem formal (e não informal) é que viabiliza o processamento automatizado da informação. A afirmação inverte essa característica.", "tier": "material", "label": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima", "pos": "depois"}, {"id": 12, "enunciado": "Na construção das ontologias, as instâncias — organizadas em taxonomia — representam a interação da ontologia com determinado domínio.", "gabarito": "E", "assunto": "Linguagens Documentárias", "adaptada": false, "banca": "CEBRASPE", "orgao": "STJ - Superior Tribunal de Justiça", "ano": "2018", "comentario": "Errado. Quem se organiza em taxonomia são as classes da ontologia, não as instâncias. As instâncias representam os elementos específicos de um domínio (os próprios dados). A questão troca o papel de classes e instâncias.", "tier": "material", "label": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima", "pos": "depois"}, {"id": 13, "enunciado": "Na arquitetura da Web, as ontologias fornecem suporte à evolução de vocabulários e integram as informações, de modo a evitar conflitos terminológicos. A função da ontologia é explicitar o vocabulário de um domínio de forma padronizada, viabilizando a interoperabilidade entre sistemas e o compartilhamento de informações.", "gabarito": "C", "assunto": "Linguagens Documentárias", "adaptada": false, "banca": "Cebraspe", "orgao": "Secretaria de Estado de Educação do Distrito Federal", "ano": "2017", "comentario": "Certo. Na arquitetura da Web (Web Semântica), as ontologias explicitam de forma padronizada o vocabulário de um domínio, integrando informações e evitando conflitos terminológicos. Com isso, viabilizam a interoperabilidade entre sistemas e o compartilhamento de conhecimento.", "tier": "proprio", "label": "comentário gerado por inteligência artificial. caso tenha dúvida de sua confiabilidade, compartilhe com a prof e os colegas no grupo Foca Chat", "pos": "depois"}, {"id": 14, "enunciado": "Ontologia refere-se à conceituação de um domínio de conhecimento; suas derivações, como a taxonomia, por exemplo, são qualificadores de metadados.", "gabarito": "C", "assunto": "Linguagens Documentárias", "adaptada": false, "banca": "CESPE/CEBRASPE", "orgao": "Defensoria Pública da União (DPU)", "ano": "2016", "comentario": "Certo. A ontologia é a conceituação formal de um domínio de conhecimento, e a taxonomia pode ser entendida como uma de suas derivações/componentes (a organização hierárquica das classes), funcionando como qualificadora de metadados nesse contexto.", "tier": "proprio", "label": "comentário gerado por inteligência artificial. caso tenha dúvida de sua confiabilidade, compartilhe com a prof e os colegas no grupo Foca Chat", "pos": "depois"}, {"id": 15, "enunciado": "Para documentos técnicos e(ou) científicos, o tipo de resumo recomendado pelas normas técnicas é o resumo indicativo.", "gabarito": "E", "assunto": "Normalização", "adaptada": false, "banca": "CEBRASPE", "orgao": "PCDF", "ano": "2024", "comentario": "Errado. ABNT NBR 6028:2021 – \"Item 4.1.3 Em documento técnico ou científico, recomenda-se o resumo informativo.\"", "tier": "banca", "label": "justificativa da banca", "pos": "antes"}, {"id": 16, "enunciado": "O resumo crítico, redigido por especialistas, com análise crítica de um documento está entre os tipos de resumos descritos na NBR 6028:2021.", "gabarito": "E", "assunto": "Normalização", "adaptada": false, "banca": "CEBRASPE", "orgao": "TSE", "ano": "2024", "comentario": "Errado. A NBR 6028:2021 não traz mais a definição de \"resumo crítico\". Os tipos previstos são o resumo indicativo e o resumo informativo; a análise crítica passou a ser tratada nos conceitos de resenha e recensão. Portanto, \"resumo crítico\" não consta entre os tipos descritos pela norma atual.", "tier": "material", "label": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima", "pos": "depois"}, {"id": 17, "enunciado": "Convém que os resumos de artigos de periódicos tenham de 100 a 250 palavras.", "gabarito": "C", "assunto": "Normalização", "adaptada": false, "banca": "CEBRASPE", "orgao": "SEE/PE", "ano": "2022", "comentario": "Certo. Segundo a NBR 6028:2021, quanto à extensão convém que os resumos tenham de 100 a 250 palavras nos artigos de periódicos (de 150 a 500 nos trabalhos acadêmicos e relatórios técnico-científicos; de 50 a 100 nos demais documentos).", "tier": "material", "label": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima", "pos": "depois"}, {"id": 18, "enunciado": "A ABNT NBR 6028:2021 recomenda o uso de resumo indicativo em documentos técnicos ou científicos.", "gabarito": "E", "assunto": "Normalização", "adaptada": false, "banca": "CEBRASPE", "orgao": "SEE/PE", "ano": "2022", "comentario": "Errado. Para documento técnico ou científico, a NBR 6028:2021 recomenda o resumo informativo (que informa finalidades, metodologia, resultados e conclusões, podendo dispensar a consulta ao original) — e não o resumo indicativo.", "tier": "material", "label": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima", "pos": "depois"}, {"id": 19, "enunciado": "Em resumos, recomenda-se que as referências sejam inseridas após o texto.", "gabarito": "E", "assunto": "Normalização", "adaptada": false, "banca": "CEBRASPE", "orgao": "PGDF", "ano": "2019", "comentario": "ERRADO. A referência pode aparecer antecedendo resumos, resenhas, recessões e erratas.", "tier": "banca", "label": "justificativa da banca", "pos": "antes"}, {"id": 20, "enunciado": "Quanto à extensão, convém que os resumos de teses e de relatórios técnico-científicos tenham de 150 a 500 palavras, enquanto convém que os resumos de artigos para publicação em periódicos devem tenham entre 100 e 250 palavras.", "gabarito": "C", "assunto": "Normalização", "adaptada": true, "banca": "CEBRASPE", "orgao": "TJ-AM", "ano": "2019", "comentario": "Certo. Conforme a NBR 6028:2021, convém que os resumos de trabalhos acadêmicos (teses, dissertações) e relatórios técnico-científicos tenham de 150 a 500 palavras, e os de artigos de periódicos, de 100 a 250 palavras. Esta questão foi adaptada em razão da atualização da norma.", "tier": "material", "label": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima", "pos": "depois"}, {"id": 21, "enunciado": "Recomenda-se que o resumo de artigo ou de trabalho acadêmico apresente, de forma reduzida, a explicação sobre o tema do artigo, as informações suficientes sobre todo o conteúdo do texto, contemplando o objetivo, o método, os resultados e as conclusões do trabalho.", "gabarito": "C", "assunto": "Normalização", "adaptada": true, "banca": "CEBRASPE", "orgao": "STJ - Superior Tribunal de Justiça", "ano": "2018", "comentario": "Certo. O resumo informativo — recomendado para documentos técnicos e científicos — apresenta, de forma reduzida, finalidade, metodologia, resultados e conclusões do trabalho, contemplando o conteúdo de modo que possa dispensar a consulta ao original. A descrição corresponde a esse tipo de resumo. Esta questão foi adaptada em razão da atualização da norma.", "tier": "material", "label": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima", "pos": "depois"}, {"id": 22, "enunciado": "Na citação direta de extensão superior a três linhas, o texto deve estar entre aspas duplas.", "gabarito": "E", "assunto": "Normalização", "adaptada": false, "banca": "CEBRASPE", "orgao": "PCDF", "ano": "2024", "comentario": "Errado. ABNT NBR 10520:2023 – Na citação direta, com mais de três linhas, o texto não fica entre aspas duplas. A própria diferenciação gráfica (texto menor e recuo especial) evidencia que se trata de texto de outra autoria.", "tier": "banca", "label": "justificativa da banca", "pos": "antes"}, {"id": 23, "enunciado": "Comentários em citações devem ser isolados entre parênteses.", "gabarito": "E", "assunto": "Normalização", "adaptada": false, "banca": "CEBRASPE", "orgao": "PCDF", "ano": "2024", "comentario": "Errado. ABNT NBR 10520:2023 – \"Item 5.2 b) interpolações, acréscimos ou comentários: [ ]\".", "tier": "banca", "label": "justificativa da banca", "pos": "antes"}, {"id": 24, "enunciado": "Na CDU, é possível realizar combinações livres entre conceitos gerais, como lugar ou tempo, com diferentes temas específicos, característica que facilita a recuperação precisa das informações representadas.", "gabarito": "C", "assunto": "Classificação", "adaptada": false, "banca": "CEBRASPE", "orgao": "MPCE", "ano": "2025", "comentario": "Certo. A CDU permite combinar livremente auxiliares comuns (como lugar e tempo) com os números das tabelas principais (temas específicos). Essa capacidade de síntese é uma das marcas do sistema e contribui para uma recuperação mais precisa dos assuntos representados.", "tier": "material", "label": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima", "pos": "depois"}, {"id": 25, "enunciado": "Na CDU, o sinal de dois pontos, assim como o sinal de adição e o da barra oblíqua, ampliam os assuntos que os ligam.", "gabarito": "E", "assunto": "Classificação", "adaptada": false, "banca": "CEBRASPE", "orgao": "Ministério Público do Estado do Tocantins", "ano": "2024", "comentario": "Errado. Quem amplia/coordena assuntos são os sinais de adição (+) e de extensão consecutiva (/). Os dois-pontos (:) são sinal de relação simples, que liga dois assuntos sem somá-los nem ampliá-los — apenas indica que um é tratado em relação ao outro. Por isso a equiparação feita na questão está incorreta.", "tier": "proprio", "label": "comentário gerado por inteligência artificial. caso tenha dúvida de sua confiabilidade, compartilhe com a prof e os colegas no grupo Foca Chat", "pos": "depois"}, {"id": 26, "enunciado": "A posição na notação do auxiliar comum de materiais é muito diversificada e é acrescentada diretamente ao número básico da CDU, sem espaço em branco ou qualquer outro símbolo.", "gabarito": "E", "assunto": "Classificação", "adaptada": false, "banca": "CEBRASPE", "orgao": "TSE", "ano": "2024", "comentario": "Certo. O auxiliar comum de materiais é um auxiliar dependente (analítica), acrescentado diretamente ao número principal, sem espaço em branco ou outro símbolo separando-o, e sua posição na notação é bastante variável.", "tier": "proprio", "label": "comentário gerado por inteligência artificial. caso tenha dúvida de sua confiabilidade, compartilhe com a prof e os colegas no grupo Foca Chat", "pos": "depois"}, {"id": 27, "enunciado": "Na notação da CDU, há números decimais além de indicadores de facetas especiais, sendo os dois pontos (:) um sinal de relação versátil.", "gabarito": "C", "assunto": "Classificação", "adaptada": false, "banca": "CEBRASPE", "orgao": "TSE", "ano": "2024", "comentario": "Certo. A notação da CDU é decimal e conta com indicadores de facetas e sinais auxiliares; entre eles, os dois-pontos (:) são o sinal de relação simples, bastante versátil, usado para indicar que um assunto é tratado em relação a outro.", "tier": "material", "label": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima", "pos": "depois"}, {"id": 28, "enunciado": "A respeito da CDU, julgue o item a seguir.\n\nO emprego do sinal gráfico asterisco (*) corresponde à introdução de um número ou conceito não autorizado pela CDU.", "gabarito": "C", "assunto": "Classificação", "adaptada": false, "banca": "CEBRASPE", "orgao": "MPCE", "ano": "2020", "comentario": "Certo. Na CDU, o asterisco (*) é o sinal usado para introduzir, na notação, um número ou conceito não pertencente/não autorizado pela própria CDU (notações estranhas ao sistema).", "tier": "material", "label": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima", "pos": "depois"}, {"id": 29, "enunciado": "As tabelas auxiliares comuns correspondem a três grupos: os auxiliares de relação (coordenação, extensão consecutiva, relação simples, subagrupamento), os auxiliares independentes (língua, forma, lugar, raça) e os auxiliares dependentes (de propriedades, de materiais, de pessoas).", "gabarito": "C", "assunto": "Classificação", "adaptada": false, "banca": "CEBRASPE", "orgao": "PGDF", "ano": "2019", "comentario": "CERTO. Os auxiliares comuns pertencem a três grupos: a) auxiliares de relação são os auxiliares de coordenação ou adição, extensão consecutiva, relação simples, subagrupamento ou colchetes, ordenação ou dois-pontos duplos; b) auxiliares independentes são os auxiliares de língua, forma, lugar, raça e tempo; c) auxiliares dependentes são os auxiliares de propriedade, materiais, relações, processos e operações, pessoas, asterisco e extensões alfabéticas.", "tier": "banca", "label": "justificativa da banca", "pos": "antes"}, {"id": 30, "enunciado": "No uso da tabela auxiliar de língua (=), a notação do título língua italiana é =811.131.1.", "gabarito": "E", "assunto": "Classificação", "adaptada": false, "banca": "CEBRASPE", "orgao": "PGDF", "ano": "2019", "comentario": "ERRADO. O auxiliar de língua entra na composição das línguas (como objeto de estudos), utilizando-se o número 811 seguido de um ponto final e da língua específica, sem o sinal de igual. Por exemplo, 811.131,1 Estudo da língua italiana.", "tier": "banca", "label": "justificativa da banca", "pos": "antes"}, {"id": 31, "enunciado": "Coordenação é representada pelo sinal de adição; ordenação, pelo sinal de dois-pontos duplos; raça, pelo símbolo (=...); e lugar, por (1/9).", "gabarito": "C", "assunto": "Classificação", "adaptada": false, "banca": "CEBRASPE", "orgao": "PGDF", "ano": "2019", "comentario": "CERTO. Na Seção I, consta adição (+), ordenação (::), raça (=...), lugar (1/9) etc. Na Seção II, constam as analíticas de traço (!1/!9).", "tier": "banca", "label": "justificativa da banca", "pos": "antes"}, {"id": 32, "enunciado": "As tabelas auxiliares de relação indicam o relacionamento entre dois ou mais números principais ou auxiliares e são de uso obrigatório.", "gabarito": "E", "assunto": "Classificação", "adaptada": false, "banca": "CEBRASPE", "orgao": "TJ-AM", "ano": "2019", "comentario": "Errado. Nenhum sinal ou tabela auxiliar da CDU é de uso obrigatório — nem os auxiliares de relação, nem qualquer outro. Os sinais e tabelas auxiliares servem para completar as tabelas principais, mas seu emprego é facultativo. Por isso a afirmação está errada.", "tier": "material", "label": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima", "pos": "depois"}, {"id": 33, "enunciado": "Na CDU, deve-se introduzir a ordem de citação se a classificação for usada pré-coordenadamente com o objetivo de arquivamento ou organização de livros em estantes.", "gabarito": "C", "assunto": "Classificação", "adaptada": false, "banca": "CESPE / CEBRASPE", "orgao": "EBSERH", "ano": "2018", "comentario": "Certo. A ordem de citação (ordem horizontal) é adotada quando a CDU é usada de forma pré-coordenada, para fins de arquivamento/organização dos materiais nas estantes. Embora a própria ordem de citação seja opcional, quando há esse objetivo pré-coordenado é ela que organiza a sequência dos sinais na notação.", "tier": "material", "label": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima", "pos": "depois"}, {"id": 34, "enunciado": "Estudos de usuários restringem-se a investigar demandas e necessidades do usuário.", "gabarito": "E", "assunto": "Estudos de Usuários", "adaptada": false, "banca": "CEBRASPE", "orgao": "Ministério Público do Estado do Tocantins", "ano": "2024", "comentario": "Errado. Os estudos de usuários não se restringem a demandas e necessidades: investigam por que, como e para quais fins os indivíduos usam a informação, abrangendo conceitos como necessidade, desejo, demanda, uso e requisito, além do comportamento informacional. Limitá-los a demandas e necessidades é reducionista.", "tier": "material", "label": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima", "pos": "depois"}, {"id": 35, "enunciado": "Por terem proximidade, estudos de usuários e estudos de práticas informacionais também possuem abordagens similares.", "gabarito": "E", "assunto": "Estudos de Usuários", "adaptada": false, "banca": "CEBRASPE", "orgao": "TJPA", "ano": "2025", "comentario": "Errado. Embora estudos de usuários e estudos de práticas informacionais sejam campos próximos, suas abordagens não são simplesmente \"similares\": as práticas informacionais enfatizam dimensões sociais e coletivas do uso da informação, com pressupostos teóricos distintos dos estudos de usuários tradicionais. A proximidade temática não implica equivalência de abordagem.", "tier": "proprio", "label": "comentário gerado por inteligência artificial. caso tenha dúvida de sua confiabilidade, compartilhe com a prof e os colegas no grupo Foca Chat", "pos": "depois"}, {"id": 36, "enunciado": "A proatividade é um atributo na caracterização de produtos e serviços informacionais e envolve a previsão das expectativas e a concretização da demanda latente antes da demanda expressa dos usuários.", "gabarito": "C", "assunto": "Estudos de Usuários", "adaptada": false, "banca": "CESPE/CEBRASPE", "orgao": "Defensoria Pública da União (DPU)", "ano": "2016", "comentario": "Certo. A proatividade é um atributo desejável de produtos e serviços de informação: antecipar-se às expectativas do usuário e atender a demandas latentes antes mesmo de elas serem expressas. A descrição está coerente com esse atributo.", "tier": "proprio", "label": "comentário gerado por inteligência artificial. caso tenha dúvida de sua confiabilidade, compartilhe com a prof e os colegas no grupo Foca Chat", "pos": "depois"}, {"id": 37, "enunciado": "Tradicionalmente, a coleta de dados em estudos de usuários foca o usuário real e potencial.", "gabarito": "C", "assunto": "Estudos de Usuários", "adaptada": false, "banca": "CEBRASPE", "orgao": "TJPA", "ano": "2025", "comentario": "Certo. Os estudos de usuários consideram tanto o usuário real (que já estabeleceu contato com a unidade por meio de seus produtos/serviços) quanto o usuário potencial (que poderia vir a utilizá-los). A coleta de dados, tradicionalmente, contempla esses dois públicos.", "tier": "material", "label": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima", "pos": "depois"}, {"id": 38, "enunciado": "No estudo de usuários, a pesquisa quantitativa tem menor precisão na análise e interpretação dos resultados.", "gabarito": "E", "assunto": "Estudos de Usuários", "adaptada": false, "banca": "CEBRASPE", "orgao": "Fundação Universidade de Brasília (FUB)", "ano": "2022", "comentario": "Errado. A pesquisa quantitativa caracteriza-se pelo uso de técnicas estatísticas justamente para aumentar a precisão e a confiabilidade na análise e interpretação dos resultados — ou seja, busca maior precisão, e não menor. A afirmação inverte essa característica.", "tier": "material", "label": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima", "pos": "depois"}, {"id": 39, "enunciado": "A entrevista, por ser um instrumento de coleta de dados que privilegia o maior número de respondentes possível, tem como principal característica uma maior superficialidade nas respostas obtidas.", "gabarito": "E", "assunto": "Estudos de Usuários", "adaptada": false, "banca": "CEBRASPE", "orgao": "TJPA", "ano": "2025", "comentario": "Errado. As características descritas — privilegiar um grande número de respondentes e tender à superficialidade — são do questionário, não da entrevista. A entrevista, por permitir esclarecer dúvidas e captar reações, costuma fornecer respostas com maior riqueza de detalhes, ainda que alcance menos respondentes.", "tier": "material", "label": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima", "pos": "depois"}, {"id": 40, "enunciado": "Enquanto instrumento qualitativo de coleta de dados, uma entrevista é tradicionalmente dividida em estruturada, semiestruturada ou aberta.", "gabarito": "C", "assunto": "Estudos de Usuários", "adaptada": false, "banca": "CEBRASPE", "orgao": "TJPA", "ano": "2025", "comentario": "Certo. Como instrumento (predominantemente qualitativo) de coleta de dados, a entrevista é tradicionalmente classificada em estruturada, semiestruturada e não estruturada (aberta).", "tier": "material", "label": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima", "pos": "depois"}, {"id": 41, "enunciado": "No processo de estudo de usuários, uma pergunta neutra durante a entrevista é uma espécie particular de pergunta aberta que busca sondar o uso que se dará à informação solicitada.", "gabarito": "C", "assunto": "Estudos de Usuários", "adaptada": false, "banca": "CEBRASPE", "orgao": "MPCE", "ano": "2025", "comentario": "Certo. A pergunta neutra é um tipo particular de pergunta aberta usada na entrevista de referência/estudo de usuários: em vez de induzir a resposta, ela busca compreender o contexto e o uso que será dado à informação solicitada, ajudando a esclarecer a real necessidade do usuário.", "tier": "proprio", "label": "comentário gerado por inteligência artificial. caso tenha dúvida de sua confiabilidade, compartilhe com a prof e os colegas no grupo Foca Chat", "pos": "depois"}, {"id": 42, "enunciado": "A entrevista é definida como uma conversação informal cuja finalidade é coletar dados.", "gabarito": "E", "assunto": "Estudos de Usuários", "adaptada": false, "banca": "CEBRASPE", "orgao": "MPCE", "ano": "2025", "comentario": "Errado. A entrevista é um método sistemático de coleta de dados (podendo ser estruturada, semiestruturada ou não estruturada), e não uma simples \"conversa informal\". Reduzi-la a uma conversação informal descaracteriza o método.", "tier": "material", "label": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima", "pos": "depois"}, {"id": 43, "enunciado": "Na entrevista, uma vantagem de se utilizar pergunta do tipo aberta é que a resposta é obtida rapidamente, já que o respondente tem liberdade de criação de sua resposta.", "gabarito": "E", "assunto": "Estudos de Usuários", "adaptada": false, "banca": "CEBRASPE", "orgao": "Ministério Público do Estado do Tocantins", "ano": "2024", "comentario": "Errado. A rapidez e a obtenção ágil de respostas são vantagens associadas ao questionário, não à pergunta aberta na entrevista. A pergunta aberta, ao contrário, costuma demandar mais tempo de elaboração e de análise, justamente por dar liberdade de resposta ao entrevistado.", "tier": "material", "label": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima", "pos": "depois"}, {"id": 44, "enunciado": "Acessibilidade bibliográfica e acessibilidade física no controle bibliográfico correspondem, respectivamente, à identificação da existência do documento e à identificação da localização.", "gabarito": "C", "assunto": "Controle Bibliográfico", "adaptada": false, "banca": "CEBRASPE", "orgao": "TJ-AM", "ano": "2019", "comentario": "Certo. No controle bibliográfico, a acessibilidade bibliográfica corresponde à possibilidade de identificar a existência do documento (saber que ele existe, por meio de registros, bibliografias, catálogos), enquanto a acessibilidade física corresponde a identificar sua localização e obtê-lo. A correspondência apresentada está correta.", "tier": "proprio", "label": "comentário gerado por inteligência artificial. caso tenha dúvida de sua confiabilidade, compartilhe com a prof e os colegas no grupo Foca Chat", "pos": "depois"}, {"id": 45, "enunciado": "O sistema OCLC (online computer library center) é um exemplo de catalogação cooperativa em que várias bibliotecas adotam a mesma norma.", "gabarito": "C", "assunto": "Controle Bibliográfico", "adaptada": false, "banca": "CEBRASPE", "orgao": "STJ", "ano": "2024", "comentario": "Certo. O OCLC (Online Computer Library Center) é o exemplo clássico de catalogação cooperativa: diversas bibliotecas compartilham e reaproveitam registros catalográficos seguindo as mesmas normas, evitando a duplicação de esforços.", "tier": "proprio", "label": "comentário gerado por inteligência artificial. caso tenha dúvida de sua confiabilidade, compartilhe com a prof e os colegas no grupo Foca Chat", "pos": "depois"}, {"id": 46, "enunciado": "A produção de bibliografias, além de ser uma maneira eficiente de registrar e preservar a memória bibliográfica nacional, também consiste em uma forma de organizar e apresentar o conhecimento produzido a partir de um recorte específico. Em relação às bibliografias e suas características, julgue o item a seguir.\n\nAs bibliografias nacionais não precisam seguir as exigências e regras do depósito legal.", "gabarito": "E", "assunto": "Controle Bibliográfico", "adaptada": false, "banca": "CEBRASPE", "orgao": "MPCE", "ano": "2020", "comentario": "Errado. Quem registra e preserva a memória bibliográfica nacional e organiza o conhecimento produzido em determinado recorte é, propriamente, a bibliografia nacional. A afirmação, ao atribuir essas funções de forma genérica a \"bibliografias\" em desacordo com o que o enunciado cobra, contraria o conceito de bibliografia nacional como base do controle bibliográfico.", "tier": "proprio", "label": "comentário gerado por inteligência artificial. caso tenha dúvida de sua confiabilidade, compartilhe com a prof e os colegas no grupo Foca Chat", "pos": "depois"}, {"id": 47, "enunciado": "Desde 1997, a produção da bibliografia nacional brasileira é de responsabilidade da Biblioteca Nacional e do Instituto Nacional do Livro.", "gabarito": "E", "assunto": "Controle Bibliográfico", "adaptada": false, "banca": "CEBRASPE", "orgao": "SEE/PE", "ano": "2022", "comentario": "Errado. No Brasil, é a Biblioteca Nacional que assume as principais funções de Agência Bibliográfica Nacional, sendo responsável por elaborar e divulgar a bibliografia brasileira corrente. Atribuir essa responsabilidade à Biblioteca Nacional em conjunto com o Instituto Nacional do Livro está incorreto.", "tier": "material", "label": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima", "pos": "depois"}, {"id": 48, "enunciado": "A organização de bibliotecas em consórcios ou redes adveio da necessidade de compartilhar recursos e dividir despesas com a aquisição de equipamentos e desenvolvimento de sistemas, o que resultou na construção de bancos de dados compartilhados e deu uma nova dimensão ao princípio de reaproveitamento dos registros bibliográficos.", "gabarito": "C", "assunto": "Controle Bibliográfico", "adaptada": false, "banca": "Cebraspe", "orgao": "Secretaria de Estado de Educação do Distrito Federal", "ano": "2017", "comentario": "Certo. A organização de bibliotecas em consórcios ou redes nasceu da necessidade de compartilhar recursos e dividir custos (equipamentos, sistemas), resultando em bancos de dados compartilhados e reforçando o princípio do reaproveitamento de registros — base da catalogação cooperativa.", "tier": "proprio", "label": "comentário gerado por inteligência artificial. caso tenha dúvida de sua confiabilidade, compartilhe com a prof e os colegas no grupo Foca Chat", "pos": "depois"}, {"id": 49, "enunciado": "A rede bibliodata é uma rede de catalogação cooperativa online.", "gabarito": "C", "assunto": "Controle Bibliográfico", "adaptada": false, "banca": "Cebraspe", "orgao": "Secretaria de Estado de Educação do Distrito Federal", "ano": "2017", "comentario": "Certo. A Rede Bibliodata é uma rede brasileira de catalogação cooperativa online, na qual bibliotecas compartilham registros bibliográficos padronizados.", "tier": "proprio", "label": "comentário gerado por inteligência artificial. caso tenha dúvida de sua confiabilidade, compartilhe com a prof e os colegas no grupo Foca Chat", "pos": "depois"}, {"id": 50, "enunciado": "Uma rede de bibliotecas refere-se a um grupo ou conjunto de instituições, com seus edifícios, instalações, acervos e pessoal, estruturados de modo a manter serviços bibliotecários coordenados ou não, cujo fim é oferecer um melhor serviço à comunidade.", "gabarito": "C", "assunto": "Controle Bibliográfico", "adaptada": false, "banca": "CESPE/CEBRASPE", "orgao": "Defensoria Pública da União (DPU)", "ano": "2016", "comentario": "Certo. Uma rede de bibliotecas é um conjunto de instituições — com seus edifícios, instalações, acervos e pessoal — estruturadas para manter serviços bibliotecários (coordenados ou não), com o objetivo de oferecer melhor atendimento à comunidade. A definição está adequada.", "tier": "proprio", "label": "comentário gerado por inteligência artificial. caso tenha dúvida de sua confiabilidade, compartilhe com a prof e os colegas no grupo Foca Chat", "pos": "depois"}, {"id": 51, "enunciado": "A rede Bibliodata é coordenada pela Fundação Getúlio Vargas e adota o formato bibliográfico denominado catalogação legível por computador (CALCO).", "gabarito": "E", "assunto": "Controle Bibliográfico", "adaptada": false, "banca": "CESPE/CEBRASPE", "orgao": "Defensoria Pública da União (DPU)", "ano": "2016", "comentario": "Errado. A Rede Bibliodata é coordenada pela Fundação Getúlio Vargas e, de fato, esteve historicamente ligada ao formato CALCO (Catalogação Legível por Computador). Contudo, a Bibliodata migrou para o formato MARC 21, padrão internacional adotado atualmente. Por afirmar que ela adota o CALCO como formato vigente, a questão está incorreta.", "tier": "proprio", "label": "comentário gerado por inteligência artificial. caso tenha dúvida de sua confiabilidade, compartilhe com a prof e os colegas no grupo Foca Chat", "pos": "depois"}];
+const STORAGE_KEY = 'foca:simulado6:respostas';
+
+const CYCLE = ["#00A74A", "#FF6A39", "#FED141", "#9BCBEB", "#F4A6D7", "#B5BD00"];
+const $ = s => document.querySelector(s);
+
+// estado: { [id]: 'C' | 'E' }
+let respostas = {};
+
+async function loadState() {
+  try {
+    const r = await window.storage.get(STORAGE_KEY);
+    if (r && r.value) respostas = JSON.parse(r.value);
+  } catch (e) { respostas = {}; }
+}
+async function saveState() {
+  try { await window.storage.set(STORAGE_KEY, JSON.stringify(respostas)); }
+  catch (e) { /* silencioso */ }
+}
+
+function pad(n){ return String(n).padStart(2,'0'); }
+
+function buildLabelEl(q, where){
+  const el = document.createElement('div');
+  if (where === 'before') {
+    el.className = 'comment-label before';
+    el.textContent = q.label;
+  } else {
+    el.className = 'comment-after';
+    el.textContent = q.label;
+  }
+  return el;
+}
+
+function renderQuestao(q) {
+  const card = document.createElement('div');
+  card.className = 'questao';
+  card.id = 'q' + q.id;
+
+  // head
+  const head = document.createElement('div');
+  head.className = 'q-head';
+  head.innerHTML =
+    '<span class="q-num">' + pad(q.id) + ' / 51</span>' +
+    '<span class="tag">' + q.orgao + ' · ' + q.ano + '</span>' +
+    '<span class="tag assunto">' + q.assunto + '</span>' +
+    (q.adaptada ? '<span class="tag adaptada">⚠️ adaptada (norma atualizada)</span>' : '');
+  card.appendChild(head);
+
+  // enunciado
+  const en = document.createElement('p');
+  en.className = 'enunciado';
+  en.textContent = q.enunciado;
+  card.appendChild(en);
+
+  // botoes C/E
+  const row = document.createElement('div');
+  row.className = 'ce-row';
+  ['C','E'].forEach(val => {
+    const b = document.createElement('button');
+    b.className = 'ce-btn';
+    b.dataset.val = val;
+    b.textContent = val === 'C' ? 'Certo' : 'Errado';
+    b.addEventListener('click', () => answer(q, val));
+    row.appendChild(b);
+  });
+  card.appendChild(row);
+
+  // feedback
+  const fb = document.createElement('div');
+  fb.className = 'feedback';
+
+  const verdict = document.createElement('div');
+  verdict.className = 'verdict';
+  fb.appendChild(verdict);
+
+  const box = document.createElement('div');
+  box.className = 'comment-box' + (q.tier === 'banca' ? ' banca' : '');
+  if (q.pos === 'antes') box.appendChild(buildLabelEl(q,'before'));
+  const txt = document.createElement('div');
+  txt.className = 'comment-text';
+  txt.textContent = q.comentario;
+  box.appendChild(txt);
+  if (q.pos === 'depois') box.appendChild(buildLabelEl(q,'after'));
+  fb.appendChild(box);
+
+  card.appendChild(fb);
+  return card;
+}
+
+function applyAnswered(q) {
+  const val = respostas[q.id];
+  if (!val) return;
+  const card = $('#q' + q.id);
+  const btns = card.querySelectorAll('.ce-btn');
+  btns.forEach(b => {
+    b.disabled = true;
+    const bv = b.dataset.val;
+    if (bv === q.gabarito) b.classList.add('is-correct');
+    if (bv === val && val !== q.gabarito) b.classList.add('is-wrong');
+    if (bv === val) b.classList.add('picked');
+  });
+  const fb = card.querySelector('.feedback');
+  const verdict = fb.querySelector('.verdict');
+  const acertou = val === q.gabarito;
+  verdict.className = 'verdict ' + (acertou ? 'acerto' : 'erro');
+  const gabTxt = q.gabarito === 'C' ? 'Certo' : 'Errado';
+  verdict.innerHTML = (acertou ? '✓ você acertou' : '✗ você errou') +
+    ' <span class="gab">· gabarito: ' + gabTxt + '</span>';
+  fb.classList.add('show');
+}
+
+function answer(q, val) {
+  if (respostas[q.id]) return; // já respondida
+  respostas[q.id] = val;
+  applyAnswered(q);
+  saveState();
+  updateProgress();
+}
+
+function updateProgress() {
+  const done = Object.keys(respostas).length;
+  let hits = 0;
+  QUESTOES.forEach(q => { if (respostas[q.id] === q.gabarito) hits++; });
+  $('#done').textContent = done;
+  $('#hits').textContent = hits;
+  $('#fill').style.width = (done / QUESTOES.length * 100) + '%';
+
+  if (done === QUESTOES.length) renderResult(hits);
+  else $('#result').style.display = 'none';
+}
+
+function renderResult(hits) {
+  $('#result').style.display = 'block';
+  $('#score').textContent = hits;
+  const pct = Math.round(hits / QUESTOES.length * 100);
+  $('#result-sub').textContent = 'você acertou ' + pct + '% das questões. siga firme nos estudos!';
+
+  // por assunto
+  const byA = {};
+  QUESTOES.forEach(q => {
+    if (!byA[q.assunto]) byA[q.assunto] = {hit:0, total:0};
+    byA[q.assunto].total++;
+    if (respostas[q.id] === q.gabarito) byA[q.assunto].hit++;
+  });
+  const rows = Object.keys(byA).sort((a,b) => (byA[b].hit/byA[b].total) - (byA[a].hit/byA[a].total));
+  const rk = $('#ranking');
+  rk.innerHTML = '';
+  rows.forEach((name, i) => {
+    const d = byA[name];
+    const p = Math.round(d.hit / d.total * 100);
+    const row = document.createElement('div');
+    row.className = 'rank-row';
+    row.innerHTML =
+      '<span class="rank-name">' + name + '</span>' +
+      '<span class="rank-track"><span class="rank-bar" style="width:' + p + '%;background:' + CYCLE[i % CYCLE.length] + '"></span></span>' +
+      '<span class="rank-val">' + d.hit + '/' + d.total + '</span>';
+    rk.appendChild(row);
+  });
+}
+
+async function reset() {
+  respostas = {};
+  await saveState();
+  document.querySelectorAll('.questao').forEach(c => {
+    c.querySelectorAll('.ce-btn').forEach(b => {
+      b.disabled = false;
+      b.className = 'ce-btn';
+    });
+    c.querySelector('.feedback').classList.remove('show');
+  });
+  updateProgress();
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+async function init() {
+  await loadState();
+  const quiz = $('#quiz');
+  QUESTOES.forEach(q => quiz.appendChild(renderQuestao(q)));
+  QUESTOES.forEach(q => { if (respostas[q.id]) applyAnswered(q); });
+  updateProgress();
+  $('#reset').addEventListener('click', reset);
+  $('#restart').addEventListener('click', reset);
+}
+init();
+</script>
+</body>
+</html>
