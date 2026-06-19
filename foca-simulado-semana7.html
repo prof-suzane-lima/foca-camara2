@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🦭 Foca na Câmara · Simulado da Semana 7</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --verde: #00A74A;
+    --rosa: #F4A6D7;
+    --bege: #F1F1DE;
+    --verde-escuro: #07272D;
+    --azul: #9BCBEB;
+    --verde-limao: #B5BD00;
+    --amarelo: #FED141;
+    --laranja: #FF6A39;
+    --bg-primary: var(--bege);
+    --bg-dark: var(--verde-escuro);
+    --acerto: var(--verde);
+    --acerto-bg: rgba(0, 167, 74, 0.12);
+    --erro: var(--laranja);
+    --erro-bg: rgba(255, 106, 57, 0.12);
+    --linha: rgba(7, 39, 45, 0.15);
+    --linha-suave: rgba(7, 39, 45, 0.08);
+    --shadow-soft: 0 1px 3px rgba(7, 39, 45, 0.06), 0 4px 16px rgba(7, 39, 45, 0.04);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bege);
+    color: var(--verde-escuro);
+    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+    font-weight: 400;
+    line-height: 1.5;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ===== MARCA TEXTUAL ===== */
+  .brand {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    line-height: 1;
+    display: inline-block;
+  }
+  .brand .b-prof   { font-weight: 400; letter-spacing: 0; }
+  .brand .b-suzane { font-weight: 800; letter-spacing: -0.02em; }
+  .brand .b-lima   { font-weight: 800; font-style: italic; letter-spacing: -0.02em; }
+  .brand.light { color: var(--verde); }
+  .brand.dark  { color: var(--bege); }
+
+  /* ===== HEADER ===== */
+  .header {
+    background: var(--verde-escuro);
+    color: var(--bege);
+    padding: 16px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .header-brand-text { font-size: 16px; }
+  .header-tag {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--rosa);
+    font-weight: 700;
+  }
+
+  /* ===== STICKY PROGRESS BAR ===== */
+  .sticky-bar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--bege);
+    border-bottom: 1px solid var(--linha-suave);
+    padding: 12px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    transition: box-shadow 0.2s ease;
+  }
+  .sticky-bar.scrolled {
+    box-shadow: 0 2px 12px rgba(7, 39, 45, 0.06);
+  }
+
+  .sticky-stats {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+  }
+  .sticky-stats strong {
+    font-weight: 800;
+    color: var(--verde-escuro);
+  }
+  .sticky-stats .acertos-num { color: var(--acerto); }
+  .sticky-stats .erros-num { color: var(--erro); }
+
+  .sticky-bar-progress {
+    flex: 1 1 100%;
+    background: rgba(7, 39, 45, 0.08);
+    height: 4px;
+    border-radius: 999px;
+    overflow: hidden;
+    order: 3;
+  }
+  .sticky-bar-progress-fill {
+    background: var(--verde);
+    height: 100%;
+    border-radius: 999px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+
+  .btn-clear {
+    background: transparent;
+    border: 1.5px solid var(--linha);
+    color: var(--verde-escuro);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s ease;
+  }
+  .btn-clear:hover {
+    border-color: var(--verde-escuro);
+    background: var(--verde-escuro);
+    color: var(--bege);
+  }
+
+  /* ===== CONTAINER ===== */
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  /* ===== HERO ===== */
+  .eyebrow {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--laranja);
+    margin-bottom: 14px;
+  }
+
+  h1 {
+    font-size: 52px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 18px;
+  }
+  h1 em { font-style: normal; color: var(--verde); }
+
+  .lead {
+    font-size: 17px;
+    color: rgba(7, 39, 45, 0.75);
+    max-width: 600px;
+    margin-bottom: 20px;
+  }
+
+  .aviso {
+    background: rgba(155, 203, 235, 0.18);
+    border-left: 3px solid var(--azul);
+    padding: 14px 18px;
+    border-radius: 4px;
+    font-size: 14px;
+    margin-bottom: 48px;
+    max-width: 600px;
+    color: rgba(7, 39, 45, 0.85);
+  }
+  .aviso strong { font-weight: 700; }
+
+  /* ===== SEÇÃO POR ASSUNTO ===== */
+  .secao {
+    margin-bottom: 56px;
+  }
+  .secao-header {
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--verde-escuro);
+  }
+  .secao-eyebrow {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--laranja);
+    margin-bottom: 6px;
+  }
+  .secao-title {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+  }
+  .secao-meta {
+    font-size: 13px;
+    color: rgba(7, 39, 45, 0.6);
+    margin-top: 6px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ===== QUESTÃO ===== */
+  .questao {
+    background: white;
+    border: 1px solid var(--linha-suave);
+    border-radius: 14px;
+    padding: 26px 28px;
+    margin-bottom: 18px;
+    box-shadow: var(--shadow-soft);
+    position: relative;
+    transition: border-color 0.2s ease;
+  }
+  .questao.respondida.acertou {
+    border-left: 4px solid var(--acerto);
+  }
+  .questao.respondida.errou {
+    border-left: 4px solid var(--erro);
+  }
+
+  .questao-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+
+  .questao-num-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .questao-num {
+    font-size: 13px;
+    font-weight: 800;
+    color: rgba(7, 39, 45, 0.55);
+    letter-spacing: 0.04em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .tag {
+    background: var(--verde-escuro);
+    color: var(--bege);
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .status-icon {
+    font-size: 16px;
+    font-weight: 800;
+    line-height: 1;
+  }
+  .status-icon.acertou { color: var(--acerto); }
+  .status-icon.errou { color: var(--erro); }
+
+  .enunciado {
+    font-size: 16px;
+    line-height: 1.65;
+    margin-bottom: 22px;
+    white-space: pre-wrap;
+  }
+
+  /* ===== BOTÕES CERTO/ERRADO ===== */
+  .ce-buttons {
+    display: flex;
+    gap: 12px;
+  }
+
+  .ce-btn {
+    flex: 1;
+    background: white;
+    border: 1.5px solid var(--linha);
+    color: var(--verde-escuro);
+    padding: 14px 20px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    font-family: inherit;
+    letter-spacing: 0.01em;
+  }
+  .ce-btn:hover:not(:disabled) {
+    border-color: var(--verde-escuro);
+    background: rgba(7, 39, 45, 0.04);
+  }
+  .ce-btn:disabled {
+    cursor: default;
+    opacity: 1;
+  }
+
+  /* Estado pós-resposta */
+  .ce-btn.escolhido-certo-correto,
+  .ce-btn.gabarito-correto {
+    background: var(--acerto-bg);
+    border-color: var(--acerto);
+    color: var(--verde-escuro);
+  }
+  .ce-btn.escolhido-errado {
+    background: var(--erro-bg);
+    border-color: var(--erro);
+    color: var(--verde-escuro);
+  }
+  .ce-btn.escolhido-certo-correto::after,
+  .ce-btn.gabarito-correto::after {
+    content: " ✓";
+    color: var(--acerto);
+    font-weight: 800;
+  }
+  .ce-btn.escolhido-errado::after {
+    content: " ✗";
+    color: var(--erro);
+    font-weight: 800;
+  }
+  .ce-btn.desmarcado {
+    opacity: 0.45;
+  }
+
+  /* ===== FEEDBACK ===== */
+  .feedback {
+    display: none;
+    margin-top: 18px;
+    padding: 16px 18px;
+    border-radius: 10px;
+    border-left: 4px solid;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+  .feedback.show { display: block; animation: fadeIn 0.3s ease; }
+  .feedback.acerto {
+    background: var(--acerto-bg);
+    border-color: var(--acerto);
+  }
+  .feedback.erro {
+    background: var(--erro-bg);
+    border-color: var(--erro);
+  }
+  .feedback-tag {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .feedback.acerto .feedback-tag { color: var(--acerto); }
+  .feedback.erro .feedback-tag { color: var(--erro); }
+  .feedback p { margin-bottom: 4px; }
+  .feedback p:last-child { margin-bottom: 0; }
+  .feedback .gab-correto { margin-bottom: 12px; }
+  .feedback .gab-correto strong { font-weight: 800; }
+
+  /* rótulo "justificativa da banca" antes do comentário */
+  .justificativa-label {
+    font-weight: 700;
+    color: var(--verde-escuro);
+  }
+  /* atribuição de IA depois do comentário */
+  .coment-fonte {
+    margin-top: 12px;
+    font-size: 12px;
+    font-style: italic;
+    color: rgba(7, 39, 45, 0.6);
+    line-height: 1.45;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ===== RESULTADO ===== */
+  .resultado-section {
+    margin-top: 80px;
+  }
+
+  .resultado-eyebrow-wrap {
+    margin-bottom: 16px;
+  }
+
+  .result-hero {
+    background: var(--verde-escuro);
+    color: var(--bege);
+    border-radius: 18px;
+    padding: 40px 36px;
+    margin-bottom: 32px;
+  }
+
+  .result-eyebrow {
+    color: var(--rosa);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .result-score {
+    font-size: 88px;
+    font-weight: 800;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    color: var(--rosa);
+    font-variant-numeric: tabular-nums;
+  }
+  .result-score em {
+    font-style: normal;
+    color: var(--bege);
+    font-size: 36px;
+    opacity: 0.6;
+    margin-left: 10px;
+    font-weight: 400;
+  }
+
+  .result-pct {
+    font-size: 16px;
+    margin-top: 14px;
+    color: rgba(241, 241, 222, 0.85);
+  }
+  .result-pct strong {
+    color: var(--bege);
+    font-weight: 800;
+  }
+
+  .result-msg {
+    font-size: 17px;
+    margin-top: 18px;
+    color: rgba(241, 241, 222, 0.9);
+    line-height: 1.5;
+  }
+
+  .breakdown {
+    background: white;
+    border: 1px solid var(--linha-suave);
+    border-radius: 14px;
+    padding: 28px 30px;
+    box-shadow: var(--shadow-soft);
+    margin-bottom: 32px;
+  }
+
+  .breakdown-title {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -0.015em;
+    margin-bottom: 22px;
+  }
+
+  .area-row {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--linha-suave);
+  }
+  .area-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .area-row:first-child { padding-top: 0; }
+
+  .area-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 14px;
+    gap: 12px;
+  }
+  .area-name {
+    font-weight: 500;
+    flex: 1;
+  }
+  .area-stats {
+    color: rgba(7, 39, 45, 0.7);
+    font-variant-numeric: tabular-nums;
+    font-size: 13px;
+  }
+  .area-stats strong {
+    color: var(--verde-escuro);
+    font-weight: 800;
+  }
+
+  .area-track {
+    background: rgba(7, 39, 45, 0.08);
+    height: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .area-fill {
+    height: 100%;
+    background: var(--verde);
+    border-radius: 4px;
+    transition: width 0.5s ease;
+  }
+
+  .resultado-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    background: var(--verde);
+    color: var(--bege);
+    border: none;
+    padding: 14px 28px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    font-family: inherit;
+  }
+  .btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(0, 167, 74, 0.25);
+  }
+  .btn.secondary {
+    background: transparent;
+    color: var(--verde-escuro);
+    border: 1.5px solid var(--verde-escuro);
+  }
+  .btn.secondary:hover {
+    background: var(--verde-escuro);
+    color: var(--bege);
+    box-shadow: 0 6px 20px rgba(7, 39, 45, 0.15);
+  }
+
+  /* ===== CTA INTERMEDIÁRIO (estado parcial) ===== */
+  .cta-em-andamento {
+    background: rgba(244, 166, 215, 0.18);
+    border: 1px solid rgba(244, 166, 215, 0.4);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-top: 28px;
+    text-align: center;
+    font-size: 15px;
+    color: rgba(7, 39, 45, 0.85);
+  }
+  .cta-em-andamento strong { font-weight: 800; }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    margin-top: 72px;
+    padding-top: 24px;
+    border-top: 1px solid var(--linha);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: rgba(7, 39, 45, 0.55);
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .footer .brand { font-size: 14px; }
+
+  /* ===== RESPONSIVO ===== */
+  @media (max-width: 640px) {
+    .header { padding: 14px 20px; }
+    .sticky-bar { padding: 10px 20px; }
+    .container { padding: 32px 18px 60px; }
+    h1 { font-size: 38px; }
+    .secao-title { font-size: 24px; }
+    .questao { padding: 22px 20px; }
+    .enunciado { font-size: 15px; }
+    .ce-buttons { flex-direction: column; }
+    .result-hero { padding: 32px 24px; }
+    .result-score { font-size: 64px; }
+    .result-score em { font-size: 28px; }
+    .breakdown { padding: 22px 20px; }
+    .sticky-stats { gap: 16px; font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <span class="brand dark header-brand-text">
+    <span class="b-prof">prof.</span> <span class="b-suzane">suzane</span> <span class="b-lima">lima</span>
+  </span>
+  <div class="header-tag">simulado · semana 7</div>
+</header>
+
+<div class="sticky-bar" id="stickyBar">
+  <div class="sticky-stats">
+    <span><strong id="respondidasNum">0</strong>/40 respondidas</span>
+    <span class="acertos-num"><strong id="acertosNum">0</strong> acertos</span>
+    <span class="erros-num"><strong id="errosNum">0</strong> erros</span>
+  </div>
+  <button class="btn-clear" id="btnClearTop" type="button">limpar progresso</button>
+  <div class="sticky-bar-progress">
+    <div class="sticky-bar-progress-fill" id="stickyProgressFill"></div>
+  </div>
+</div>
+
+<main class="container">
+
+  <div class="eyebrow">🦭 foca na câmara</div>
+  <h1>simulado da <em>semana 7</em></h1>
+  <p class="lead">
+    40 questões de biblioteconomia no formato certo ou errado, divididas nas
+    disciplinas que estudamos essa semana. clica no botão da resposta que você
+    acha ser a correta e o gabarito aparece na hora, junto do comentário. anote seu
+    resultado, pra medir seu progresso ao longo do tempo.
+  </p>
+  <div class="aviso">
+    <strong>aviso:</strong> seu progresso fica salvo só nesse navegador. se você
+    fechar a aba e voltar depois, as respostas continuam aí. mas se você trocar
+    de dispositivo ou limpar o cache, tem que recomeçar.
+  </div>
+
+  <div id="questoesWrap"></div>
+
+  <section class="resultado-section" id="resultadoSection" style="display:none;">
+    <div class="resultado-eyebrow-wrap">
+      <div class="eyebrow">resultado final</div>
+    </div>
+    <div class="result-hero">
+      <div class="result-eyebrow">aproveitamento</div>
+      <div class="result-score">
+        <span id="finalAcertos">0</span><em>/ 40</em>
+      </div>
+      <div class="result-pct"><strong id="finalPct">0%</strong> de aproveitamento</div>
+      <p class="result-msg" id="resultMsg"></p>
+    </div>
+
+    <div class="breakdown">
+      <div class="breakdown-title">desempenho por área</div>
+      <div id="breakdownWrap"></div>
+    </div>
+
+    <div class="resultado-actions">
+      <button class="btn secondary" id="btnReset" type="button">refazer simulado</button>
+    </div>
+  </section>
+
+  <div class="cta-em-andamento" id="ctaParcial" style="display:none;">
+    👀 você já respondeu <strong id="ctaParcialNum">0</strong> de 40.
+    o resultado completo aparece quando você fechar todas.
+  </div>
+
+  <footer class="footer">
+    <span class="brand light">
+      <span class="b-prof">prof.</span> <span class="b-suzane">suzane</span> <span class="b-lima">lima</span>
+    </span>
+    <span>foca na câmara · semana 7</span>
+  </footer>
+
+</main>
+
+<script>
+  // ============================================================
+  // DADOS DAS QUESTÕES
+  // ============================================================
+  const QUESTOES = [{"id": 1, "enunciado": "No que se refere à paginação de um trabalho acadêmico, as folhas ou páginas pré-textuais devem ser contadas, mas não numeradas.", "gabarito": "C", "banca": "Fundação Universidade de Brasília (FUB)", "ano": "2022", "assunto": "Normalização", "comentario": "Certo. Pela NBR 14724, as folhas ou páginas pré-textuais são contadas, mas não numeradas. A numeração visível só aparece a partir da primeira folha da parte textual, em algarismos arábicos, no canto superior direito.", "src": "notion"}, {"id": 2, "enunciado": "A parte interna de um trabalho acadêmico está dividida em elementos pré-textuais, textuais e pós-textuais, sendo os elementos textuais os únicos obrigatórios.", "gabarito": "E", "banca": "Fundação Universidade de Brasília (FUB)", "ano": "2022", "assunto": "Normalização", "comentario": "Errado. A divisão em pré-textuais, textuais e pós-textuais está correta, mas os textuais não são os únicos obrigatórios. Há elementos obrigatórios nas três partes: por exemplo, folha de rosto, folha de aprovação, resumos e sumário (pré-textuais) e referências (pós-textual). A pegadinha está em dizer que só os textuais são obrigatórios.", "src": "notion"}, {"id": 3, "enunciado": "O verso da folha de rosto deve conter os dados de catalogação-na-publicação, conforme o Código de Catalogação Anglo-Americano vigente.", "gabarito": "C", "banca": "Fundação Universidade de Brasília (FUB)", "ano": "2022", "assunto": "Normalização", "comentario": "Certo. Os dados de catalogação na publicação (ficha catalográfica) ficam no verso da folha de rosto. É a única exceção à regra de que os elementos pré-textuais iniciam no anverso da folha.", "src": "notion"}, {"id": 4, "enunciado": "Os títulos das seções primárias devem começar em página ímpar (anverso), na parte superior da mancha gráfica, e ser separados do texto que os sucede por um espaço entre as linhas de 1,5.", "gabarito": "C", "banca": "Fundação Universidade de Brasília (FUB)", "ano": "2022", "assunto": "Normalização", "comentario": "Certo. A NBR 14724 determina que os títulos das seções primárias comecem em página ímpar (anverso), na parte superior da mancha gráfica, separados do texto que os sucede por um espaço de 1,5 entre as linhas.", "src": "notion"}, {"id": 5, "enunciado": "Na ABNT NBR 14724, o uso do AACR (Anglo-American Cataloguing Rules) é informado na produção da ficha catalográfica do documento.", "gabarito": "C", "banca": "ABIN", "ano": "2018", "assunto": "Normalização", "comentario": "Certo. A ficha catalográfica que vai no verso da folha de rosto é elaborada conforme o código de catalogação vigente (AACR). A questão apenas descreve esse uso, que é compatível com a norma.", "src": "notion"}, {"id": 6, "enunciado": "Conforme a NBR 6027, índice é a enumeração das divisões, seções e outras partes de um documento, na mesma ordem e grafia em que a matéria nele se sucede.", "gabarito": "E", "banca": "TSE", "ano": "2024", "assunto": "Normalização", "comentario": "Errado. A definição apresentada (enumeração das divisões, seções e outras partes na mesma ordem e grafia em que a matéria se sucede) é a de sumário, não de índice. Índice é a lista de palavras ou frases ordenadas segundo determinado critério, que localiza e remete às informações do texto. Trocar sumário por índice é pegadinha clássica das bancas.", "src": "notion"}, {"id": 7, "enunciado": "Na estrutura do sumário, quando se trata de obras coletivas, o nome dos autores deve estar grafado da mesma forma que está no texto, após os títulos e os subtítulos.", "gabarito": "C", "banca": "Prefeitura Municipal de Cachoeiro de Itapemirim/ES", "ano": "2024", "assunto": "Normalização", "comentario": "Certo. Pela NBR 6027, em obras coletivas o nome dos autores deve aparecer após os títulos e subtítulos das partes, grafado da mesma forma que consta no texto.", "src": "ia"}, {"id": 8, "enunciado": "A ABNT NBR 6027 trata de procedimentos de numeração progressiva das seções de um documento.", "gabarito": "E", "banca": "ABIN", "ano": "2018", "assunto": "Normalização", "comentario": "Errado. Quem trata da numeração progressiva das seções de um documento é a NBR 6024, e não a 6027. A NBR 6027 cuida da elaboração e apresentação de sumários. A banca trocou o objeto de uma norma pelo da outra.", "src": "notion"}, {"id": 9, "enunciado": "Segundo a NBR 10518, nos guias de bibliotecas devem constar endereços postal e eletrônico, número de telefone, incluindo códigos do país e da área, e redes sociais, se houver.", "gabarito": "C", "banca": "TSE", "ano": "2024", "assunto": "Normalização", "comentario": "Certo. Entre os elementos essenciais do guia, a NBR 10518:2023 inclui endereços postal e eletrônico, número de telefone com códigos de país e área e, se houver, as redes sociais. A inclusão das redes sociais como elemento essencial é justamente uma das novidades da versão de 2023.", "src": "notion"}, {"id": 10, "enunciado": "De acordo com a ABNT NBR 10518, de 2023, um guia de unidades informacionais deve conter, entre outros dados essenciais, o endereço completo, o endereço telegráfico e os números do telefone e do fax.", "gabarito": "E", "banca": "Prefeitura Municipal de Cachoeiro de Itapemirim/ES", "ano": "2024", "assunto": "Normalização", "comentario": "Errado. A NBR 10518:2023 fala em endereços postal e eletrônico, telefone (com códigos de país e área) e redes sociais. Itens como endereço telegráfico e fax pertencem a uma redação antiga e desatualizada, não ao rol de elementos essenciais da versão em vigor.", "src": "notion"}, {"id": 11, "enunciado": "Livros e artigos de periódicos incluem-se entre as fontes de informação primária.", "gabarito": "C", "banca": "Fundação Universidade de Brasília (FUB)", "ano": "2022", "assunto": "Fontes de Informação", "comentario": "Certo. Na abordagem de Murilo Cunha, que é a mais cobrada em concurso, periódicos são fontes primárias. Atenção ao detalhe sobre livros: por esse mesmo autor, livros são fontes secundárias (ainda que outros autores os tratem como primárias). Como a questão junta livros e artigos de periódicos como primárias e foi dada como certa, a banca aqui considerou ambos como primários, mas vale guardar a ressalva sobre o livro para outras provas.", "src": "notion"}, {"id": 12, "enunciado": "Fonte terciária de informação é o conjunto de informações selecionadas e colecionadas apenas de fontes secundárias de informação.", "gabarito": "E", "banca": "Fundação Universidade de Brasília (FUB)", "ano": "2022", "assunto": "Fontes de Informação", "comentario": "Errado. Fontes terciárias não se limitam a colecionar fontes secundárias. Elas servem para localizar fontes primárias e secundárias ou para apresentar a informação de forma condensada. São exemplos as bibliografias de bibliografias, os diretórios e os guias. A definição da questão restringe demais o conceito.", "src": "notion"}, {"id": 13, "enunciado": "A patente de uma invenção é um documento que tem por objetivo descrever as características de um produto.", "gabarito": "E", "banca": "PGDF", "ano": "2019", "assunto": "Fontes de Informação", "comentario": "ERRADO. A patente de invenção é um instrumento legal destinado a proteger uma invenção. Aplica-se à indústria, por prazo determinado, contra cópias e quaisquer outros usos não autorizados pelo seu possuidor.", "src": "banca"}, {"id": 14, "enunciado": "A comunicação do conhecimento expressa em língua natural é classificada como fonte de informação secundária.", "gabarito": "E", "banca": "TJ-AM", "ano": "2019", "assunto": "Fontes de Informação", "comentario": "Errado. A comunicação do conhecimento expressa em língua natural, em primeira mão, caracteriza fonte primária, não secundária. As secundárias são as que organizam, filtram ou remetem ao que já foi produzido, como bibliografias, índices e dicionários.", "src": "notion"}, {"id": 15, "enunciado": "Consideram-se fontes os documentos, as pessoas ou as instituições que fornecem informações pertinentes a determinada área — fatores estes essenciais para se produzir conhecimento.", "gabarito": "C", "banca": "STJ - Superior Tribunal de Justiça", "ano": "2018", "assunto": "Fontes de Informação", "comentario": "Certo. Fontes de informação englobam documentos, pessoas e instituições capazes de fornecer informação pertinente a uma área. Bibliotecas e centros de informação, por exemplo, também são considerados fontes (terciárias).", "src": "notion"}, {"id": 16, "enunciado": "O uso de fontes de informações serve para qualquer fim, independentemente das necessidades do usuário.", "gabarito": "C", "banca": "STJ - Superior Tribunal de Justiça", "ano": "2018", "assunto": "Fontes de Informação", "comentario": "Certo. A questão trata da fonte de informação em sentido amplo: o registro existe e pode atender a qualquer finalidade. O recorte por necessidade do usuário aparece no momento da seleção e do uso da fonte, e não como uma propriedade que limite a fonte em si.", "src": "ia"}, {"id": 17, "enunciado": "São consideradas fontes terciárias, as que mostram a participação de outro autor ou produtor, tais como as bibliografias, os dicionários, as enciclopédias, as publicações ou periódicos de indexação e resumos, os artigos de revisão e os catálogos.", "gabarito": "E", "banca": "STJ - Superior Tribunal de Justiça", "ano": "2018", "assunto": "Fontes de Informação", "comentario": "Errado. Bibliografias, dicionários, enciclopédias, periódicos de indexação e resumos, artigos de revisão e catálogos são tipicamente fontes secundárias, não terciárias. As terciárias seriam, por exemplo, as bibliografias de bibliografias e os diretórios. A banca subiu um degrau na classificação para induzir ao erro.", "src": "notion"}, {"id": 18, "enunciado": "As fontes primárias de informação registram as mais recentes informações científicas e tecnológicas, por isso são facilmente identificáveis e localizáveis.", "gabarito": "E", "banca": "Fundação Universidade de Brasília (FUB)", "ano": "2022", "assunto": "Fontes de Informação", "comentario": "Errado. As fontes primárias até registram informação nova e recente, mas justamente por isso costumam ser dispersas e de difícil identificação e localização (pense em anais de evento, relatórios técnicos, preprints). A facilidade de identificação é característica das fontes secundárias, que organizam e dão acesso ao que foi produzido.", "src": "notion"}, {"id": 19, "enunciado": "Literatura cinzenta é a denominação aplicada aos documentos não convencionais e semipublicados nas áreas governamentais e acadêmicas.", "gabarito": "C", "banca": "PGDF", "ano": "2019", "assunto": "Fontes de Informação", "comentario": "CERTO. Literatura cinzenta é a expressão utilizada para designar documentos não convencionais e semipublicados, produzidos nos âmbitos governamentais, acadêmicos, comerciais e industriais.", "src": "banca"}, {"id": 20, "enunciado": "No conjunto de obras disponibilizadas pelos serviços de referência não se incluem aquelas classificadas como repertórios bibliográficos.", "gabarito": "E", "banca": "TJ-AM", "ano": "2019", "assunto": "Fontes de Informação", "comentario": "Errado. Os repertórios bibliográficos (bibliografias) estão, sim, entre as obras do acervo de referência, ao lado de dicionários, enciclopédias, índices, guias e catálogos. A questão exclui indevidamente um tipo de obra que é clássico do setor de referência.", "src": "notion"}, {"id": 21, "enunciado": "O gestor de uma unidade de informação deve planejar, organizar e utilizar técnicas mercadológicas para ampliar, aperfeiçoar e promover serviços e produtos com valor agregado para a sua comunidade, considerando a biblioteca como um negócio promissor.", "gabarito": "C", "banca": "Secretaria de Estado de Educação do Distrito Federal", "ano": "2017", "assunto": "Marketing para Unidades de Informação", "comentario": "Certo. A descrição corresponde à gestão orientada para o marketing: planejar, organizar e aplicar técnicas mercadológicas para ampliar, aperfeiçoar e promover serviços e produtos com valor agregado para a comunidade atendida. Tratar a biblioteca como um negócio (ainda que sem fins lucrativos) faz parte dessa lógica.", "src": "notion"}, {"id": 22, "enunciado": "Uma das finalidades do marketing da informação é melhorar o processo de comunicação entre o usuário e a biblioteca.", "gabarito": "C", "banca": "TJ/ES", "ano": "2023", "assunto": "Marketing para Unidades de Informação", "comentario": "Certo. Melhorar a comunicação entre a unidade de informação e seus públicos está entre as finalidades do marketing da informação. A ênfase no relacionamento com os públicos é, inclusive, um dos princípios do marketing da informação segundo Amaral.", "src": "notion"}, {"id": 23, "enunciado": "As ações promocionais em unidades de informação devem concentrar-se nos usuários internos, pois os usuários externos não interferem nos indicadores de desempenho da instituição.", "gabarito": "E", "banca": "TJPA", "ano": "2025", "assunto": "Marketing para Unidades de Informação", "comentario": "Errado. As ações promocionais não devem se limitar aos usuários internos. Os usuários externos (reais e potenciais) também importam e fazem parte do mercado da unidade de informação. Restringir o marketing ao público interno contraria a lógica de segmentação e de atendimento ao público-alvo.", "src": "notion"}, {"id": 24, "enunciado": "Visto que o acesso à informação depende primordialmente da oferta, o marketing em bibliotecas deve priorizar a promoção dos serviços em detrimento da formulação de estratégias direcionadas ao usuário.", "gabarito": "E", "banca": "MPCE", "ano": "2025", "assunto": "Marketing para Unidades de Informação", "comentario": "Errado. O marketing não pode priorizar a promoção em detrimento do usuário. A lógica é a oposta: a orientação para o marketing parte das necessidades e desejos do usuário, e a promoção é apenas um dos elementos (o P de promoção) do composto. Colocar a promoção acima da estratégia centrada no usuário inverte o conceito.", "src": "notion"}, {"id": 25, "enunciado": "O marketing é estratégia importante para a realização de estudos com enfoque mercadológico, o que é uma das fases da análise de mercado.", "gabarito": "C", "banca": "TJ-AM", "ano": "2019", "assunto": "Marketing para Unidades de Informação", "comentario": "Certo. Estudos com enfoque mercadológico (análise de mercado, segmentação e análise do consumidor) integram a administração da unidade de informação orientada para o marketing. Kotler trata a análise de mercado como pré-requisito essencial da ação eficaz de marketing.", "src": "notion"}, {"id": 26, "enunciado": "A definição dos objetivos é uma das etapas da implementação do marketing.", "gabarito": "C", "banca": "TJ-AM", "ano": "2019", "assunto": "Marketing para Unidades de Informação", "comentario": "Certo. Estabelecer objetivos é a primeira etapa do plano de marketing. A sequência consagrada é: estabelecer objetivos, conhecer a situação presente, examinar estratégias alternativas, selecionar as estratégias apropriadas e converter o plano em ação.", "src": "notion"}, {"id": 27, "enunciado": "A respeito da organização e administração de bibliotecas, julgue o item a seguir.\n\nNo marketing da informação, a informação é tida como um objeto que agrega valor aos produtos e serviços ofertados, de modo que o valor agregado será influenciado pelos processos de gestão da informação, como a coleta, o tratamento e a disseminação. Em bibliotecas, um produto que contém uma informação considerada importante para os usuários será mais procurado.", "gabarito": "C", "banca": "MPCE", "ano": "2020", "assunto": "Marketing para Unidades de Informação", "comentario": "Certo. A questão reúne ideias centrais do marketing da informação e das leis da informação: a informação agrega valor a produtos e serviços e esse valor é influenciado pelos processos de coleta, tratamento e disseminação. A noção de que a informação considerada mais importante (e mais usada) tende a ser mais procurada dialoga com a lei do valor/uso, segundo a qual o valor da informação aumenta com o uso.", "src": "notion"}, {"id": 28, "enunciado": "As mídias sociais são uma ferramenta de comunicação para as bibliotecas, pois possibilita a divulgação de serviços e o relacionamento com usuários.", "gabarito": "C", "banca": "TJPA", "ano": "2025", "assunto": "Marketing para Unidades de Informação", "comentario": "Certo. As mídias sociais funcionam como ferramenta de comunicação da biblioteca, viabilizando a divulgação de serviços e o relacionamento com os usuários. Isso conversa com o P de promoção do composto de marketing e com a ênfase no relacionamento com os públicos.", "src": "notion"}, {"id": 29, "enunciado": "O marketing de conteúdo em serviços de informação deve considerar, além da frequência de publicações, as métricas de engajamento, pois o formato das interações e o horário no qual elas ocorrem influenciam a eficácia da estratégia, exigindo-se planejamento baseado em dados.", "gabarito": "C", "banca": "MPCE", "ano": "2025", "assunto": "Marketing para Unidades de Informação", "comentario": "Certo. O marketing de conteúdo não se resume a publicar com frequência: formato das interações, horário de publicação e métricas de engajamento influenciam o resultado. Por isso a estratégia exige planejamento baseado em dados, e não em achismo. Essa abordagem é coerente com o caráter de processo gerencial do marketing (análise, planejamento, implementação e controle).", "src": "ia"}, {"id": 30, "enunciado": "Uma biblioteca pode adotar o marketing de permissão como instrumento de gestão de demanda de seus usuários, de forma a atendê-los antecipadamente nas necessidades deles de informação.", "gabarito": "C", "banca": "Fundação Universidade de Brasília (FUB)", "ano": "2015", "assunto": "Marketing para Unidades de Informação", "comentario": "Certo. O marketing de permissão parte do consentimento do usuário para se comunicar com ele de forma mais direcionada, o que permite antecipar e atender melhor às suas necessidades de informação. É uma ferramenta de gestão de demanda alinhada à orientação para o usuário.", "src": "ia"}, {"id": 31, "enunciado": "A bibliografia é relevante para o desenvolvimento de estudos bibliométricos e de comunicação científica na medida em que contribui para o conhecimento da recepção de obras, a partir do estudo dos processos de transmissão, produção e recepção dos textos enquanto formas registradas.", "gabarito": "C", "banca": "MPCE", "ano": "2025", "assunto": "Bibliografia", "comentario": "Certo. A bibliografia, ao estudar os processos de produção, transmissão e recepção dos textos como formas registradas, dá suporte a estudos bibliométricos e de comunicação científica. Esse é o sentido da bibliografia como ramo que pesquisa, indica, descreve e classifica os registros do conhecimento.", "src": "notion"}, {"id": 32, "enunciado": "Uma das funções de uma bibliografia é referenciar o conhecimento produzido em outras fontes e suportes de informação.", "gabarito": "C", "banca": "Ministério Público do Estado do Tocantins", "ano": "2024", "assunto": "Bibliografia", "comentario": "Certo. Referenciar o conhecimento produzido em outras fontes e suportes é uma das funções centrais da bibliografia. Pelo Dicionário de Biblioteconomia, a bibliografia é a produção sistemática de listas descritivas de registros do conhecimento (livros, artigos, capítulos e itens similares).", "src": "notion"}, {"id": 33, "enunciado": "De acordo com sua natureza, as bibliografias classificam-se em primárias ou secundárias e, de acordo com o seu assunto, em gerais ou especializadas.", "gabarito": "C", "banca": "MPCE", "ano": "2025", "assunto": "Bibliografia", "comentario": "Certo. São dois critérios de classificação diferentes. Quanto ao nível de publicação, as bibliografias podem ser primárias ou secundárias (e até terciárias). Quanto ao conteúdo/assunto, podem ser gerais ou especializadas. A questão apenas combina corretamente esses dois eixos.", "src": "notion"}, {"id": 34, "enunciado": "A Bibliografia Brasileira de Ciência da Informação é uma publicação do Instituto Brasileiro de Informação em Ciência e Tecnologia (IBICT).", "gabarito": "C", "banca": "Ministério Público do Estado do Tocantins", "ano": "2024", "assunto": "Bibliografia", "comentario": "Certo. A questão trata de uma bibliografia nacional especializada produzida pelo IBICT, no caso a Bibliografia Brasileira de Ciência da Informação. O ponto a memorizar é o vínculo institucional: bibliografias nacionais especializadas costumam ser editadas por órgãos como o IBICT (e, no caso jurídico, a Biblioteca do Senado, com a Bibliografia Brasileira de Direito).", "src": "ia"}, {"id": 35, "enunciado": "A produção de bibliografias, além de ser uma maneira eficiente de registrar e preservar a memória bibliográfica nacional, também consiste em uma forma de organizar e apresentar o conhecimento produzido a partir de um recorte específico. Em relação às bibliografias e suas características, julgue o item a seguir.\n\nAs bibliografias são caraterizadas como documentos secundários.", "gabarito": "C", "banca": "MPCE", "ano": "2020", "assunto": "Bibliografia", "comentario": "Certo. Enquanto fontes de informação, as bibliografias são documentos secundários. Vale a distinção: como fonte de informação a bibliografia é secundária, e a bibliografia de bibliografias é terciária. A afirmação está alinhada a essa classificação.", "src": "notion"}, {"id": 36, "enunciado": "A bibliografia sinalética apresenta um resumo que relaciona o conteúdo da obra referenciada, sem comentários a respeito da qualidade desse resumo.", "gabarito": "E", "banca": "PGDF", "ano": "2019", "assunto": "Bibliografia", "comentario": "ERRADO. É a bibliografia analítica que apresenta o resumo sem comentar sobre sua qualidade. A sinalética apenas enumera autores e títulos das obras, com indicação que permite identificar a obra.", "src": "banca"}, {"id": 37, "enunciado": "As bibliografias especializadas, tais como os catálogos de biblioteca, representam a totalidade do acervo de uma biblioteca.", "gabarito": "E", "banca": "PGDF", "ano": "2019", "assunto": "Bibliografia", "comentario": "ERRADO. As bibliografias especializadas, diferentemente dos catálogos de biblioteca, podem extrapolar o acervo sob a guarda da biblioteca. Ademais, as bibliografias especializadas não representam a totalidade do acervo de uma biblioteca e sim um determinado tema ou área específica do conhecimento.", "src": "banca"}, {"id": 38, "enunciado": "As bibliografias podem ser diferenciadas no que concerne à periodicidade, à forma de tratamento de documentos e ao alcance dos tipos de documentos.", "gabarito": "C", "banca": "TJ-AM", "ano": "2019", "assunto": "Bibliografia", "comentario": "Certo. As bibliografias podem ser diferenciadas por vários critérios, entre eles a periodicidade (corrente, retrospectiva, prospectiva), a forma de tratamento dos documentos (sinalética, analítica, crítica) e o alcance (exaustiva ou seletiva). A questão apenas reconhece a existência desses critérios.", "src": "notion"}, {"id": 39, "enunciado": "Entre as bases de dados que indexam a literatura relativa à ciência da informação, destaca-se a LISA, que é uma bibliografia corrente, publicada em diversos países e línguas, indexando periódicos especializados.", "gabarito": "C", "banca": "EBSERH", "ano": "2018", "assunto": "Bibliografia", "comentario": "Certo. A LISA (Library and Information Science Abstracts) é uma base que indexa a literatura de biblioteconomia e ciência da informação e funciona como bibliografia corrente, ou seja, registra os documentos à medida que vão sendo publicados, a intervalos regulares. Corrente é justamente o tipo que acompanha a produção de forma continuada.", "src": "ia"}, {"id": 40, "enunciado": "Em relação ao nível de publicação, as bibliografias se subdividem em primárias, secundárias e terciárias.", "gabarito": "C", "banca": "TJDFT", "ano": "2015", "assunto": "Bibliografia", "comentario": "Certo. Quanto ao nível de publicação, as bibliografias se subdividem em primárias (referências elaboradas a partir dos próprios documentos), secundárias (copiadas de bibliografias primárias) e terciárias. A afirmação reproduz exatamente essa subdivisão.", "src": "notion"}];
+  const TOTAL = 40;
+
+  // rótulos por fonte de comentário
+  const LABELS = {
+    banca:  { label: 'justificativa da banca:', fonte: null },
+    notion: { label: null, fonte: 'comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima' },
+    ia:     { label: null, fonte: 'comentário gerado por inteligência artificial. caso tenha dúvida de sua confiabilidade, compartilhe com a prof e os colegas no grupo Foca Chat' }
+  };
+
+  const STORAGE_KEY = 'foca-camara-semana-7:respostas';
+
+  // ============================================================
+  // ESTADO
+  // ============================================================
+  let respostas = {}; // { idQuestao: 'C' | 'E' }
+
+  // ============================================================
+  // PERSISTÊNCIA (localStorage — funciona em GitHub Pages)
+  // ============================================================
+  function carregarRespostas() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) respostas = JSON.parse(raw) || {};
+    } catch (e) {
+      console.warn('falha ao ler localStorage:', e);
+      respostas = {};
+    }
+  }
+
+  function salvarRespostas() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(respostas));
+    } catch (e) {
+      console.warn('falha ao salvar localStorage:', e);
+    }
+  }
+
+  function limparRespostas() {
+    respostas = {};
+    try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+  }
+
+  // ============================================================
+  // RENDERIZAÇÃO
+  // ============================================================
+  function agruparPorAssunto(qs) {
+    const grupos = {};
+    const ordem = [];
+    qs.forEach(q => {
+      if (!grupos[q.assunto]) {
+        grupos[q.assunto] = [];
+        ordem.push(q.assunto);
+      }
+      grupos[q.assunto].push(q);
+    });
+    return ordem.map(a => ({ assunto: a, questoes: grupos[a] }));
+  }
+
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function renderQuestoes() {
+    const wrap = document.getElementById('questoesWrap');
+    const grupos = agruparPorAssunto(QUESTOES);
+    let html = '';
+    grupos.forEach((grupo, gi) => {
+      const num = String(gi + 1).padStart(2, '0');
+      html += `
+        <section class="secao">
+          <div class="secao-header">
+            <div class="secao-eyebrow">área ${num}</div>
+            <div class="secao-title">${escapeHtml(grupo.assunto.toLowerCase())}</div>
+            <div class="secao-meta">${grupo.questoes.length} questões</div>
+          </div>
+      `;
+      grupo.questoes.forEach((q, qi) => {
+        const numQ = String(qi + 1).padStart(2, '0');
+        html += `
+          <article class="questao" id="q-${q.id}" data-id="${q.id}" data-gabarito="${q.gabarito}" data-assunto="${escapeHtml(q.assunto)}">
+            <div class="questao-header">
+              <div class="questao-num-wrap">
+                <span class="questao-num">${numQ}</span>
+                <span class="tag">${escapeHtml(q.banca)} · ${escapeHtml(q.ano)}</span>
+              </div>
+              <span class="status-icon" id="status-${q.id}"></span>
+            </div>
+            <p class="enunciado">${escapeHtml(q.enunciado)}</p>
+            <div class="ce-buttons">
+              <button class="ce-btn" type="button" data-resposta="C" onclick="responder(${q.id}, 'C')">certo</button>
+              <button class="ce-btn" type="button" data-resposta="E" onclick="responder(${q.id}, 'E')">errado</button>
+            </div>
+            <div class="feedback" id="feedback-${q.id}"></div>
+          </article>
+        `;
+      });
+      html += `</section>`;
+    });
+    wrap.innerHTML = html;
+  }
+
+  // ============================================================
+  // INTERAÇÃO
+  // ============================================================
+  function responder(id, resposta) {
+    if (respostas[id] !== undefined) return; // já respondeu
+    respostas[id] = resposta;
+    salvarRespostas();
+    aplicarRespostaNaUI(id, resposta);
+    atualizarStats();
+  }
+
+  function aplicarRespostaNaUI(id, resposta) {
+    const q = QUESTOES.find(x => x.id === id);
+    if (!q) return;
+
+    const article = document.getElementById('q-' + id);
+    const statusEl = document.getElementById('status-' + id);
+    const fbEl = document.getElementById('feedback-' + id);
+    const btns = article.querySelectorAll('.ce-btn');
+
+    const acertou = resposta === q.gabarito;
+
+    article.classList.add('respondida');
+    article.classList.add(acertou ? 'acertou' : 'errou');
+
+    btns.forEach(b => {
+      b.disabled = true;
+      const r = b.getAttribute('data-resposta');
+      if (r === resposta) {
+        b.classList.add(acertou ? 'escolhido-certo-correto' : 'escolhido-errado');
+      } else if (r === q.gabarito && !acertou) {
+        b.classList.add('gabarito-correto');
+      } else {
+        b.classList.add('desmarcado');
+      }
+    });
+
+    statusEl.classList.add(acertou ? 'acertou' : 'errou');
+    statusEl.textContent = acertou ? '✓' : '✗';
+
+    const gabaritoTxt = q.gabarito === 'C' ? 'certo' : 'errado';
+    const meta = LABELS[q.src] || LABELS.ia;
+
+    let html = `<div class="feedback-tag">${acertou ? 'você acertou' : 'você errou'}</div>`;
+    html += `<p class="gab-correto">resposta correta: <strong>${gabaritoTxt}</strong></p>`;
+
+    // comentário: rótulo da banca (antes) OU atribuição de IA (depois)
+    if (meta.label) {
+      html += `<p><span class="justificativa-label">${meta.label}</span> ${escapeHtml(q.comentario)}</p>`;
+    } else {
+      html += `<p>${escapeHtml(q.comentario)}</p>`;
+    }
+    if (meta.fonte) {
+      html += `<p class="coment-fonte">${escapeHtml(meta.fonte)}</p>`;
+    }
+
+    fbEl.innerHTML = html;
+    fbEl.classList.remove('acerto', 'erro');
+    fbEl.classList.add(acertou ? 'acerto' : 'erro', 'show');
+  }
+
+  // ============================================================
+  // STATS / RESULTADO
+  // ============================================================
+  function calcularStats() {
+    let respondidas = 0, acertos = 0, erros = 0;
+    QUESTOES.forEach(q => {
+      if (respostas[q.id] !== undefined) {
+        respondidas++;
+        if (respostas[q.id] === q.gabarito) acertos++; else erros++;
+      }
+    });
+    return { respondidas, acertos, erros };
+  }
+
+  function statsPorArea() {
+    const map = {};
+    const ordem = [];
+    QUESTOES.forEach(q => {
+      if (!map[q.assunto]) { map[q.assunto] = { total: 0, acertos: 0, respondidas: 0 }; ordem.push(q.assunto); }
+      map[q.assunto].total++;
+      if (respostas[q.id] !== undefined) {
+        map[q.assunto].respondidas++;
+        if (respostas[q.id] === q.gabarito) map[q.assunto].acertos++;
+      }
+    });
+    return { map, ordem };
+  }
+
+  function mensagemResultado(pct) {
+    if (pct >= 90) return 'desempenho excelente. você tá pronta pra esse tipo de prova. 🦭';
+    if (pct >= 75) return 'muito bom. já dá pra ver que o estudo tá rendendo. vale revisar os pontos que errou.';
+    if (pct >= 60) return 'aproveitamento razoável. dá uma olhada no breakdown abaixo pra ver onde mais errou.';
+    if (pct >= 40) return 'tá no caminho, mas dá pra apertar o estudo. revisa as áreas com pior desempenho.';
+    return 'simulado puxado. usa esse resultado pra mapear as áreas que precisam de mais atenção e segue firme. 🦭';
+  }
+
+  function atualizarStats() {
+    const { respondidas, acertos, erros } = calcularStats();
+    document.getElementById('respondidasNum').textContent = respondidas;
+    document.getElementById('acertosNum').textContent = acertos;
+    document.getElementById('errosNum').textContent = erros;
+    document.getElementById('stickyProgressFill').style.width = (respondidas / TOTAL * 100) + '%';
+
+    const ctaParcial = document.getElementById('ctaParcial');
+    const resultadoSection = document.getElementById('resultadoSection');
+
+    if (respondidas === TOTAL) {
+      ctaParcial.style.display = 'none';
+      resultadoSection.style.display = 'block';
+      document.getElementById('finalAcertos').textContent = acertos;
+      const pct = Math.round(acertos / TOTAL * 100);
+      document.getElementById('finalPct').textContent = pct + '%';
+      document.getElementById('resultMsg').textContent = mensagemResultado(pct);
+
+      const { map, ordem } = statsPorArea();
+      const wrap = document.getElementById('breakdownWrap');
+      let html = '';
+      ordem.forEach(area => {
+        const s = map[area];
+        const pctArea = Math.round(s.acertos / s.total * 100);
+        html += `
+          <div class="area-row">
+            <div class="area-meta">
+              <span class="area-name">${escapeHtml(area.toLowerCase())}</span>
+              <span class="area-stats"><strong>${s.acertos}</strong>/${s.total} · ${pctArea}%</span>
+            </div>
+            <div class="area-track"><div class="area-fill" style="width:${pctArea}%"></div></div>
+          </div>
+        `;
+      });
+      wrap.innerHTML = html;
+    } else if (respondidas > 0) {
+      ctaParcial.style.display = 'block';
+      document.getElementById('ctaParcialNum').textContent = respondidas;
+      resultadoSection.style.display = 'none';
+    } else {
+      ctaParcial.style.display = 'none';
+      resultadoSection.style.display = 'none';
+    }
+  }
+
+  // ============================================================
+  // RESET
+  // ============================================================
+  function resetarTudo() {
+    const ok = confirm('tem certeza? vai apagar todas as respostas salvas.');
+    if (!ok) return;
+    limparRespostas();
+    location.reload();
+  }
+
+  // ============================================================
+  // INIT
+  // ============================================================
+  function restaurarRespostasNaUI() {
+    Object.keys(respostas).forEach(id => {
+      aplicarRespostaNaUI(parseInt(id), respostas[id]);
+    });
+  }
+
+  function setupSticky() {
+    const bar = document.getElementById('stickyBar');
+    function check() {
+      if (window.scrollY > 8) bar.classList.add('scrolled');
+      else bar.classList.remove('scrolled');
+    }
+    window.addEventListener('scroll', check, { passive: true });
+    check();
+  }
+
+  document.getElementById('btnClearTop').addEventListener('click', resetarTudo);
+  document.getElementById('btnReset').addEventListener('click', resetarTudo);
+
+  // expor pra inline onclick
+  window.responder = responder;
+
+  carregarRespostas();
+  renderQuestoes();
+  restaurarRespostasNaUI();
+  atualizarStats();
+  setupSticky();
+</script>
+
+</body>
+</html>
