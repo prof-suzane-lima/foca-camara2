@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🦭 Foca na Câmara - Simulado da semana 8</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --verde: #00A74A;
+    --rosa: #F4A6D7;
+    --bege: #F1F1DE;
+    --verde-escuro: #07272D;
+    --azul: #9BCBEB;
+    --verde-limao: #B5BD00;
+    --amarelo: #FED141;
+    --laranja: #FF6A39;
+    --acerto: var(--verde);
+    --acerto-bg: rgba(0, 167, 74, 0.12);
+    --erro: var(--laranja);
+    --erro-bg: rgba(255, 106, 57, 0.12);
+    --linha: rgba(7, 39, 45, 0.15);
+    --linha-suave: rgba(7, 39, 45, 0.08);
+    --shadow-soft: 0 1px 3px rgba(7, 39, 45, 0.06), 0 4px 16px rgba(7, 39, 45, 0.04);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bege);
+    color: var(--verde-escuro);
+    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+    font-weight: 400;
+    line-height: 1.5;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ===== HEADER ===== */
+  .header {
+    background: var(--verde-escuro);
+    color: var(--bege);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .brand {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    line-height: 1;
+    display: inline-block;
+    font-size: 16px;
+  }
+  .brand .b-prof   { font-weight: 400; letter-spacing: 0; }
+  .brand .b-suzane { font-weight: 800; letter-spacing: -0.02em; }
+  .brand .b-lima   { font-weight: 800; font-style: italic; letter-spacing: -0.02em; }
+  .brand.dark { color: var(--bege); }
+  .header-tag {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--rosa);
+    font-weight: 700;
+  }
+
+  .container {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 40px 20px 64px;
+  }
+
+  /* ===== HERO ===== */
+  .eyebrow {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--laranja);
+    margin-bottom: 14px;
+  }
+  h1 {
+    font-size: 40px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.02;
+    margin-bottom: 16px;
+  }
+  h1 .seal { font-style: normal; }
+  h1 em { font-style: normal; color: var(--verde); }
+  .lead {
+    font-size: 16px;
+    color: rgba(7, 39, 45, 0.75);
+    max-width: 560px;
+    margin-bottom: 22px;
+  }
+
+  /* ===== AVISOS ===== */
+  .avisos {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .nota {
+    background: white;
+    border: 1px solid var(--linha-suave);
+    border-left: 4px solid var(--azul);
+    border-radius: 10px;
+    padding: 14px 18px;
+    font-size: 13.5px;
+    color: rgba(7, 39, 45, 0.82);
+    box-shadow: var(--shadow-soft);
+  }
+  .nota strong { color: var(--verde-escuro); font-weight: 800; }
+  .nota.salvamento { border-left-color: var(--verde); }
+
+  /* ===== BARRA DE PROGRESSO FIXA ===== */
+  .progresso-bar {
+    position: sticky;
+    top: 56px;
+    z-index: 40;
+    background: var(--bege);
+    padding: 12px 0 14px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid var(--linha-suave);
+  }
+  .progresso-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 13px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+    gap: 4px 12px;
+  }
+  .progresso-meta strong { color: var(--verde); font-weight: 800; }
+  .progresso-track {
+    background: rgba(7, 39, 45, 0.10);
+    height: 6px;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .progresso-fill {
+    background: var(--verde);
+    height: 100%;
+    width: 0%;
+    border-radius: 999px;
+    transition: width 0.35s ease;
+  }
+  .reset-link {
+    background: none;
+    border: none;
+    color: rgba(7, 39, 45, 0.5);
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 0;
+  }
+  .reset-link:hover { color: var(--laranja); }
+
+  /* ===== QUESTÃO ===== */
+  .questao {
+    background: white;
+    border: 1px solid var(--linha-suave);
+    border-radius: 14px;
+    padding: 24px 22px;
+    margin-bottom: 18px;
+    box-shadow: var(--shadow-soft);
+    scroll-margin-top: 130px;
+  }
+  .questao-topo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+  .questao-num {
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--verde-escuro);
+    background: rgba(7, 39, 45, 0.06);
+    width: 30px; height: 30px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-variant-numeric: tabular-nums;
+  }
+  .tag {
+    background: var(--verde-escuro);
+    color: var(--bege);
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .tag-adaptada {
+    background: var(--amarelo);
+    color: var(--verde-escuro);
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .enunciado {
+    font-size: 15.5px;
+    line-height: 1.65;
+    margin-bottom: 20px;
+    white-space: pre-line;
+  }
+
+  /* ===== BOTÕES CERTO / ERRADO ===== */
+  .ce-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 4px;
+  }
+  .ce-btn {
+    flex: 1;
+    background: transparent;
+    border: 1.5px solid var(--linha);
+    color: var(--verde-escuro);
+    padding: 13px 16px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.16s ease;
+    font-family: inherit;
+  }
+  .ce-btn:hover { border-color: var(--verde-escuro); }
+  .ce-btn:disabled { cursor: default; }
+
+  /* estados pós-resposta */
+  .ce-btn.escolhida-certa,
+  .ce-btn.gabarito-certo {
+    border-color: var(--acerto);
+    background: var(--acerto-bg);
+    color: var(--verde-escuro);
+  }
+  .ce-btn.escolhida-errada {
+    border-color: var(--erro);
+    background: var(--erro-bg);
+    color: var(--verde-escuro);
+  }
+  .ce-btn.apagada { opacity: 0.4; }
+
+  /* ===== FEEDBACK / COMENTÁRIO ===== */
+  .feedback {
+    display: none;
+    margin-top: 18px;
+    border-radius: 10px;
+    border-left: 4px solid;
+    padding: 16px 18px;
+  }
+  .feedback.show { display: block; animation: fadeIn 0.28s ease; }
+  .feedback.acerto { background: var(--acerto-bg); border-color: var(--acerto); }
+  .feedback.erro { background: var(--erro-bg); border-color: var(--erro); }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .feedback-status {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .feedback.acerto .feedback-status { color: var(--acerto); }
+  .feedback.erro .feedback-status { color: var(--erro); }
+  .feedback-gab {
+    font-size: 13px;
+    font-weight: 700;
+    color: rgba(7, 39, 45, 0.7);
+    margin-bottom: 12px;
+  }
+  .feedback-gab b { color: var(--verde-escuro); }
+  .comentario-label {
+    font-weight: 800;
+  }
+  .comentario-corpo {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--verde-escuro);
+  }
+  .comentario-atrib {
+    display: block;
+    margin-top: 12px;
+    font-size: 11.5px;
+    font-style: italic;
+    color: rgba(7, 39, 45, 0.55);
+    line-height: 1.45;
+  }
+
+  /* ===== RESULTADO / RANKING ===== */
+  .resultado {
+    display: none;
+    margin-top: 36px;
+    scroll-margin-top: 120px;
+  }
+  .resultado.show { display: block; animation: fadeIn 0.4s ease; }
+  .result-hero {
+    background: var(--verde-escuro);
+    color: var(--bege);
+    border-radius: 18px;
+    padding: 36px 32px;
+    margin-bottom: 18px;
+  }
+  .result-eyebrow {
+    color: var(--rosa);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .result-score {
+    font-size: 80px;
+    font-weight: 800;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    color: var(--rosa);
+  }
+  .result-score em { font-style: normal; color: var(--bege); font-size: 32px; opacity: 0.6; margin-left: 10px; }
+  .result-msg {
+    font-size: 17px;
+    margin-top: 14px;
+    color: rgba(241, 241, 222, 0.88);
+  }
+  .result-extra {
+    display: flex;
+    gap: 10px;
+    margin-top: 22px;
+    flex-wrap: wrap;
+  }
+  .result-chip {
+    background: rgba(241, 241, 222, 0.08);
+    border: 1px solid rgba(241, 241, 222, 0.18);
+    border-radius: 999px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--bege);
+    font-variant-numeric: tabular-nums;
+  }
+  .result-chip b { font-weight: 800; }
+  .btn {
+    background: var(--verde);
+    color: var(--bege);
+    border: none;
+    padding: 14px 24px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    font-family: inherit;
+  }
+  .btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0, 167, 74, 0.25); }
+  .btn.secondary {
+    background: transparent;
+    color: var(--verde-escuro);
+    border: 1.5px solid var(--verde-escuro);
+  }
+  .btn.secondary:hover { background: var(--verde-escuro); color: var(--bege); }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    margin-top: 48px;
+    padding-top: 22px;
+    border-top: 1px solid var(--linha);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 12px;
+    color: rgba(7, 39, 45, 0.55);
+  }
+  .footer .brand { font-size: 13px; }
+  .footer .brand.light .b-prof,
+  .footer .brand.light .b-suzane,
+  .footer .brand.light .b-lima { color: var(--verde); }
+
+  @media (max-width: 560px) {
+    h1 { font-size: 32px; }
+    .questao { padding: 20px 16px; }
+    .result-score { font-size: 64px; }
+  }
+</style>
+</head>
+<body>
+  <header class="header">
+    <span class="brand dark">
+      <span class="b-prof">prof.</span> <span class="b-suzane">suzane</span> <span class="b-lima">lima</span>
+    </span>
+    <span class="header-tag">🦭 foca na câmara</span>
+  </header>
+
+  <main class="container">
+    <div class="eyebrow">simulado da semana 8</div>
+    <h1><span class="seal">🦭</span> foca na câmara<br><em>simulado da semana 8</em></h1>
+    <p class="lead">responda cada item como <strong>certo</strong> ou <strong>errado</strong>. assim que confirmar, aparece o gabarito e o comentário. ao final, você vê sua pontuação.</p>
+
+    <div class="avisos">
+      <div class="nota salvamento">
+        <strong>seu progresso fica salvo neste navegador.</strong> pode fechar a página e voltar depois que as questões já respondidas continuam marcadas. (o salvamento é local, não sincroniza entre aparelhos.)
+      </div>
+      <div class="nota">
+        <strong>duas questões foram adaptadas</strong> por causa de atualização da norma. elas aparecem com o selo <span class="tag-adaptada" style="display:inline-block;margin:0 2px;">adaptada</span> ao lado do número.
+      </div>
+    </div>
+
+    <div class="progresso-bar">
+      <div class="progresso-meta">
+        <span>respondidas: <strong id="prog-resp">0</strong> de <span id="prog-total">0</span></span>
+        <span>acertos: <strong id="prog-acertos">0</strong></span>
+        <button class="reset-link" id="btn-reset" type="button">recomeçar</button>
+      </div>
+      <div class="progresso-track"><div class="progresso-fill" id="prog-fill"></div></div>
+    </div>
+
+    <div id="lista-questoes"></div>
+
+    <section class="resultado" id="resultado">
+      <div class="result-hero">
+        <div class="result-eyebrow">resultado do simulado</div>
+        <div class="result-score"><span id="r-pct">0</span>%<em id="r-frac">0/0</em></div>
+        <p class="result-msg" id="r-msg"></p>
+        <div class="result-extra">
+          <span class="result-chip">acertos: <b id="r-acertos">0</b></span>
+          <span class="result-chip">erros: <b id="r-erros">0</b></span>
+          <span class="result-chip">aproveitamento: <b id="r-aprov">0%</b></span>
+        </div>
+      </div>
+      <button class="btn secondary" id="btn-refazer" type="button">refazer o simulado</button>
+    </section>
+
+    <div class="footer">
+      <span class="brand light">
+        <span class="b-prof">prof.</span> <span class="b-suzane">suzane</span> <span class="b-lima">lima</span>
+      </span>
+      <span>🦭 foca na câmara · simulado da semana 8</span>
+    </div>
+  </main>
+
+<script>
+  const QUESTOES = [{"id": 1, "enunciado": "A respeito de publicações e documentos normativos adotados em bibliotecas jurídicas, julgue o item a seguir.\n\nA norma que estabelece os princípios para apresentação das partes que formam um livro ou folheto é a NBR 10719:2011, que adota como referência o AACR-2.", "gabarito": "E", "orgao": "MPCE", "ano": "2020", "comentario_tipo": "notion", "comentario_prefixo": "", "comentario": "Gabarito errado. A norma que estabelece os princípios para apresentação das partes de um livro ou folheto é a NBR 6029, não a NBR 10719:2011 (essa cuida de relatório técnico e/ou científico). E a 6029 não adota o AACR-2 como referência. Repare na pegadinha dupla: trocaram o número da norma e ainda inventaram uma referência inexistente.", "comentario_atribuicao": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"id": 2, "enunciado": "A definição para nota de rodapé, segundo a Norma Brasileira 6029 (Informação e documentação — Livros e folhetos — Apresentação) é a seguinte: local onde o autor apresenta uma citação, seguida de indicação de autoria, relacionada com a matéria tratada no corpo do trabalho.", "gabarito": "E", "orgao": "Fundação Universidade de Brasília (FUB)", "ano": "2015", "comentario_tipo": "notion", "comentario_prefixo": "", "comentario": "Item errado. A definição apresentada não corresponde a nota de rodapé. A NBR 6029 estabelece os princípios gerais de apresentação de livros e folhetos, e nota de rodapé é a anotação no pé da página para esclarecimentos ou comentários, não o 'local onde o autor apresenta uma citação seguida de indicação de autoria'. A banca distorce uma definição para confundir.", "comentario_atribuicao": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"id": 3, "enunciado": "Baseadas no ordenamento jurídico brasileiro, as fontes materiais correspondem às normas superiores, como leis e decretos, e às normas inferiores, como circulares e deliberações.", "gabarito": "E", "orgao": "PGDF", "ano": "2019", "comentario_tipo": "banca", "comentario_prefixo": "justificativa da banca:", "comentario": "ERRADO. Conforme o ordenamento jurídico brasileiro, as fontes jurídicas são categorizadas em: (i) formais, como normas superiores (leis, projetos de lei, decretos etc.) e normas inferiores (circulares, resoluções, deliberações etc.); e (ii) materiais, com base nas quais o legislador determina as fontes formais.", "comentario_atribuicao": ""}, {"id": 4, "enunciado": "Monografias e artigos no campo do direito são exemplos de fontes de informação doutrinárias, sendo considerados tipos de fontes relevantes porque resultam em documentação jurídica.", "gabarito": "C", "orgao": "PGDF", "ano": "2019", "comentario_tipo": "banca", "comentario_prefixo": "justificativa da banca:", "comentario": "CERTO. Monografias, artigos e trabalhos apresentados em eventos são exemplos de fontes doutrinárias. No caso da atuação do bibliotecário jurídico, verifica-se que as fontes legislativas, doutrinárias e jurisprudenciais são as mais relevantes, denominando a chamada documentação jurídica.", "comentario_atribuicao": ""}, {"id": 5, "enunciado": "Uma coletânea de jurisprudências pode ser considerada documento secundário, uma vez que facilita o acesso a documentos primários dispersos.", "gabarito": "C", "orgao": "Ministério Público do Estado do Tocantins", "ano": "2024", "comentario_tipo": "notion", "comentario_prefixo": "", "comentario": "Certo. A coletânea de jurisprudências reúne e organiza decisões (documentos primários) que estavam dispersas, funcionando como documento secundário ao facilitar o acesso a esses primários. Vale lembrar: jurisprudência e doutrina são fontes secundárias do Direito, então um produto que as organiza tem natureza secundária.", "comentario_atribuicao": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"id": 6, "enunciado": "Os periódicos jurídicos são considerados fontes jurídicas primárias, assim como o Diário Oficial da União.", "gabarito": "E", "orgao": "TSE", "ano": "2024", "comentario_tipo": "notion", "comentario_prefixo": "", "comentario": "Errado. O Diário Oficial da União é fonte primária (publica atos normativos), mas periódico jurídico não é fonte primária: tem caráter doutrinário, ou seja, secundário. A questão coloca os dois no mesmo balaio de 'primárias' para induzir ao erro. Fique de olho: nem tudo que circula no meio jurídico é fonte primária.", "comentario_atribuicao": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"id": 7, "enunciado": "A informação analítica (por meio da doutrina) e a normativa (por meio da legislação) são as duas únicas formas pelas quais a informação jurídica pode ser gerada, registrada e recuperada.", "gabarito": "E", "orgao": "TSE", "ano": "2024", "comentario_tipo": "notion", "comentario_prefixo": "", "comentario": "Errado. A informação jurídica não se limita a duas formas. Ela aparece em três: legislação, doutrina e jurisprudência. A afirmativa restringe a apenas analítica (doutrina) e normativa (legislação) e deixa a jurisprudência de fora. Cuidado com recortes que excluem uma das três.", "comentario_atribuicao": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"id": 8, "enunciado": "A documentação jurídica ocorre apenas no nível da jurisprudência.", "gabarito": "E", "orgao": "TJ/ES", "ano": "2023", "comentario_tipo": "notion", "comentario_prefixo": "", "comentario": "Errado. A documentação jurídica não ocorre apenas no nível da jurisprudência. Ela abrange legislação, doutrina e jurisprudência, reunindo e organizando a informação jurídica como um todo. Restringir a um único nível derruba a afirmativa.", "comentario_atribuicao": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"id": 9, "enunciado": "Julgue o item a seguir, relativo à ciência da informação e à documentação geral e jurídica.\n\nA informação jurídica possui caráter eminentemente privado, sendo uma de suas principais funções fornecer as regras, os direitos e os deveres que regem a sociedade.", "gabarito": "E", "orgao": "MPCE", "ano": "2020", "comentario_tipo": "notion", "comentario_prefixo": "", "comentario": "Errado. A informação jurídica tem caráter eminentemente público, não privado. Ela é base para o trabalho de juristas, advogados, magistrados e do próprio poder público, fornecendo as regras, direitos e deveres que regem a sociedade. O erro está em chamá-la de privada.", "comentario_atribuicao": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"id": 10, "enunciado": "O acervo do Portal LEXML reúne, organiza, integra e dá acesso a documentos de legislação, jurisprudência e proposições legislativas das esferas federal, estadual e municipal, comportando informações dos Poderes Executivo, Legislativo e Judiciário e do Ministério Público, além de disponibilizar doutrina correlacionada com a legislação por meio do registro de livros jurídicos disponíveis na RVBI.", "gabarito": "C", "orgao": "TJPA", "ano": "2025", "comentario_tipo": "notion", "comentario_prefixo": "", "comentario": "Certo. O LexML reúne, organiza, integra e dá acesso a legislação, jurisprudência e proposições legislativas das três esferas (federal, estadual e municipal) e dos âmbitos Executivo, Legislativo, Judiciário e Ministério Público, remetendo também à doutrina correlata pelo acervo da RVBI. Descrição alinhada ao portal.", "comentario_atribuicao": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"id": 11, "enunciado": "O vocabulário de autoridade do LexML Brasil é inicialmente preenchido com cinco valores: federal, estadual, municipal, jurídico e legislativo.", "gabarito": "E", "orgao": "MPCE", "ano": "2025", "comentario_tipo": "ia", "comentario_prefixo": "", "comentario": "Errado. As esferas previstas no vocabulário do LexML são federal, estadual e municipal. A afirmativa mistura nesse rol valores como 'jurídico' e 'legislativo', que não compõem o preenchimento inicial do vocabulário de autoridade nesses termos. A pegadinha está em embaralhar esferas com tipos/áreas.", "comentario_atribuicao": "comentário gerado por inteligência artificial. caso tenha dúvida de sua confiabilidade, compartilhe com a prof e os colegas no grupo Foca Chat"}, {"id": 12, "enunciado": "A notação urn:lex:br:federal:lei:lei.maria.penha é uma URN do tipo canônica no LexML Brasil.", "gabarito": "E", "orgao": "MPCE", "ano": "2025", "comentario_tipo": "ia", "comentario_prefixo": "", "comentario": "Errado. A notação com 'lei.maria.penha' é um apelido (alias) amigável, não a URN canônica. A forma canônica segue a estrutura padronizada com esfera, autoridade, tipo de documento e identificação por data e número (algo como urn:lex:br:federal:lei:2006-08-07;11340). O apelido apenas remete à canônica.", "comentario_atribuicao": "comentário gerado por inteligência artificial. caso tenha dúvida de sua confiabilidade, compartilhe com a prof e os colegas no grupo Foca Chat"}, {"id": 13, "enunciado": "No LexML Brasil, há dois esquemas XML, o rígido e o flexível, organizados de modo que todo documento válido no esquema flexível também seja válido no esquema rígido.", "gabarito": "E", "orgao": "MPCE", "ano": "2025", "comentario_tipo": "ia", "comentario_prefixo": "", "comentario": "Errado. A relação está invertida. Num par de esquemas em que um é mais restritivo (rígido) e o outro mais permissivo (flexível), todo documento válido no rígido também é válido no flexível, e não o contrário. A banca troca a ordem para confundir.", "comentario_atribuicao": "comentário gerado por inteligência artificial. caso tenha dúvida de sua confiabilidade, compartilhe com a prof e os colegas no grupo Foca Chat"}, {"id": 14, "enunciado": "LexML é um portal especializado em informação jurídica e legislativa que reúne leis, decretos, acórdãos, súmulas, projetos de leis, entre outros documentos das esferas federal, estadual e municipal dos Poderes Executivo, Legislativo e Judiciário de todo o Brasil, sendo um exemplo de metabuscador disponível atualmente.", "gabarito": "C", "orgao": "Ministério Público do Estado do Tocantins", "ano": "2024", "comentario_tipo": "notion", "comentario_prefixo": "", "comentario": "Certo. O LexML é um portal especializado em informação jurídica e legislativa que reúne leis, decretos, acórdãos, súmulas e projetos de lei das três esferas e dos diferentes poderes de todo o Brasil. Por reunir e dar acesso integrado a conteúdo de várias fontes, é corretamente tratado como metabuscador.", "comentario_atribuicao": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"id": 15, "enunciado": "O LEXML é uma base de dados jurídicas do tipo referencial, cujo funcionamento baseia-se no protocolo OAI PMH.", "gabarito": "C", "orgao": "STJ", "ano": "2024", "comentario_tipo": "notion", "comentario_prefixo": "", "comentario": "Certo. O LexML é uma base de natureza referencial (aponta e dá acesso aos documentos) e funciona como agregador que coleta metadados de provedores de dados por meio do protocolo OAI-PMH. Os dois pontos da afirmativa estão corretos.", "comentario_atribuicao": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"id": 16, "enunciado": "No portal LexML, o denominado texto compilado da norma original deriva da vinculação por assunto, que é um dos elementos que permitem caracterizar o conjunto de normas como um sistema coeso, já que tal vinculação é facilmente registrada em banco de dados.", "gabarito": "E", "orgao": "STJ", "ano": "2024", "comentario_tipo": "ia", "comentario_prefixo": "", "comentario": "Errado. O texto compilado (norma consolidada com suas alterações) não deriva de vinculação por assunto. Ele resulta da relação entre a norma original e as normas que a alteram ao longo do tempo. A questão troca o tipo de vinculação que dá origem ao compilado.", "comentario_atribuicao": "comentário gerado por inteligência artificial. caso tenha dúvida de sua confiabilidade, compartilhe com a prof e os colegas no grupo Foca Chat"}, {"id": 17, "enunciado": "No portal LexML, um identificador unívoco e persistente, chamado URN, é atribuído a todos os documentos legislativos e jurídicos, possibilitando que eles sejam referenciados sem o risco de que o endereço seja alterado no futuro.", "gabarito": "C", "orgao": "STJ", "ano": "2024", "comentario_tipo": "notion", "comentario_prefixo": "", "comentario": "Certo. No LexML, a URN (Uniform Resource Name) é o identificador unívoco e persistente atribuído a cada documento legislativo e jurídico. Por ser persistente, permite referenciar o documento sem risco de o endereço mudar no futuro, que é exatamente a vantagem desse tipo de identificador.", "comentario_atribuicao": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"id": 18, "enunciado": "A rede LexML funciona como depositária do patrimônio bibliográfico e documental, sendo responsável pela execução da política governamental de captação, preservação e difusão da produção intelectual brasileira na área do direito.", "gabarito": "E", "orgao": "STJ", "ano": "2024", "comentario_tipo": "notion", "comentario_prefixo": "", "comentario": "Errado. A descrição de 'depositária do patrimônio bibliográfico' e responsável pela política de captação, preservação e difusão remete à Biblioteca Nacional (contexto do depósito legal), não à rede LexML. O LexML organiza, integra e dá acesso a conteúdo jurídico já disponível nos portais dos órgãos.", "comentario_atribuicao": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"id": 19, "enunciado": "A rede LexML constitui um portal especializado em informação jurídica e legislativa fruto de uma iniciativa conjunta de diversos órgãos participantes do Grupo de Trabalho LexML, liderado pelo Supremo Tribunal Federal.", "gabarito": "E", "orgao": "STJ", "ano": "2024", "comentario_tipo": "notion", "comentario_prefixo": "", "comentario": "Errado. O LexML é iniciativa conjunta de diversos órgãos do GT LexML, mas a liderança é do Senado Federal, não do Supremo Tribunal Federal. Esse é um ponto que as bancas adoram trocar, então memorize: quem lidera o LexML é o Senado.", "comentario_atribuicao": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"id": 20, "enunciado": "No portal normas.leg.br, toda referência a uma norma deverá ser feita no formato a seguir, sendo a variável URN_DE_IDENTIFICACAO_DA_NORMA substituída pela URN específica de cada norma:\nhttps://normas.leg.br/?urn=URN_DE_IDENTIFICACAO_DA_NORMA", "gabarito": "C", "orgao": "STJ", "ano": "2024", "comentario_tipo": "notion", "comentario_prefixo": "", "comentario": "Certo. No portal normas.leg.br, a referência a uma norma é feita nesse formato, substituindo a variável pela URN específica de cada norma. A estrutura com a URN como parâmetro garante a identificação persistente do documento.", "comentario_atribuicao": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"id": 21, "enunciado": "Mensagens de veto parcial e decisões de controle concentrado de constitucionalidade do Supremo Tribunal Federal estão entre as informações disponíveis no portal normas.leg.br.", "gabarito": "C", "orgao": "STJ", "ano": "2024", "comentario_tipo": "ia", "comentario_prefixo": "", "comentario": "Certo. O portal normas.leg.br disponibiliza, entre outras informações, mensagens de veto e decisões de controle concentrado de constitucionalidade do STF, integrando dados sobre a formação e o controle das normas.", "comentario_atribuicao": "comentário gerado por inteligência artificial. caso tenha dúvida de sua confiabilidade, compartilhe com a prof e os colegas no grupo Foca Chat"}, {"id": 22, "enunciado": "Coordenada pela Biblioteca da Câmara dos Deputados, a RVBI é uma rede cooperativa de onze bibliotecas da administração pública federal e do governo do Distrito Federal, pertencentes aos Poderes Legislativo, Executivo e Judiciário, e possui um acervo que prioriza a área do direito, especialmente a doutrina, mas também contempla outras áreas das ciências humanas e sociais.", "gabarito": "E", "orgao": "TJPA", "ano": "2025", "comentario_tipo": "notion", "comentario_prefixo": "", "comentario": "Errado. A RVBI é coordenada pela Biblioteca do Senado Federal, não pela Biblioteca da Câmara dos Deputados. O resto da descrição (rede cooperativa da administração pública federal e do DF) está correto, mas o erro está na coordenação. Memorize: RVBI = Senado.", "comentario_atribuicao": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"id": 23, "enunciado": "A RVBI é uma rede cooperativa que, coordenada pela Biblioteca do Senado Federal, é composta por bibliotecas dos Poderes Legislativo, Executivo e Judiciário que compartilham recursos bibliográficos e estruturam suas bases de dados de forma inter-relacionada, a fim de facilitar a recuperação da informação.", "gabarito": "C", "orgao": "MPCE", "ano": "2025", "comentario_tipo": "notion", "comentario_prefixo": "", "comentario": "Certo. A RVBI é a rede cooperativa coordenada pela Biblioteca do Senado Federal, composta por bibliotecas dos Poderes Legislativo, Executivo e Judiciário, que compartilham recursos e estruturam suas bases de forma inter-relacionada para facilitar a recuperação da informação. Descrição correta.", "comentario_atribuicao": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"id": 24, "enunciado": "O acesso ao catálogo da RVBI é aberto, de maneira que qualquer usuário, independentemente de vínculo institucional, pode realizar empréstimos de publicações e solicitar a reprodução integral de documentos disponíveis em seu acervo.", "gabarito": "E", "orgao": "MPCE", "ano": "2025", "comentario_tipo": "ia", "comentario_prefixo": "", "comentario": "Errado. Consultar o catálogo da RVBI é aberto, mas isso não significa que qualquer pessoa, sem vínculo, possa fazer empréstimos e solicitar reprodução integral de documentos. O empréstimo e os serviços seguem regras institucionais, e a reprodução integral esbarra na Lei de Direitos Autorais. Consulta é uma coisa; usufruir de todos os serviços é outra.", "comentario_atribuicao": "comentário gerado por inteligência artificial. caso tenha dúvida de sua confiabilidade, compartilhe com a prof e os colegas no grupo Foca Chat"}, {"id": 25, "enunciado": "Empréstimo entre bibliotecas é a colaboração entre duas ou mais bibliotecas que planejam ações formais ou informais com o objetivo de otimizar tanto recursos quanto produtos e serviços informacionais, como ocorre na RVBI.", "gabarito": "E", "orgao": "STJ", "ano": "2024", "comentario_tipo": "ia", "comentario_prefixo": "", "comentario": "Errado. A definição apresentada descreve cooperação entre bibliotecas (ações conjuntas para otimizar recursos, produtos e serviços), não empréstimo entre bibliotecas. O empréstimo entre bibliotecas é o serviço específico de enviar um item de uma biblioteca para outra atender seu usuário. A banca troca o conceito amplo pelo específico.", "comentario_atribuicao": "comentário gerado por inteligência artificial. caso tenha dúvida de sua confiabilidade, compartilhe com a prof e os colegas no grupo Foca Chat"}, {"id": 26, "enunciado": "A Rede Virtual de Bibliotecas (RVBI) agrega recursos bibliográficos, materiais e humanos da administração pública federal e do governo do Distrito Federal, dos Poderes Legislativo, Executivo e Judiciário.", "gabarito": "C", "orgao": "TSE", "ano": "2024", "comentario_tipo": "notion", "comentario_prefixo": "", "comentario": "Certo. A RVBI agrega recursos bibliográficos, materiais e humanos da administração pública federal e do governo do Distrito Federal, abrangendo os Poderes Legislativo, Executivo e Judiciário. Descrição alinhada à rede.", "comentario_atribuicao": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"id": 27, "enunciado": "Julgue o item a seguir, a respeito de redes e sistemas de centros de documentação e de serviços de informação em bibliotecas.\n\nO acervo da Rede Virtual de Bibliotecas (RVBI), rede cooperativa de bibliotecas coordenada pela biblioteca do Senado Federal, concentra, no que se refere à área das ciências do direito, recursos bibliográficos, materiais e humanos de bibliotecas exclusivamente da administração pública federal, neste caso, relacionados ao Poder Legislativo.", "gabarito": "E", "orgao": "MPCE", "ano": "2020", "comentario_tipo": "notion", "comentario_prefixo": "", "comentario": "Errado. A RVBI não se restringe exclusivamente à administração pública federal nem só ao Poder Legislativo. Coordenada pela Biblioteca do Senado, reúne bibliotecas dos três poderes e inclui o governo do Distrito Federal. A palavra 'exclusivamente' é a chave do erro: restringe demais o alcance da rede.", "comentario_atribuicao": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"id": 28, "enunciado": "A RVBI, rede cooperativa de bibliotecas coordenada pela Biblioteca do Senado Federal, tem o direito como área temática exclusiva.", "gabarito": "E", "orgao": "STJ - Superior Tribunal de Justiça", "ano": "2018", "comentario_tipo": "notion", "comentario_prefixo": "", "comentario": "Errado. A RVBI é coordenada pela Biblioteca do Senado Federal (isso está certo), mas o Direito não é sua área temática exclusiva: o acervo prioriza o Direito, porém também contempla ciências humanas e sociais. O erro está no 'exclusiva'.", "comentario_atribuicao": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"id": 29, "enunciado": "A Bibliografia Brasileira de Direito é uma bibliografia extensiva, com atualização anual e organizada pela Biblioteca Nacional.", "gabarito": "E", "orgao": "Ministério Público do Estado do Tocantins", "ano": "2024", "comentario_tipo": "notion", "comentario_prefixo": "", "comentario": "Errado. A Bibliografia Brasileira de Direito (BBD) é seletiva, não extensiva, e é organizada pela Biblioteca do Senado Federal a partir do acervo da RVBI, não pela Biblioteca Nacional. Além disso, fica disponível online com atualização diária, sendo corrente. A questão erra na natureza e na responsável.", "comentario_atribuicao": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"id": 30, "enunciado": "Um dos preceitos indispensáveis para a produção de efeitos de um normativo é a sua publicação em um veículo de publicação oficial como o DOU.", "gabarito": "C", "orgao": "TJPA", "ano": "2025", "comentario_tipo": "notion", "comentario_prefixo": "", "comentario": "Certo. A publicação em veículo oficial como o DOU é requisito para que o ato normativo produza efeitos. A publicidade é condição para a vigência e a eficácia do ato: não basta editá-lo, ele precisa ser publicado oficialmente.", "comentario_atribuicao": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"id": 31, "enunciado": "No aplicativo DOU para dispositivos móveis, disponível nas lojas on-line Google Play (Android) e Apple Store (iOS), é possível fazer uma configuração personalizada para a leitura de partes do diário ou de tipos de atos específicos.", "gabarito": "C", "orgao": "Ministério Público do Estado do Tocantins", "ano": "2024", "comentario_tipo": "notion", "comentario_prefixo": "", "comentario": "Certo. O aplicativo do DOU, disponível para Android e iOS, permite configuração personalizada de leitura (o espaço 'Meu DOU' filtra a edição do dia conforme as preferências) e leitura de partes do diário ou de tipos específicos de atos. Funcionalidade correta.", "comentario_atribuicao": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"id": 32, "enunciado": "Qualquer pessoa pode ter acesso aos atos oficiais publicados nas edições normais, extras e suplementares do DOU por meio do sítio eletrônico da Imprensa Nacional, do aplicativo do DOU e da Biblioteca Machado de Assis.", "gabarito": "C", "orgao": "Prefeitura Municipal de Cachoeiro de Itapemirim/ES", "ano": "2024", "comentario_tipo": "notion", "comentario_prefixo": "", "comentario": "Certo. O acesso aos atos oficiais das edições normais, extras e suplementares do DOU pode ser feito pelo site da Imprensa Nacional, pelo aplicativo do DOU e pela Biblioteca Machado de Assis, e qualquer pessoa pode usar esse serviço gratuito.", "comentario_atribuicao": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"id": 33, "enunciado": "Entre as matérias publicadas no DOU estão os pareceres do advogado-geral da União e os respectivos despachos presidenciais, incluídos aqueles cujos efeitos não tenham caráter geral.", "gabarito": "E", "orgao": "MPCE", "ano": "2025", "comentario_tipo": "ia", "comentario_prefixo": "", "comentario": "Errado. Os pareceres do Advogado-Geral da União que vinculam a Administração têm caráter normativo e são publicados na íntegra na Seção 1. A afirmativa tenta incluir 'aqueles cujos efeitos não tenham caráter geral', o que não corresponde ao que é publicado obrigatoriamente. O recorte distorce a regra.", "comentario_atribuicao": "comentário gerado por inteligência artificial. caso tenha dúvida de sua confiabilidade, compartilhe com a prof e os colegas no grupo Foca Chat"}, {"id": 34, "enunciado": "A publicação do texto dos atos normativos federais, estaduais e municipais na Seção 1 do DOU é requisito para que esses atos entrem em vigor e tenham autenticidade legal.", "gabarito": "E", "orgao": "Ministério Público do Estado do Tocantins", "ano": "2024", "comentario_tipo": "notion", "comentario_prefixo": "", "comentario": "Errado. A Seção 1 do DOU publica atos normativos federais, não atos de estados e municípios (estes aparecem na Seção 3, na subseção de ineditoriais). A questão generaliza a exigência para normas estaduais e municipais, o que está incorreto.", "comentario_atribuicao": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"id": 35, "enunciado": "O conteúdo do DOU é organizado em três seções, estando na seção 1 os atos normativos de interesse geral, como leis, decretos, resoluções, instruções normativas, portarias e demais normas que regulem aspectos relevantes para a sociedade.", "gabarito": "C", "orgao": "PCDF", "ano": "2024", "comentario_tipo": "banca", "comentario_prefixo": "justificativa da banca:", "comentario": "Certo. De acordo com a Portaria n.º 268/2009 da Imprensa Nacional, o conteúdo do Diário Oficial da União é dividido em três seções: Seção 01: \"Atos normativos de interesse geral\" (leis, decretos, resoluções, instruções normativas, portarias e outros).", "comentario_atribuicao": ""}, {"id": 36, "enunciado": "São publicados na seção 3 do Diário Oficial da União extratos de instrumentos contratuais, editais e comunicados, além de outros atos da administração pública.", "gabarito": "C", "orgao": "CAPES", "ano": "2024", "comentario_tipo": "notion", "comentario_prefixo": "", "comentario": "Certo. A Seção 3 do DOU reúne extratos de instrumentos contratuais, editais, comunicados, avisos e demais ineditoriais da administração pública. Conteúdo correto da seção.", "comentario_atribuicao": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"id": 37, "enunciado": "Atos de interesse dos servidores da administração pública federal são publicados na seção 2 do DOU.", "gabarito": "C", "orgao": "Prefeitura Municipal de Cachoeiro de Itapemirim/ES", "ano": "2024", "comentario_tipo": "notion", "comentario_prefixo": "", "comentario": "Certo. A Seção 2 do DOU é destinada aos atos de pessoal, isto é, atos de interesse dos servidores da administração pública federal (nomeações, exonerações, aposentadorias). Conteúdo correto.", "comentario_atribuicao": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"id": 38, "enunciado": "O DOU é dividido em três seções.", "gabarito": "C", "orgao": "TJ/ES", "ano": "2023", "comentario_tipo": "notion", "comentario_prefixo": "", "comentario": "Certo. O DOU é dividido em três seções: Seção 1 (atos normativos), Seção 2 (atos de pessoal) e Seção 3 (contratos, editais, avisos e ineditoriais). Ponto bem cobrado, então memorize a divisão em três.", "comentario_atribuicao": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"id": 39, "enunciado": "Na página da Imprensa Nacional, é possível acessar as edições do Diário da Justiça publicadas entre 1990 e 2010, no formato digital.", "gabarito": "C", "orgao": "Ministério Público do Estado do Tocantins", "ano": "2024", "comentario_tipo": "notion", "comentario_prefixo": "", "comentario": "Certo. Na página da Imprensa Nacional é possível acessar edições do Diário da Justiça em formato digital relativas ao período indicado. As publicações ficam disponibilizadas eletronicamente para consulta gratuita.", "comentario_atribuicao": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"id": 40, "enunciado": "Atualmente, as decisões de cada órgão do Judiciário são publicadas no Diário da Justiça Eletrônico (DJe) e disponibilizadas por meio da sua página institucional na Internet.", "gabarito": "C", "orgao": "Ministério Público do Estado do Tocantins", "ano": "2024", "comentario_tipo": "notion", "comentario_prefixo": "", "comentario": "Certo. Atualmente as decisões de cada órgão do Judiciário são publicadas no Diário da Justiça Eletrônico (DJe) e disponibilizadas na respectiva página institucional na internet. Cada órgão tem o seu DJe (do STJ, do STF, do TSE, etc.).", "comentario_atribuicao": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"id": 41, "enunciado": "O Diário da Justiça foi editado pela Imprensa Nacional entre 1925 e 2010 para a publicação de atos judiciais dos tribunais superiores, dos tribunais regionais federais, das seções judiciárias e do Tribunal de Justiça do Distrito Federal e dos Territórios.", "gabarito": "C", "orgao": "Ministério Público do Estado do Tocantins", "ano": "2024", "comentario_tipo": "ia", "comentario_prefixo": "", "comentario": "Certo. O Diário da Justiça foi editado pela Imprensa Nacional ao longo desse período para publicar atos judiciais de tribunais superiores, tribunais regionais federais, seções judiciárias e do TJDFT, até a migração para a forma eletrônica por órgão (DJe).", "comentario_atribuicao": "comentário gerado por inteligência artificial. caso tenha dúvida de sua confiabilidade, compartilhe com a prof e os colegas no grupo Foca Chat"}, {"id": 42, "enunciado": "A Biblioteca Digital Jurídica (BDJur), além de conter atos administrativos e doutrinários do Superior Tribunal de Justiça, funciona como o repositório institucional de documentos produzidos por todos os tribunais superiores.", "gabarito": "E", "orgao": "STJ", "ano": "2024", "comentario_tipo": "notion", "comentario_prefixo": "", "comentario": "Errado. A BDJur é o repositório institucional mantido pelo STJ (com seus atos administrativos e doutrinários), mas não funciona como repositório de documentos de todos os tribunais superiores. A integração de repositórios de várias instituições acontece no Consórcio BDJur, que é diferente da BDJur em si. A questão confunde os dois.", "comentario_atribuicao": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"id": 43, "enunciado": "Entre as instituições participantes do consórcio BDJur, encontram-se o Tribunal Superior Eleitoral e o Superior Tribunal Militar.", "gabarito": "E", "orgao": "STJ", "ano": "2024", "comentario_tipo": "ia", "comentario_prefixo": "", "comentario": "Errado. O Consórcio BDJur reúne órgãos do Poder Judiciário e outras instituições provedoras de informação jurídica, mas a afirmativa aponta como participantes instituições que não compõem esse rol nesses termos. Cuidado com questões que listam órgãos específicos como integrantes: a banca costuma inserir nomes que não fazem parte.", "comentario_atribuicao": "comentário gerado por inteligência artificial. caso tenha dúvida de sua confiabilidade, compartilhe com a prof e os colegas no grupo Foca Chat"}, {"id": 44, "enunciado": "A BDJur utiliza o DataVerse, software livre amplamente utilizado para gestão de repositórios digitais.", "gabarito": "E", "orgao": "STJ", "ano": "2024", "comentario_tipo": "notion", "comentario_prefixo": "", "comentario": "Errado. A BDJur utiliza o DSpace como software de biblioteca digital (e o Dublin Core como padrão de metadados), não o DataVerse. O DSpace é amplamente usado em repositórios institucionais. O erro está no nome do software.", "comentario_atribuicao": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"id": 45, "enunciado": "Na BDJur, itens restritos são acessados somente por ministros, magistrados convocados e servidores do STJ, mediante login de acesso.", "gabarito": "C", "orgao": "STJ", "ano": "2024", "comentario_tipo": "ia", "comentario_prefixo": "", "comentario": "Certo. Em repositórios institucionais como a BDJur, itens de acesso restrito ficam disponíveis apenas para públicos autorizados (no caso, ministros, magistrados convocados e servidores do STJ), mediante login. O controle de acesso por perfil é prática comum nesses repositórios.", "comentario_atribuicao": "comentário gerado por inteligência artificial. caso tenha dúvida de sua confiabilidade, compartilhe com a prof e os colegas no grupo Foca Chat"}, {"id": 46, "enunciado": "Apenas obras de domínio público ou publicações institucionais podem ser digitalizadas e disponibilizadas em biblioteca digital de organizações para fins de disseminação da informação.", "gabarito": "E", "orgao": "Defensoria Pública da União (DPU)", "ano": "2016", "comentario_tipo": "notion", "comentario_prefixo": "", "comentario": "Errado. A digitalização e disponibilização em biblioteca digital não se restringem a obras de domínio público ou publicações institucionais. A Lei 9.610/1998 permite usos mediante autorização do titular dos direitos, além das limitações previstas em lei. Com autorização ou nas hipóteses legais, outras obras também podem ser disponibilizadas. A palavra 'apenas' é o que torna a afirmativa falsa.", "comentario_atribuicao": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"id": 47, "enunciado": "No contexto da ciência da informação, os estudos de comunicação científica devem ter como finalidade geral a identificação das propriedades da informação, a fim de detectar seus tipos e suas características.", "gabarito": "E", "orgao": "MPCE", "ano": "2025", "comentario_tipo": "notion", "comentario_prefixo": "", "comentario": "Errado. A finalidade descrita (identificar propriedades da informação para detectar tipos e características) não é o objeto dos estudos de comunicação científica. A comunicação científica trata do processo de produção, consumo e transferência de informação no campo científico, voltado à disseminação entre pares. A questão troca o foco do conceito.", "comentario_atribuicao": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"id": 48, "enunciado": "Embora sejam muito úteis na comunicação e no compartilhamento da produção científica, as redes sociais têm pouca contribuição na análise do impacto científico.", "gabarito": "E", "orgao": "MPCE", "ano": "2025", "comentario_tipo": "notion", "comentario_prefixo": "", "comentario": "Errado. As redes sociais (acadêmicas) não têm pouca contribuição na análise do impacto científico. Pelo contrário: além de ajudarem na comunicação e no compartilhamento, elas contribuem para métricas e indicadores (as chamadas altmetrias). O erro está em minimizar esse papel.", "comentario_atribuicao": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"id": 49, "enunciado": "A ResearchGate é um exemplo de rede social que permite a troca de experiências colaborativa entre pesquisadores em vários locais do globo.", "gabarito": "C", "orgao": "MPCE", "ano": "2025", "comentario_tipo": "notion", "comentario_prefixo": "", "comentario": "Certo. A ResearchGate é uma rede social acadêmica que permite a pesquisadores de diferentes lugares trocar experiências, compartilhar publicações e colaborar. Encaixa-se na definição de rede social científica voltada à colaboração entre pares.", "comentario_atribuicao": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"id": 50, "enunciado": "A comunicação científica compreende amplo processo de geração e transferência de informação científica.", "gabarito": "C", "orgao": "EMBRAPA", "ano": "2025", "comentario_tipo": "notion", "comentario_prefixo": "", "comentario": "Certo. A comunicação científica é justamente o amplo processo de geração e transferência de informação científica, conforme o conceito proposto por John Bernal. Definição correta.", "comentario_atribuicao": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"id": 51, "enunciado": "A colaboração científica entre instituições distintas possibilita o intercâmbio de conhecimento e, consequentemente, efetiva troca de experiências, impulsionando a evolução da ciência.", "gabarito": "C", "orgao": "EBSERH", "ano": "2018", "comentario_tipo": "notion", "comentario_prefixo": "", "comentario": "Certo. A colaboração científica entre instituições distintas favorece o intercâmbio de conhecimento e a troca de experiências, impulsionando o avanço da ciência. Afirmativa alinhada ao papel da colaboração na produção científica.", "comentario_atribuicao": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"id": 52, "enunciado": "Os repositórios digitais de acesso aberto devem ser interoperáveis e disponibilizar arquivos abertos.", "gabarito": "C", "orgao": "IPHAN", "ano": "2018", "comentario_tipo": "notion", "comentario_prefixo": "", "comentario": "Certo. Os repositórios digitais de acesso aberto devem ser interoperáveis e disponibilizar arquivos abertos, condição essencial para que os conteúdos possam ser coletados (harvesting) e integrados entre sistemas. A interoperabilidade é um dos pilares do acesso aberto.", "comentario_atribuicao": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"id": 53, "enunciado": "Garantia de qualidade e controle de qualidade são expressões empregadas na descrição de procedimentos relacionados à prevenção e à minimização da introdução de erros em conjunto de dados.", "gabarito": "C", "orgao": "EMBRAPA", "ano": "2025", "comentario_tipo": "ia", "comentario_prefixo": "", "comentario": "Certo. Garantia de qualidade e controle de qualidade são expressões empregadas na descrição de procedimentos voltados a prevenir e minimizar a introdução de erros em conjuntos de dados. Na gestão de dados de pesquisa, essas práticas asseguram a confiabilidade dos dados.", "comentario_atribuicao": "comentário gerado por inteligência artificial. caso tenha dúvida de sua confiabilidade, compartilhe com a prof e os colegas no grupo Foca Chat"}, {"id": 54, "enunciado": "Garantir que os dados estejam disponíveis e adequados para serem descobertos e reusados no futuro é uma das ações envolvidas na gestão de dados da curadoria digital.", "gabarito": "C", "orgao": "EMBRAPA", "ano": "2025", "comentario_tipo": "notion", "comentario_prefixo": "", "comentario": "Certo. Garantir que os dados estejam disponíveis e adequados para serem descobertos e reusados no futuro é uma das ações da gestão de dados na curadoria digital. Isso dialoga diretamente com os princípios FAIR (localizável, acessível, interoperável e reutilizável).", "comentario_atribuicao": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"id": 55, "enunciado": "A curadoria digital pode ser corretamente definida como o processo que compreende a seleção, a preservação, a manutenção, a coleção e o arquivamento de ativos digitais.", "gabarito": "C", "orgao": "STJ", "ano": "2024", "comentario_tipo": "notion", "comentario_prefixo": "", "comentario": "Certo. A curadoria digital compreende a seleção, preservação, manutenção, coleta e arquivamento de ativos digitais, garantindo seu uso e reuso ao longo do tempo. Definição correta.", "comentario_atribuicao": "comentário gerado por inteligência artificial, a partir do material da Prof. Suzane Lima"}, {"id": 56, "enunciado": "O conteúdo armazenado e disponibilizado pela biblioteca digital deverá estar harmonizado com as prerrogativas de direitos autorais e seguir os termos das licenças Creative Commons.", "gabarito": "E", "orgao": "PGDF", "ano": "2019", "comentario_tipo": "banca", "comentario_prefixo": "justificativa da banca:", "comentario": "ERRADO. As licenças Creative Commons representam uma possibilidade de licenciamento aberto para o uso do conteúdo disponibilizado pela biblioteca. Existem outros tipos de licenças que podem ser adotadas pelas bibliotecas digitais que harmonizam com as legislações de direitos autorais e com os acordos celebrados entre as partes interessadas.", "comentario_atribuicao": ""}];
+  const ADAPTADAS = []; // ids de questões adaptadas por atualização de norma (preencher quando a coluna N chegar)
+  const STORAGE_KEY = 'foca_simulado_semana8_v1';
+
+  const $ = (s, ctx=document) => ctx.querySelector(s);
+  const $$ = (s, ctx=document) => Array.from(ctx.querySelectorAll(s));
+
+  // estado: { respostas: { [id]: "C"|"E" } }
+  let estado = { respostas: {} };
+
+  function carregar() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) estado = JSON.parse(raw);
+      if (!estado.respostas) estado.respostas = {};
+    } catch (e) { estado = { respostas: {} }; }
+  }
+  function salvar() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(estado)); } catch (e) {}
+  }
+
+  function montarQuestao(q) {
+    const card = document.createElement('div');
+    card.className = 'questao';
+    card.id = 'q-' + q.id;
+
+    const num = String(q.id).padStart(2, '0');
+    const adaptada = ADAPTADAS.includes(q.id)
+      ? '<span class="tag-adaptada">adaptada</span>' : '';
+
+    card.innerHTML = `
+      <div class="questao-topo">
+        <span class="questao-num">${num}</span>
+        <span class="tag">${q.orgao} · ${q.ano}</span>
+        ${adaptada}
+      </div>
+      <p class="enunciado">${escapeHtml(q.enunciado)}</p>
+      <div class="ce-row">
+        <button class="ce-btn" data-resp="C" type="button">certo</button>
+        <button class="ce-btn" data-resp="E" type="button">errado</button>
+      </div>
+      <div class="feedback" id="fb-${q.id}"></div>
+    `;
+
+    const btns = $$('.ce-btn', card);
+    btns.forEach(b => b.addEventListener('click', () => responder(q, b.dataset.resp)));
+    return card;
+  }
+
+  function responder(q, escolha) {
+    estado.respostas[q.id] = escolha;
+    salvar();
+    aplicarResposta(q);
+    atualizarProgresso();
+  }
+
+  function aplicarResposta(q) {
+    const escolha = estado.respostas[q.id];
+    if (!escolha) return;
+    const card = $('#q-' + q.id);
+    const btns = $$('.ce-btn', card);
+    const acertou = escolha === q.gabarito;
+
+    btns.forEach(b => {
+      b.disabled = true;
+      b.classList.remove('escolhida-certa','escolhida-errada','gabarito-certo','apagada');
+      const r = b.dataset.resp;
+      if (r === q.gabarito) {
+        b.classList.add(r === escolha ? 'escolhida-certa' : 'gabarito-certo');
+      } else if (r === escolha) {
+        b.classList.add('escolhida-errada');
+      } else {
+        b.classList.add('apagada');
+      }
+    });
+
+    const gabExtenso = q.gabarito === 'C' ? 'Certo' : 'Errado';
+    const fb = $('#fb-' + q.id);
+    fb.className = 'feedback show ' + (acertou ? 'acerto' : 'erro');
+
+    let prefixoHtml = '';
+    if (q.comentario_prefixo) {
+      prefixoHtml = `<span class="comentario-label">${escapeHtml(q.comentario_prefixo)}</span> `;
+    }
+    let atribHtml = '';
+    if (q.comentario_atribuicao) {
+      atribHtml = `<span class="comentario-atrib">${escapeHtml(q.comentario_atribuicao)}</span>`;
+    }
+
+    fb.innerHTML = `
+      <div class="feedback-status">${acertou ? '✓ você acertou' : '✗ você errou'}</div>
+      <div class="feedback-gab">gabarito: <b>${gabExtenso}</b></div>
+      <div class="comentario-corpo">${prefixoHtml}${escapeHtml(q.comentario)}${atribHtml}</div>
+    `;
+  }
+
+  function atualizarProgresso() {
+    const total = QUESTOES.length;
+    const respondidas = QUESTOES.filter(q => estado.respostas[q.id]).length;
+    const acertos = QUESTOES.filter(q => estado.respostas[q.id] === q.gabarito).length;
+
+    $('#prog-resp').textContent = respondidas;
+    $('#prog-acertos').textContent = acertos;
+    $('#prog-fill').style.width = (respondidas / total * 100) + '%';
+
+    if (respondidas === total) {
+      mostrarResultado(acertos, total);
+    } else {
+      $('#resultado').classList.remove('show');
+    }
+  }
+
+  function mostrarResultado(acertos, total) {
+    const pct = Math.round(acertos / total * 100);
+    const erros = total - acertos;
+    $('#r-pct').textContent = pct;
+    $('#r-frac').textContent = acertos + '/' + total;
+    $('#r-acertos').textContent = acertos;
+    $('#r-erros').textContent = erros;
+    $('#r-aprov').textContent = pct + '%';
+
+    let msg;
+    if (pct >= 80) msg = 'mandou muito bem. esse conteúdo está dominado.';
+    else if (pct >= 60) msg = 'bom desempenho. revise os itens que errou pra fechar as lacunas.';
+    else if (pct >= 40) msg = 'você está no caminho. vale revisar a teoria das partes mais fracas.';
+    else msg = 'bora reforçar a teoria antes da próxima rodada. revise com calma os comentários.';
+    $('#r-msg').textContent = msg;
+
+    $('#resultado').classList.add('show');
+  }
+
+  function refazer() {
+    estado = { respostas: {} };
+    salvar();
+    renderTudo();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function renderTudo() {
+    const lista = $('#lista-questoes');
+    lista.innerHTML = '';
+    $('#prog-total').textContent = QUESTOES.length;
+    QUESTOES.forEach(q => lista.appendChild(montarQuestao(q)));
+    QUESTOES.forEach(q => { if (estado.respostas[q.id]) aplicarResposta(q); });
+    atualizarProgresso();
+  }
+
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+  }
+
+  $('#btn-reset').addEventListener('click', () => {
+    if (confirm('Recomeçar o simulado? Suas respostas serão apagadas.')) refazer();
+  });
+  $('#btn-refazer').addEventListener('click', refazer);
+
+  carregar();
+  renderTudo();
+</script>
+</body>
+</html>
